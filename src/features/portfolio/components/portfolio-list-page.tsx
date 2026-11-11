@@ -20,11 +20,7 @@ export function PortfolioListPage() {
         <Todo>필터 기능 (업종·기술 선택 시 목록 좁히기)</Todo>
       </Section>
       {listPortfolioByGroup().map((group) => (
-        <Section
-          key={group.group}
-          title={`${group.name} (${group.items.length}건)`}
-          description={`사이트에서의 역할: ${group.role}`}
-        >
+        <Section key={group.group} title={`${group.name} (${group.items.length}건)`}>
           <CardGrid>
             {group.items.map((item) => (
               <LinkCard
@@ -39,9 +35,6 @@ export function PortfolioListPage() {
           </CardGrid>
         </Section>
       ))}
-      <Section title="참고">
-        <BulletList items={meta.notes} />
-      </Section>
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { hospitalDifferentiator, hospitalJourney, hospitalJourneyIntro } from "@/content/hospital";
+import { hospitalDifferentiator, hospitalJourney } from "@/content/hospital";
 import { growthBundleNotes } from "@/content/pricing";
 import { listServices } from "@/content/services";
 import { routes } from "@/shared/config";
@@ -15,14 +15,12 @@ export function HospitalOverviewPage() {
       <Section title="병원 솔루션">
         <CardGrid columns={2}>
           {listServices("hospital").map((s) => (
-            <LinkCard key={s.id} href={s.href} title={s.name} description={s.message}>
-              다음 행동: {s.nextAction}
-            </LinkCard>
+            <LinkCard key={s.id} href={s.href} title={s.name} description={s.message} />
           ))}
         </CardGrid>
       </Section>
 
-      <Section title="병원 고객 흐름" description={hospitalJourneyIntro}>
+      <Section title="병원 고객 흐름">
         <ol className="space-y-4">
           {hospitalJourney.map((step, index) => (
             <li key={step.title}>

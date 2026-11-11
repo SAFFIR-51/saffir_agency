@@ -6,7 +6,7 @@ import { routes } from "@/shared/config";
 import { formatKRW } from "@/shared/lib";
 import { SolutionTemplate } from "@/shared/sections";
 import { BulletList, DataTable, Note, PlanTable, Subheading } from "@/shared/ui";
-import { crmContent, crmOpenQuestions } from "../model/content";
+import { crmContent } from "../model/content";
 
 export function CrmPage() {
   return (
@@ -16,20 +16,14 @@ export function CrmPage() {
         afterFeatures: (
           <>
             <Subheading>보안</Subheading>
-            <p className="text-foreground/70">{crmSecurity.why}</p>
             <BulletList items={crmSecurity.items} />
-            <Note title="리콜 문자">
-              <p>{crmSecurity.messaging}</p>
-            </Note>
+            <p>{crmSecurity.messaging}</p>
             <Link
               href={routes.legal.security}
               className="inline-block underline underline-offset-4"
             >
               보안·데이터 정책 자세히 보기
             </Link>
-            <Note title="기획 미정">
-              <BulletList items={crmOpenQuestions} />
-            </Note>
           </>
         ),
         demo: <BulletList items={crmDemo} />,

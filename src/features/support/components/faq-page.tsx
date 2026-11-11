@@ -7,7 +7,7 @@ export function FaqPage() {
       <PageHeader title="자주 묻는 질문" />
       {faqCategories.map((category) => (
         <Section key={category} title={category}>
-          <Todo>{category} 질문과 답변 (기획서 미정)</Todo>
+          <Todo>{category} 질문과 답변</Todo>
         </Section>
       ))}
     </>

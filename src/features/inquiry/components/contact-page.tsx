@@ -17,7 +17,7 @@ export function ContactPage() {
       </Section>
       <Section title="문의 입력 항목 (안)">
         <BulletList items={contactContent.fields} />
-        <Todo>문의 폼 (react-hook-form)</Todo>
+        <Todo>문의 폼</Todo>
       </Section>
     </>
   );

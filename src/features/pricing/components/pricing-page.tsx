@@ -1,6 +1,6 @@
 import {
   geoPlans,
-  geoPricingPrinciple,
+  geoPricingHeadline,
   growthBundleNotes,
   hospitalWebsiteNotes,
   hospitalWebsitePlans,
@@ -9,8 +9,6 @@ import {
   outsourcingDeposits,
   outsourcingNotes,
   paymentTypes,
-  priceStatus,
-  pricingNotes,
   serverTierNotes,
   serverTiers,
   solutionPlans,
@@ -32,17 +30,14 @@ export function PricingPage() {
     <>
       <PageHeader
         title="요금 안내"
-        lead={`모든 서비스 요금을 한 페이지에 공개합니다. 금액은 VAT 포함입니다.${priceStatus === "proposed" ? " (제안가, 확정 전)" : ""}`}
-      >
-        <BulletList items={pricingNotes} />
-      </PageHeader>
+        lead="모든 서비스 요금을 한 페이지에 공개합니다. 금액은 VAT 포함입니다."
+      />
 
       <Section id="geo" title="AI 검색 최적화 (월 구독)">
-        <Note title={geoPricingPrinciple.headline}>
-          <p>{geoPricingPrinciple.reason}</p>
+        <Note>
+          <p>{geoPricingHeadline}</p>
         </Note>
         <PlanTable plans={geoPlans} />
-        <BulletList items={geoPricingPrinciple.notes} />
       </Section>
 
       <Section id="solutions" title="구축형 솔루션 (CRM, 커머스 연동, ERP, AI 챗봇)">

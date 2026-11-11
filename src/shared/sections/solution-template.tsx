@@ -120,7 +120,7 @@ export function SolutionTemplate({
             ))}
           </dl>
         ) : (
-          <Todo>자주 묻는 질문 (기획서 미정)</Todo>
+          <Todo>자주 묻는 질문</Todo>
         )}
       </Section>
 

@@ -1,16 +1,14 @@
 import { installedSolutionNotes, systemArchitecture } from "@/content/company";
 import { crmSecurity } from "@/content/hospital";
-import { BulletList, Note, PageHeader, Section, Todo } from "@/shared/ui";
+import { BulletList, PageHeader, Section, Todo } from "@/shared/ui";
 
 export function SecurityPage() {
   return (
     <>
-      <PageHeader title="보안·데이터 정책" lead={crmSecurity.why} />
+      <PageHeader title="보안·데이터 정책" />
       <Section title="병원 CRM 보안">
         <BulletList items={crmSecurity.items} />
-        <Note title="리콜 문자">
-          <p>{crmSecurity.messaging}</p>
-        </Note>
+        <p>{crmSecurity.messaging}</p>
       </Section>
       <Section title="솔루션 설치와 데이터 소유">
         <BulletList items={installedSolutionNotes} />

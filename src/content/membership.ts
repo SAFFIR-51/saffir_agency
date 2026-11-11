@@ -4,7 +4,6 @@ export const loginPurposes = ["서비스 둘러보기", "고객이 된 뒤 작�
 
 export const loginNotes = [
   "솔루션 자체는 포털 안에서 쓰지 않습니다. CRM 등은 고객사 전용 서버에 설치되고, 포털에는 그 주소로 가는 바로가기만 둡니다.",
-  "saffirgeo 로그인과 기존 포털 로그인은 하나로 합칩니다.",
 ];
 
 export const memberTypes = [

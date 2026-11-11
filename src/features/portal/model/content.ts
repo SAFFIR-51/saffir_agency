@@ -33,6 +33,5 @@ export function menuItems(menu: (typeof portalMenus)[number]["menu"]) {
 
 export const coreServerNotes = [
   "서버 상태와 사용량은 중앙 코어 서버에서 가져옵니다.",
-  "고객사별 인스턴스 + 모니터링·라이선스·배포를 맡는 코어 서버 구조를 그대로 씁니다.",
   "코어 서버가 집계한 사용량이 곧 월 서버 운영비의 청구 근거가 됩니다.",
 ];

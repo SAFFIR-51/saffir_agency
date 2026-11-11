@@ -1,17 +1,9 @@
 import Link from "next/link";
-import { businessFlywheel, developmentClaim, modules } from "@/content/company";
+import { modules } from "@/content/company";
 import { portfolioItems } from "@/content/portfolio";
 import { outsourcingDeposits, outsourcingNotes } from "@/content/pricing";
 import { routes } from "@/shared/config";
-import {
-  BulletList,
-  ButtonLink,
-  Note,
-  PageHeader,
-  PlanTable,
-  Section,
-  Subheading,
-} from "@/shared/ui";
+import { BulletList, ButtonLink, PageHeader, PlanTable, Section, Subheading } from "@/shared/ui";
 import { developmentContent } from "../model/content";
 
 export function DevelopmentPage() {
@@ -52,20 +44,13 @@ export function DevelopmentPage() {
         ))}
       </Section>
 
-      <Section title="보유 모듈로 빠르게 만듭니다" description={developmentClaim.text}>
+      <Section title="보유 모듈로 빠르게 만듭니다">
         <BulletList items={modules} />
-        <Note title="확인 필요">
-          <p>{developmentClaim.caution}</p>
-        </Note>
       </Section>
 
       <Section title="정찰가 패키지" description="금액은 VAT 포함입니다.">
         <PlanTable plans={outsourcingDeposits} setupLabel="계약금" />
         <BulletList items={outsourcingNotes} />
-      </Section>
-
-      <Section title="외주가 솔루션이 됩니다">
-        <BulletList items={businessFlywheel} />
       </Section>
 
       <Section title="견적 요청">

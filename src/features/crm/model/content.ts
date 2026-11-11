@@ -24,11 +24,5 @@ export const crmContent: SolutionPageContent = {
   process: ["데모 신청", "도입 신청", "병원 전용 서버 세팅 (데이터 이관 포함)"],
   faq: [],
   cta: { label: "데모 신청", href: routes.contact },
-  secondaryCta: { label: "요금 보기", href: `${routes.pricing}#solutions` },
+  secondaryCta: { label: "도입 신청", href: routes.contact },
 };
-
-/** 기획서 미정 사항 중 CRM 관련 */
-export const crmOpenQuestions = [
-  "환자 데이터 출처 (EMR 연동·엑셀 업로드·직접 입력), 기능 범위, 런칭 시점",
-  "월 이용료 기준 (의사 수, 환자 수, 지점 수 중 선택)",
-];

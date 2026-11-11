@@ -17,7 +17,7 @@ export const geoContent: SolutionPageContent = {
     "유료 구독 시 매달 재진단, AI 가시성 측정, 점수 추이, 경쟁 병원 비교",
   ],
   demo: ["샘플 리포트"],
-  cases: [{ title: "자체 서비스 (saffirgeo를 saffir.co.kr/geo로 흡수)" }],
+  cases: [{ title: "자체 서비스" }],
   pricingNotes: [],
   process: [
     "홈페이지 주소 입력 → 무료 진단",

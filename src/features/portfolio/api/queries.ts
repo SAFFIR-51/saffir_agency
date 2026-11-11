@@ -1,10 +1,8 @@
 import {
   getPortfolioItem,
   industryFilters,
-  portfolioGroupRoles,
   portfolioGroups,
   portfolioItems,
-  portfolioNotes,
   techLabels,
   type PortfolioGroup,
 } from "@/content/portfolio";
@@ -14,13 +12,12 @@ export function listPortfolioByGroup() {
   return (Object.keys(portfolioGroups) as PortfolioGroup[]).map((group) => ({
     group,
     name: portfolioGroups[group],
-    role: portfolioGroupRoles[group],
     items: portfolioItems.filter((item) => item.group === group),
   }));
 }
 
 export function getPortfolioMeta() {
-  return { total: portfolioItems.length, notes: portfolioNotes, industryFilters, techLabels };
+  return { total: portfolioItems.length, industryFilters, techLabels };
 }
 
 export function getPortfolioSlugs() {

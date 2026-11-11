@@ -16,7 +16,7 @@ export function PortfolioDetailPage({ slug }: { slug: string }) {
       <Section title="프로젝트 내용">
         <Todo>고객 문제, 구현 내용, 결과, 화면 캡처</Todo>
       </Section>
-      <Section title="다음 행동">
+      <Section title="관련 서비스">
         <div className="flex flex-wrap gap-3">
           {item.relatedSolution ? (
             <ButtonLink href={item.relatedSolution}>이 기능을 솔루션으로 도입하기</ButtonLink>

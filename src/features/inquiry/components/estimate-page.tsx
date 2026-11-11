@@ -11,7 +11,7 @@ export function EstimatePage() {
       </Section>
       <Section title="견적 요청 입력 항목 (안)">
         <BulletList items={estimateContent.fields} />
-        <Todo>견적 요청 폼 (react-hook-form)</Todo>
+        <Todo>견적 요청 폼</Todo>
       </Section>
     </>
   );

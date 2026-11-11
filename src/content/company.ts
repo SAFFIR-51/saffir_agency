@@ -11,9 +11,6 @@ export const overview = {
   ],
 };
 
-export const businessModelIntro =
-  "사피어는 이미 세 가지 방식으로 매출을 내고 있습니다. 사이트는 이 세 가지를 눈에 보이게 나눠서 보여줍니다.";
-
 export const businessModels = [
   {
     type: "구독형 서비스",
@@ -63,11 +60,6 @@ export const workflow = [
 export const modules = ["결제·구독", "예약", "지도·GPS", "BLE 연동", "AI 코칭", "커머스 어드민"];
 
 export const developmentAreas = ["웹·앱", "쇼핑몰", "플랫폼 연동", "AI", "IoT"];
-
-export const developmentClaim = {
-  text: "넓은 범위를 보유 모듈로 빠르게 만든다는 근거로 씁니다. 기존의 AI로 2~3배 빠르게 주장과 연결합니다.",
-  caution: "2~3배 수치는 공개 전에 근거 자료를 확인합니다.",
-};
 
 /** 프로젝트 진행 단계 (포털 프로젝트 화면과 같은 단계) */
 export const projectStages = ["착수", "기획", "디자인", "개발", "검수", "운영"];

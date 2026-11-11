@@ -10,10 +10,7 @@ export const hospitalWebsiteContent: SolutionPageContent = {
   eyebrow: "병원 솔루션",
   name: "사피어 병원 홈페이지",
   message: "AI 검색에 강한 병원 홈페이지",
-  problems: [
-    "진단 점수가 낮거나, 진단 결과를 보고도 직접 고치기 어려운 병원",
-    "두 사이트(saffirgeo, 사피어)에 흩어져 있던 병원 홈페이지 가격을 하나로 정리합니다.",
-  ],
+  problems: ["진단 점수가 낮거나, 진단 결과를 보고도 직접 고치기 어려운 병원"],
   features: [
     "기본형부터 GEO 기본 세팅 포함",
     "기본형: 유니크 3면 + 반복 7면, 검색 등록, GA4, 네이버 예약·카카오 채널 연결",

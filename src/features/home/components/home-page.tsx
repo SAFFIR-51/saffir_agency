@@ -1,4 +1,4 @@
-import { businessModelIntro, businessModels, modules, workflow } from "@/content/company";
+import { businessModels, modules, workflow } from "@/content/company";
 import { portfolioItems } from "@/content/portfolio";
 import { geoPlans, hospitalWebsitePlans, solutionPlans } from "@/content/pricing";
 import { listServices, serviceLines } from "@/content/services";
@@ -83,9 +83,9 @@ export function HomePage() {
         <ButtonLink href={routes.hospital.geo}>무료 진단하기</ButtonLink>
       </Section>
 
-      <Section title="사피어가 일하는 세 가지 방식" description={businessModelIntro}>
+      <Section title="사피어가 일하는 세 가지 방식">
         <DataTable
-          columns={["판매 방식", "대표 상품", "제공 방식", "매출 구조", "소스 소유권"]}
+          columns={["판매 방식", "대표 상품", "제공 방식", "요금 방식", "소스 소유권"]}
           rows={businessModels.map((m) => [m.type, m.products, m.delivery, m.revenue, m.ownership])}
         />
       </Section>

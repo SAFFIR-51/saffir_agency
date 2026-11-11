@@ -1,9 +1,4 @@
-/**
- * 요금 데이터 (기획서 "요금 체계", VAT 포함, 2026-11 제안가).
- * 원가 확인 후 대표 확정 전까지 status: "proposed" 로 둡니다.
- */
-export type PriceStatus = "proposed" | "confirmed";
-
+/** 요금 데이터 (기획서 "요금 체계", VAT 포함, 2026-11 제안가) */
 export type Plan = {
   id: string;
   name: string;
@@ -13,8 +8,6 @@ export type Plan = {
   setup?: number | null;
   note?: string;
 };
-
-export const priceStatus: PriceStatus = "proposed";
 
 export const geoPlans: Plan[] = [
   {
@@ -163,20 +156,8 @@ export const hospitalGrowthBundle = {
   note: "홈페이지 신규 제작 병원이 12개월 이용 시 기본형 제작비 50% 할인",
 };
 
-/** 요금 공통 안내 (기획서 "요금 체계") */
-export const pricingNotes = [
-  "요금은 /pricing 한 페이지에 모두 공개합니다. 금액은 VAT 포함입니다.",
-  "아래 금액은 경쟁사 공개 가격을 기준으로 잡은 제안가이며, 원가 확인 후 대표가 확정합니다.",
-];
-
 /** AI 검색 최적화 요금 원칙 */
-export const geoPricingPrinciple = {
-  headline: "한 번 보는 정보는 무료, 계속 지켜보는 건 유료",
-  reason: "AI 가시성 측정은 LLM API를 매번 호출해 원가가 반복해서 들기 때문입니다.",
-  notes: [
-    "관리형은 기존 병원 홈페이지 월 유지보수(33,000원)를 흡수합니다. 상품은 하나 줄고 객단가는 올라갑니다.",
-  ],
-};
+export const geoPricingHeadline = "한 번 보는 정보는 무료, 계속 지켜보는 건 유료";
 
 /** 메시지 발송(CRM) 건별 단가 표시용 */
 export const messagePriceRows = [
@@ -185,18 +166,14 @@ export const messagePriceRows = [
   { name: "장문(LMS)", unit: messageUnitPrices.lms },
 ];
 
-export const messagePriceNote =
-  "메시지 발송(CRM)은 건별로 받습니다. 예시 단가이며, 발송 대행사 원가를 확인한 뒤 확정합니다.";
+export const messagePriceNote = "메시지 발송(CRM)은 건별로 받습니다.";
 
 export const serverTierNotes = [
-  "서버 운영비 구간의 기준값은 예시이며, 실제 AWS 비용을 보고 확정합니다.",
-  "구간을 넘는 사용량은 저장공간 10GB당 11,000원, 트래픽 100GB당 22,000원으로 정산합니다 (예시, AWS 청구서 확인 후 확정).",
+  "구간을 넘는 사용량은 저장공간 10GB당 11,000원, 트래픽 100GB당 22,000원으로 정산합니다.",
 ];
 
 export const hospitalWebsiteNotes = [
-  "두 사이트의 가격(saffirgeo 200만·500만·1,000만 원 이상, 사피어 기본형 1,045,000원)을 하나로 맞춥니다.",
-  "기본형은 크몽 병원 홈페이지 상위 상품(1,650,000원, 15면)과 같은 수준으로 두고, GEO 세팅을 기본 포함해 차별화합니다.",
-  "납품 후에는 GEO 관리형(월 550,000원)이나 단순 유지보수(월 33,000원, 현행 유지)를 선택합니다.",
+  "납품 후에는 GEO 관리형(월 550,000원)이나 단순 유지보수(월 33,000원)를 선택합니다.",
 ];
 
 export const growthBundleNotes = [
@@ -204,10 +181,7 @@ export const growthBundleNotes = [
   "홈페이지를 새로 만드는 병원은 패키지를 12개월 이용하면 기본형 제작비를 50% 할인합니다.",
 ];
 
-export const outsourcingNotes = [
-  "홈페이지 제작 계약금(1,100,000원), 웹앱 MVP 계약금(2,200,000원)은 정찰가로 유지합니다.",
-  "나머지 맞춤형 개발은 견적 요청으로 받습니다.",
-];
+export const outsourcingNotes = ["나머지 맞춤형 개발은 견적 요청으로 받습니다."];
 
 /** 결제 유형 (기획서 "결제와 토스페이먼츠 심사") */
 export const paymentTypes = [
@@ -221,7 +195,7 @@ export const paymentTypes = [
     type: "정액 구독",
     products: "GEO 등급, 솔루션 월 이용료",
     where: "포털 구독 관리",
-    toss: "자동결제(빌링), 추가 신청 필요",
+    toss: "자동결제(빌링)",
   },
   {
     type: "변동 청구",
