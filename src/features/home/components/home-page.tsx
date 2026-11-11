@@ -1,5 +1,5 @@
 import { businessModels, developmentAreas, modules, workflow } from "@/content/company";
-import { portfolioItems } from "@/content/portfolio";
+import { portfolioGroups, portfolioItems } from "@/content/portfolio";
 import { geoPlans, hospitalWebsitePlans, solutionPlans } from "@/content/pricing";
 import { listServices, serviceLines } from "@/content/services";
 import { routes, site } from "@/shared/config";
@@ -24,7 +24,13 @@ function minPrice(values: Array<number | null | undefined>) {
 }
 
 export function HomePage() {
-  const medicalCount = portfolioItems.filter((item) => item.group === "medical").length;
+  /** 한 업종에 치우치지 않게 업종별 건수를 모두 보여준다 */
+  const groupCounts = Object.entries(portfolioGroups)
+    .map(([group, label]) => ({
+      label,
+      count: portfolioItems.filter((item) => item.group === group).length,
+    }))
+    .filter((g) => g.count > 0);
   const featured = c.featuredSlugs
     .map((slug) => portfolioItems.find((item) => item.slug === slug))
     .filter((item) => item !== undefined);
@@ -46,14 +52,14 @@ export function HomePage() {
     <>
       <PageHeader eyebrow={site.legalName} title={site.tagline} lead={site.description}>
         <div className="flex flex-wrap gap-3">
-          <ButtonLink href={routes.hospital.geo}>병원 홈페이지 무료 진단</ButtonLink>
-          <ButtonLink href={routes.development.estimate} variant="secondary">
-            맞춤 개발 견적
+          <ButtonLink href={routes.contact}>{c.hero.primaryCta}</ButtonLink>
+          <ButtonLink href={routes.portfolio} variant="secondary">
+            {c.hero.secondaryCta}
           </ButtonLink>
         </div>
         <ul className="flex flex-wrap gap-x-8 gap-y-2 text-sm">
           <li>포트폴리오 {portfolioItems.length}건</li>
-          <li>의료·헬스케어 {medicalCount}건</li>
+          <li>{groupCounts.map((g) => `${g.label} ${g.count}`).join(" · ")}</li>
           <li>운영 중인 고객사 [ 숫자 ]</li>
         </ul>
         <WireBox label="이미지 · 대표 화면" size="lg" />

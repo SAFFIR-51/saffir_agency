@@ -1,5 +1,7 @@
 /** 메인 화면 문구 */
 export const homeContent = {
+  /** 히어로 버튼은 업종 구분 없이. 업종별 입구는 바로 아래 세 갈래에서 고른다 */
+  hero: { primaryCta: "도입 상담 신청", secondaryCta: "만든 것 보기" },
   entry: {
     title: "어떤 일이 필요하세요?",
     hospital: "병원 홈페이지 진단부터 환자 관리까지",

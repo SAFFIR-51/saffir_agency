@@ -1,6 +1,6 @@
 # 예시 2. 폼 (react-hook-form + 스키마 + server action)
 
-> 이 예시는 **zod 4.6.7**을 가정합니다. zod는 아직 설치되지 않았습니다(지침 13번 제안 대상). 승인 후 `npm i zod@4.6.7`로 설치하면 그대로 동작합니다. `tsc`, `eslint`, `prettier` 통과를 확인한 코드입니다.
+> 이 예시는 **zod 4.6.7**(설치됨) 기준입니다. `tsc`, `eslint`, `prettier` 통과를 확인한 코드입니다. 실제로 동작하는 폼은 `src/features/inquiry`에 있습니다.
 
 ## 파일 배치
 

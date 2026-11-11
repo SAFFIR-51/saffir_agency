@@ -32,7 +32,7 @@
 | 컴파일     | React Compiler 1.0 켜짐 (자동 메모이제이션)                                    |
 | 언어       | TypeScript 6.0 strict                                                          |
 | 스타일     | Tailwind CSS 4. 설정 파일 없이 `src/app/globals.css`의 토큰 사용               |
-| 폼         | react-hook-form 7.91 + @hookform/resolvers 7                                   |
+| 폼         | react-hook-form 7.91 + @hookform/resolvers 7 + zod 4.6                         |
 | 품질       | ESLint(boundaries), Prettier(+tailwind), husky, lint-staged, commitlint, knip  |
 | UI 키트    | 쓰지 않는다 (shadcn/ui, MUI, Chakra 등). 공통 UI는 `shared/ui`에 직접 만든다   |
 | 에이전트   | `next-devtools-mcp` (`.mcp.json`): 실행 중인 개발 서버의 오류·라우트·로그 확인 |
@@ -115,7 +115,7 @@
 
 - 입력이 있는 폼은 모두 react-hook-form으로 만든다. `useState`로 필드를 하나씩 관리하지 않는다.
 - 입력값을 화면에 반영할 때는 `watch()` 대신 **`useWatch`**를 쓴다. `watch()`는 React Compiler의 자동 메모이제이션과 맞지 않아 화면이 갱신되지 않을 수 있다 (lint `incompatible-library` 경고).
-- 스키마 하나로 클라이언트 검증(resolver)과 서버 재검증을 함께 한다. 스키마 라이브러리는 아직 없다 → 첫 폼 작업 때 13번 형식으로 zod를 제안한다.
+- 스키마 하나로 클라이언트 검증(resolver)과 서버 재검증을 함께 한다. 스키마는 zod(4.6)로 `features/<기능>/model/schema.ts`에 둔다. 실제 예: `features/inquiry`.
 - 배치: `model/<이름>-schema.ts` → `components/<이름>-form.tsx`(`"use client"`) → `api/<동사>-<이름>.ts`(`"use server"`)
 - server action은 항상 `ActionResult`로 반환한다.
 
@@ -159,6 +159,7 @@
 ## 10. 보안
 
 - `dangerouslySetInnerHTML`을 쓰지 않는다. 꼭 필요하면 이유와 정제 방법을 제안하고 승인받는다.
+  - 예외: 구조화데이터(JSON-LD)는 `shared/seo`의 `<JsonLd>`로만 넣는다. 직접 만든 객체만 넘기고, 사용자 입력을 그대로 넣지 않는다 (`<`는 컴포넌트가 이스케이프한다).
 - 외부 링크는 `target="_blank"`일 때 `rel="noopener noreferrer"`를 붙인다.
 - **GEO 진단 주소 입력**: 서버가 사용자가 넣은 URL을 여는 기능이다.
   - `http`/`https`만 허용하고, `localhost`, 사설 IP(10.x, 172.16–31.x, 192.168.x), `169.254.x`, 내부 도메인을 막는다.
@@ -201,7 +202,7 @@
 
 - 승인되면 정확한 버전으로 설치하고 dependencies와 devDependencies를 구분한다.
 - 쓰지 않기로 한 것: shadcn/ui를 포함한 UI 키트
-- 필요해지면 제안할 후보: zod(스키마), clsx + tailwind-merge(`cn()` 교체), lucide-react(아이콘), motion(애니메이션), sonner(알림)
+- 필요해지면 제안할 후보: clsx + tailwind-merge(`cn()` 교체), lucide-react(아이콘), motion(애니메이션), sonner(알림)
 - 보류 중 (지원 상황이 바뀌면 18번으로 제안): TypeScript 7(typescript-eslint 미지원), ESLint 10(eslint-config-next 플러그인 미지원), Oxlint·Oxfmt(eslint-plugin-boundaries 대체 불가)
 
 ## 14. 화면 품질 체크
