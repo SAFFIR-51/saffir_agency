@@ -61,6 +61,9 @@ export const routes = {
   contactFor: (topic: ContactTopic) => `/contact?type=${topic}` as Route,
   /** 주문서 (요금표의 결제 버튼) */
   order: (planId: string) => `/order?plan=${planId}` as Route,
+  /** 토스 결제창이 돌아오는 주소 (successUrl, failUrl) */
+  orderComplete: "/order/complete",
+  orderFail: "/order/fail",
   faq: "/faq",
   legal: {
     terms: "/terms",
@@ -75,6 +78,8 @@ export const routes = {
   auth: {
     login: "/login",
     signup: "/signup",
+    forgotPassword: "/forgot-password",
+    resetPassword: "/reset-password",
     /** 가입 후 next로 돌아간다 (예: 방금 본 진단 결과) */
     signupFrom: (next: string) => `/signup?next=${encodeURIComponent(next)}` as Route,
   },

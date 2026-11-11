@@ -1,8 +1,20 @@
 import { geoPlans, geoPricingHeadline } from "@/content/pricing";
 import { routes } from "@/shared/config";
 import { SolutionTemplate } from "@/shared/sections";
-import { PlanTable, Subheading, TrackedButtonLink, WireBox, WireInput } from "@/shared/ui";
-import { geoContent, geoLockedResult, geoResultActions } from "../model/content";
+import {
+  PlanTable,
+  StateTable,
+  Subheading,
+  TrackedButtonLink,
+  WireBox,
+  WireInput,
+} from "@/shared/ui";
+import {
+  geoContent,
+  geoDiagnosisStates,
+  geoLockedResult,
+  geoResultActions,
+} from "../model/content";
 
 export function GeoLandingPage() {
   return (
@@ -29,6 +41,8 @@ export function GeoLandingPage() {
                 </TrackedButtonLink>
               ))}
             </div>
+            <Subheading>진단 상태</Subheading>
+            <StateTable states={geoDiagnosisStates} />
           </div>
         ),
         pricing: (

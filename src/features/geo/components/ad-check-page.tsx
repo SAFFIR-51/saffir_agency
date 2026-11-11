@@ -1,7 +1,15 @@
 import { SolutionTemplate } from "@/shared/sections";
 import { routes } from "@/shared/config";
-import { ButtonLink, DataTable, Note, WireBox, WireInput } from "@/shared/ui";
-import { adCheckContent, adCheckDisclaimer, adCheckLimits } from "../model/content";
+import {
+  ButtonLink,
+  DataTable,
+  Note,
+  StateTable,
+  Subheading,
+  WireBox,
+  WireInput,
+} from "@/shared/ui";
+import { adCheckContent, adCheckDisclaimer, adCheckLimits, adCheckStates } from "../model/content";
 
 export function AdCheckPage() {
   return (
@@ -29,6 +37,8 @@ export function AdCheckPage() {
                 홈페이지 문구 점검·제작 상담
               </ButtonLink>
             </div>
+            <Subheading>검사 상태</Subheading>
+            <StateTable states={adCheckStates} />
           </div>
         ),
         pricing: (

@@ -24,6 +24,39 @@ export function findOrderItem(planId: string | undefined): OrderItem | null {
   return null;
 }
 
+export const orderResultContent = {
+  complete: {
+    title: "결제가 완료됐습니다",
+    lead: "영수증은 주문서에 적은 이메일로 보내 드립니다.",
+    rows: ["상품", "금액", "결제 수단", "승인 시각", "주문 번호"],
+    nextSubscription:
+      "구독은 포털 GEO에서 바로 쓸 수 있고, 다음 결제일과 해지는 청구·결제에서 관리합니다.",
+    nextOnce: "결제 내역과 영수증은 포털 청구·결제에서 다시 볼 수 있습니다.",
+  },
+  fail: {
+    title: "결제가 완료되지 않았습니다",
+    lead: "아래 사유를 확인하고 다시 결제해 주세요.",
+    reasons: [
+      { state: "결제창을 닫음", screen: "결제를 취소했다는 안내", next: "다시 결제하기" },
+      {
+        state: "카드 한도·잔액 부족",
+        screen: "토스가 보낸 사유 문구",
+        next: "다른 카드로 다시 결제",
+      },
+      {
+        state: "카드사 승인 거절",
+        screen: "토스가 보낸 사유 문구",
+        next: "카드사 확인 후 다시 결제 / 문의",
+      },
+      {
+        state: "일시적 오류",
+        screen: "잠시 후 다시 시도하라는 안내",
+        next: "다시 결제하기 / 문의",
+      },
+    ],
+  },
+};
+
 export const orderContent = {
   title: "주문서",
   lead: "상품과 금액을 확인하고 결제하세요. 금액은 VAT 포함입니다.",
