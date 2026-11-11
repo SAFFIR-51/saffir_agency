@@ -15,6 +15,7 @@ const publicPaths = [
   routes.development.root,
   routes.development.process,
   routes.development.estimate,
+  routes.about,
   routes.portfolio,
   routes.pricing,
   routes.contact,

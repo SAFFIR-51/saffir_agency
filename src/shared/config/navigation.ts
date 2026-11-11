@@ -90,12 +90,31 @@ export const utilityNav: NavItem[] = [
   { label: "로그인", href: routes.auth.login },
 ];
 
-export const footerNav: NavItem[] = [
+/** 하단 사이트맵. 서비스 묶음은 상단 메뉴(mainNav)를 그대로 쓰고, 회사·정책 묶음을 더한다. */
+export type FooterGroup = { title: string; href?: Route; items: NavItem[] };
+
+const policyNav: NavItem[] = [
   { label: "이용약관", href: routes.legal.terms },
   { label: "개인정보처리방침", href: routes.legal.privacy },
   { label: "취소 및 환불 규정", href: routes.legal.refund },
   { label: "보안·데이터 정책", href: routes.legal.security },
-  { label: "FAQ", href: routes.faq },
+];
+
+export const footerGroups: FooterGroup[] = [
+  ...mainNav
+    .filter((item) => item.children)
+    .map((item) => ({ title: item.label, href: item.href, items: item.children ?? [] })),
+  {
+    title: "회사",
+    items: [
+      { label: "회사 소개", href: routes.about },
+      { label: "포트폴리오", href: routes.portfolio },
+      { label: "요금 안내", href: routes.pricing },
+      { label: "FAQ", href: routes.faq },
+      { label: "문의", href: routes.contact },
+    ],
+  },
+  { title: "정책", items: policyNav },
 ];
 
 /** 포털 메뉴. requires 값으로 가입한 서비스에 따라 보이거나 숨깁니다. */

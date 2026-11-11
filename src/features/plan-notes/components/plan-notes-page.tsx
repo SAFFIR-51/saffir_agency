@@ -3,7 +3,7 @@ import { businessFlywheel, overview, systemArchitecture } from "@/content/compan
 import { priceBenchmarkNotes, priceBenchmarks } from "@/content/pricing";
 import { services } from "@/content/services";
 import { isProduction } from "@/server/env";
-import { footerNav, mainNav } from "@/shared/config";
+import { footerGroups, mainNav } from "@/shared/config";
 import { BulletList, DataTable, Note, PageHeader, Section } from "@/shared/ui";
 import {
   openQuestions,
@@ -41,7 +41,9 @@ export function PlanNotesPage() {
           items={[
             "문의 /contact, FAQ /faq",
             "로그인·포털 /login, /dashboard",
-            `하단: ${footerNav.map((f) => `${f.label} ${f.href}`).join(", ")}`,
+            ...footerGroups.map(
+              (g) => `하단 ${g.title}: ${g.items.map((f) => `${f.label} ${f.href}`).join(", ")}`,
+            ),
           ]}
         />
       </Section>

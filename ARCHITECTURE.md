@@ -37,10 +37,12 @@ src/
 │  │  │  └─ website/             /hospital/website
 │  │  ├─ geo/                    /geo         AI 검색 최적화
 │  │  │  └─ ad-check/            /geo/ad-check 의료광고 검사기
-│  │  ├─ crm/                    /crm
+│  │  │  └─ crm/                 /hospital/crm
 │  │  ├─ solutions/              /solutions   비즈니스 솔루션
-│  │  ├─ connect/ erp/ ai-chatbot/
-│  │  ├─ development/ process/ estimate/
+│  │  │  └─ connect/ erp/ ai-chatbot/   /solutions/...
+│  │  ├─ development/            /development 맞춤 개발
+│  │  │  └─ process/ estimate/   /development/...
+│  │  ├─ about/                  /about       회사 소개
 │  │  ├─ portfolio/ (+ [slug])
 │  │  ├─ pricing/ contact/ faq/
 │  │  └─ (legal)/ terms privacy refund security
@@ -51,7 +53,7 @@ src/
 │  ├─ (internal)/internal/plan/   기획 메모 (내부 검토용, 운영에서는 404)
 │  ├─ robots.ts sitemap.ts not-found.tsx
 ├─ features/
-│  ├─ home/ hospital/ geo/ crm/ solutions/
+│  ├─ home/ about/ hospital/ geo/ crm/ solutions/
 │  ├─ development/ inquiry/ portfolio/ pricing/ support/ legal/
 │  ├─ auth/ portal/ billing/ plan-notes/
 │  └─ <각 feature>/

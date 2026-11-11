@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { mainNav, routes, site, utilityNav, type NavItem } from "@/shared/config";
 import { Container } from "@/shared/ui";
+import { MobileNav } from "./mobile-nav";
 
 /**
  * 데스크톱(md 이상): 메뉴에 마우스를 올리거나 키보드로 포커스하면 하위 메뉴와 설명이 열린다.
- * 모바일: 상위 메뉴만 가로로 보인다 (모바일 메뉴는 docs/TODO.md).
+ * 모바일(md 미만): 메뉴 버튼으로 여는 아코디언 (mobile-nav.tsx).
  */
 function SubMenu({ item }: { item: NavItem }) {
   return (
@@ -40,7 +41,7 @@ function SubMenu({ item }: { item: NavItem }) {
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-foreground/10 bg-background/90 backdrop-blur">
-      <Container className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 py-3">
+      <Container className="relative flex items-center justify-between gap-x-6 py-3">
         <Link href={routes.home} className="text-lg font-bold">
           {site.name}
         </Link>
@@ -50,11 +51,9 @@ export function SiteHeader() {
               {item.label}
             </Link>
           ))}
+          <MobileNav />
         </div>
-        <nav
-          aria-label="주요 메뉴"
-          className="w-full overflow-x-auto text-sm whitespace-nowrap md:w-auto md:overflow-visible"
-        >
+        <nav aria-label="주요 메뉴" className="hidden text-sm whitespace-nowrap md:block">
           <ul className="flex gap-1">
             {mainNav.map((item) => (
               <li key={item.href} className="group relative">
