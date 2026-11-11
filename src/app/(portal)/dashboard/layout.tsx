@@ -1,10 +1,11 @@
 import Link from "next/link";
+import { Suspense } from "react";
+import { PortalSessionNav } from "@/features/auth";
 import { routes, site } from "@/shared/config";
-import { PortalSidebar } from "@/shared/layout";
 
 /**
  * 고객 포털: 사이드바 레이아웃. 로그인 확인은 src/proxy.ts(1차)와
- * 각 화면의 데이터 조회(server/auth, 2차)에서 합니다.
+ * 각 화면의 데이터 조회(server/portal requirePortal, 2차)에서 합니다.
  */
 export default function PortalLayout({ children }: LayoutProps<"/dashboard">) {
   return (
@@ -13,7 +14,9 @@ export default function PortalLayout({ children }: LayoutProps<"/dashboard">) {
         <Link href={routes.home} className="mb-4 block px-3 text-lg font-bold">
           {site.name}
         </Link>
-        <PortalSidebar />
+        <Suspense fallback={<p className="px-3 text-sm text-foreground/60">불러오는 중…</p>}>
+          <PortalSessionNav />
+        </Suspense>
       </aside>
       <main className="flex-1">{children}</main>
     </div>

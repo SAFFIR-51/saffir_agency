@@ -151,3 +151,15 @@ export const portalNav: PortalNavItem[] = [
 export function isPortalMenuVisible(item: PortalNavItem, kinds: readonly MemberKind[]) {
   return !item.audience || item.audience.some((kind) => kinds.includes(kind));
 }
+
+/** 주소로 포털 메뉴를 찾아 이 회원에게 보이는지 확인한다 (메뉴에 없는 주소는 모두에게 보임) */
+export function canSeePortalMenu(href: string, kinds: readonly MemberKind[]) {
+  const item = portalNav.find((menu) => menu.href === href);
+  return !item || isPortalMenuVisible(item, kinds);
+}
+
+/** 이 메뉴를 볼 수 있는 회원 종류 이름 (접근 안내 문구용) */
+export function portalMenuAudienceLabel(href: string) {
+  const item = portalNav.find((menu) => menu.href === href);
+  return item?.audience?.map((kind) => memberKindLabels[kind]).join(", ") ?? "모든 회원";
+}

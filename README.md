@@ -14,7 +14,7 @@ npm run dev
 
 http://localhost:3000
 
-- 포털 화면(/dashboard)을 로그인 없이 보려면 `.env.local`에 `PORTAL_AUTH_BYPASS=1`
+- 포털(/dashboard)은 `/login`의 데모 계정으로 들어갑니다 (회원 종류별 5개, 로그인 화면에서 누르면 채워짐). 로그인 없이 보려면 `.env.local`에 `PORTAL_AUTH_BYPASS=1`
 - Claude Code·Codex 등 에이전트는 `.mcp.json`의 `next-devtools-mcp`로 실행 중인 개발 서버의 오류·라우트를 확인합니다. 개발 지침은 [docs/frontend-guide.md](./docs/frontend-guide.md)
 
 ## 문서

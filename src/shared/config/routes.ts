@@ -84,6 +84,8 @@ export const routes = {
     resetPassword: "/reset-password",
     /** 가입 후 next로 돌아간다 (예: 방금 본 진단 결과) */
     signupFrom: (next: string) => `/signup?next=${encodeURIComponent(next)}` as Route,
+    /** 로그인 후 next로 돌아간다 */
+    loginFrom: (next: string) => `/login?next=${encodeURIComponent(next)}` as Route,
   },
   portal: {
     home: "/dashboard",
@@ -97,3 +99,13 @@ export const routes = {
     account: "/dashboard/account",
   },
 } as const;
+
+/**
+ * 로그인 후 돌아갈 주소처럼 바깥에서 받은 경로를 사이트 안 경로로만 허용한다.
+ * "//다른사이트" 같은 주소는 fallback으로 바꾼다.
+ */
+export function toInternalRoute(path: string | undefined, fallback: Route): Route {
+  return path && path.startsWith("/") && !path.startsWith("//") && !path.includes("\\")
+    ? (path as Route)
+    : fallback;
+}

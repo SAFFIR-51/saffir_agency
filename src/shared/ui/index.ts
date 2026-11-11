@@ -10,6 +10,7 @@ export { PageHeader } from "./page-header";
 export { Subheading } from "./subheading";
 export { BulletList } from "./bullet-list";
 export { DataTable } from "./data-table";
+export { ProgressBar } from "./progress-bar";
 export { StateTable } from "./state-table";
 export { PlanTable } from "./plan-table";
 export { Note } from "./note";
