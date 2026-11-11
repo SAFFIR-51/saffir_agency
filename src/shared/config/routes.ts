@@ -1,4 +1,10 @@
-/** 모든 내부 경로는 여기서만 정의합니다. 화면 코드에 문자열 경로를 직접 쓰지 않습니다. */
+import type { Route } from "next";
+
+/**
+ * 모든 내부 경로는 여기서만 정의합니다. 화면 코드에 문자열 경로를 직접 쓰지 않습니다.
+ * typedRoutes가 켜져 있어서 실제로 없는 경로를 적으면 타입 오류가 납니다.
+ * 동적 경로는 함수로 만들고 반환 타입을 Route로 둡니다.
+ */
 export const routes = {
   home: "/",
   hospital: {
@@ -20,7 +26,7 @@ export const routes = {
     estimate: "/estimate",
   },
   portfolio: "/portfolio",
-  portfolioDetail: (slug: string) => `/portfolio/${slug}`,
+  portfolioDetail: (slug: string) => `/portfolio/${slug}` as Route,
   pricing: "/pricing",
   contact: "/contact",
   faq: "/faq",
@@ -37,7 +43,7 @@ export const routes = {
   portal: {
     home: "/dashboard",
     projects: "/dashboard/projects",
-    project: (id: string) => `/dashboard/projects/${id}`,
+    project: (id: string) => `/dashboard/projects/${id}` as Route,
     reports: "/dashboard/reports",
     requests: "/dashboard/requests",
     solutions: "/dashboard/solutions",

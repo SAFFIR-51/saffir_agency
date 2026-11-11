@@ -59,7 +59,13 @@ import { z } from "zod";
 import type { ActionResult } from "@/shared/lib";
 import { consultSchema } from "../model/consult-schema";
 
-/** 상담 신청 접수. 클라이언트 검증과 별개로 서버에서 반드시 다시 검증한다. */
+/**
+ * 상담 신청 접수. 클라이언트 검증과 별개로 서버에서 반드시 다시 검증한다.
+ * server action은 누구나 호출할 수 있는 공개 POST 주소다 (지침 8번).
+ * - 이 폼은 로그인 없이 쓰는 공개 폼이라 세션 확인은 없다. 대신 반복 제출 제한을 server/에서 건다.
+ * - 로그인이 필요한 action이면 맨 위에서 server/auth의 getSession()으로 세션·권한부터 확인한다.
+ * - 반환값은 화면에 필요한 값(id)만 담는다.
+ */
 export async function submitConsult(input: unknown): Promise<ActionResult<{ id: string }>> {
   const parsed = consultSchema.safeParse(input);
   if (!parsed.success) {

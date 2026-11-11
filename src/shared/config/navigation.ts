@@ -1,6 +1,7 @@
+import type { Route } from "next";
 import { routes } from "./routes";
 
-export type NavItem = { label: string; href: string; children?: NavItem[] };
+export type NavItem = { label: string; href: Route; children?: NavItem[] };
 
 /** 상단 메뉴 5개 (기획서: 병원 솔루션, 비즈니스 솔루션, 맞춤 개발, 포트폴리오, 요금 안내) */
 export const mainNav: NavItem[] = [

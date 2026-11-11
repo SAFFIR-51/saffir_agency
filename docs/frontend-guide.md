@@ -17,21 +17,25 @@
 1. 읽기: `ARCHITECTURE.md`, `README.md`, `AGENTS.md`, 이 문서, 관련 예시
 2. Next.js 16은 학습 데이터와 다르다. API가 확실하지 않으면 `node_modules/next/dist/docs/`에서 먼저 확인한다.
 3. 작업할 feature의 `index.ts`, `shared/ui`, `shared/config/routes.ts`, `content/`를 확인한다.
-4. 코드를 쓰기 전에 계획을 적는다.
+4. 개발 서버(`npm run dev`)가 떠 있으면 `next-devtools-mcp`(`.mcp.json`에 등록됨)로 현재 오류·라우트·로그를 먼저 확인한다. 수정한 뒤에도 같은 방법으로 오류가 없는지 확인한다.
+5. 코드를 쓰기 전에 계획을 적는다.
    - 바꿀 파일 / 새로 만들 파일
    - 재사용할 공통 컴포넌트 / 새로 뽑아낼 공통 컴포넌트 후보
    - 새 라이브러리 필요 여부 (필요하면 13번 형식으로 제안만 하고 멈춘다)
 
 ## 2. 고정 스택 (임의로 바꾸지 않는다)
 
-| 영역       | 사용                                                                          |
-| ---------- | ----------------------------------------------------------------------------- |
-| 프레임워크 | Next.js 16.4 App Router, React 19.3, Cache Components 켜짐                    |
-| 언어       | TypeScript strict                                                             |
-| 스타일     | Tailwind CSS 4. 설정 파일 없이 `src/app/globals.css`의 토큰 사용              |
-| 폼         | react-hook-form 7.91 + @hookform/resolvers 7                                  |
-| 품질       | ESLint(boundaries), Prettier(+tailwind), husky, lint-staged, commitlint, knip |
-| UI 키트    | 쓰지 않는다 (shadcn/ui, MUI, Chakra 등). 공통 UI는 `shared/ui`에 직접 만든다  |
+| 영역       | 사용                                                                           |
+| ---------- | ------------------------------------------------------------------------------ |
+| 런타임     | Node.js 24 LTS (`.nvmrc`, `package.json` engines)                              |
+| 프레임워크 | Next.js 16.4 App Router, React 19.3, Cache Components·typedRoutes 켜짐         |
+| 컴파일     | React Compiler 1.0 켜짐 (자동 메모이제이션)                                    |
+| 언어       | TypeScript 6.0 strict                                                          |
+| 스타일     | Tailwind CSS 4. 설정 파일 없이 `src/app/globals.css`의 토큰 사용               |
+| 폼         | react-hook-form 7.91 + @hookform/resolvers 7                                   |
+| 품질       | ESLint(boundaries), Prettier(+tailwind), husky, lint-staged, commitlint, knip  |
+| UI 키트    | 쓰지 않는다 (shadcn/ui, MUI, Chakra 등). 공통 UI는 `shared/ui`에 직접 만든다   |
+| 에이전트   | `next-devtools-mcp` (`.mcp.json`): 실행 중인 개발 서버의 오류·라우트·로그 확인 |
 
 ## 3. 폴더와 import 규칙
 
@@ -71,7 +75,11 @@
    - 순수 함수 → `shared/lib`
 3. 숫자·가격·목록·문구처럼 사업 담당자가 바꾸는 값 → `content` 또는 `features/<이름>/model`
 4. 외부 API, 비밀키, DB, 쿠키 → `server`. feature의 `api/`에서 호출한다
+   - `server/`는 **데이터 접근 계층**이다. `process.env`는 `server/`에서만 읽는다 (예외: `next.config.ts`, `src/proxy.ts`, `NEXT_PUBLIC_` 값)
+   - `server/` 함수는 DB 레코드를 그대로 돌려주지 않고, 화면에 필요한 필드만 담은 객체(DTO)를 돌려준다
 5. 경로 → `shared/config/routes.ts`. 화면에 `"/pricing"` 같은 문자열을 직접 쓰지 않는다
+   - typedRoutes가 켜져 있어서 경로 타입은 `Route`(`import type { Route } from "next"`)다. 없는 경로를 적으면 타입 오류가 난다
+   - 동적 경로는 `routes.ts`에 함수로 만들고 그 안에서만 `as Route`로 바꾼다. 화면 코드에서는 `as Route`를 쓰지 않는다
 6. 이미지 → `public/images/<feature>/`, WebP 우선, kebab-case 파일명
 
 ## 6. 공통 컴포넌트 규칙 ([예시 1](./examples/01-shared-component.md))
@@ -90,7 +98,12 @@
 - 기본은 서버 컴포넌트다. `"use client"`는 상호작용이 필요한 **가장 작은 컴포넌트**에만 붙인다.
 - `page.tsx`는 `metadata`와 feature 화면 import만 한다.
 - `PageProps<"/경로">`, `LayoutProps<"/경로">`는 전역 타입이다. `params`, `searchParams`는 Promise이므로 `await`한다.
-- Cache Components가 켜져 있다. 쿠키, 헤더, searchParams, 미리 알 수 없는 params는 `<Suspense>` 안에서 읽는다. 동적 경로는 `generateStaticParams`를 쓰거나 Suspense로 감싼다.
+- Cache Components가 켜져 있다. 데이터를 읽을 때 Next가 오류로 제시하는 세 가지 중 하나를 고르고, 작업 보고에 무엇을 골랐는지 적는다.
+  - **stream**: 요청마다 다른 데이터(쿠키, 헤더, searchParams, 미리 알 수 없는 params, 로그인 사용자 데이터) → `<Suspense fallback>` 안에서 읽는다
+  - **cache**: 모든 사용자에게 같은 데이터(요금, 포트폴리오, 공개 콘텐츠를 외부에서 가져올 때) → `"use cache"` + 필요하면 `cacheLife`·`cacheTag`
+  - **block**(`export const instant = false`): 쓰지 않는다. 꼭 필요하면 이유와 함께 제안한다
+  - 동적 경로는 `generateStaticParams`를 쓰거나 Suspense로 감싼다.
+- **React Compiler**가 켜져 있다. `useMemo`, `useCallback`, `React.memo`를 직접 쓰지 않는다. `react-hooks` lint가 컴파일러가 다룰 수 없는 코드(렌더 중 부수 효과, ref 읽기, Effect 안 setState 등)를 오류로 알려주면 규칙을 끄지 말고 코드를 고친다. 성능 문제가 측정되면 그때 제안한다.
 - 미들웨어는 `src/proxy.ts`다. 낙관적 확인만 하고, 실제 권한 검증은 `server/auth`에서 한다.
 - 서버 전용 파일은 맨 위에 `import "server-only"`를 둔다.
 - 링크는 `next/link`, 이미지는 `next/image`, 폰트는 `next/font`를 쓴다.
@@ -101,6 +114,7 @@
 ## 8. 폼과 server action ([예시 2](./examples/02-form.md))
 
 - 입력이 있는 폼은 모두 react-hook-form으로 만든다. `useState`로 필드를 하나씩 관리하지 않는다.
+- 입력값을 화면에 반영할 때는 `watch()` 대신 **`useWatch`**를 쓴다. `watch()`는 React Compiler의 자동 메모이제이션과 맞지 않아 화면이 갱신되지 않을 수 있다 (lint `incompatible-library` 경고).
 - 스키마 하나로 클라이언트 검증(resolver)과 서버 재검증을 함께 한다. 스키마 라이브러리는 아직 없다 → 첫 폼 작업 때 13번 형식으로 zod를 제안한다.
 - 배치: `model/<이름>-schema.ts` → `components/<이름>-form.tsx`(`"use client"`) → `api/<동사>-<이름>.ts`(`"use server"`)
 - server action은 항상 `ActionResult`로 반환한다.
@@ -114,6 +128,11 @@
   - 화면은 `ok`만 보고 분기한다. `throw`로 실패를 알리지 않는다 (예상 못 한 오류만 `error.tsx`로 간다).
   - `fieldErrors`는 `setError`로 해당 필드에 다시 표시한다.
 
+- **server action은 누구나 호출할 수 있는 공개 POST 주소다.** 화면에서 폼을 숨기는 것은 보안이 아니다.
+  - 로그인이 필요한 action은 맨 위에서 `server/auth`로 세션과 권한을 확인한다.
+  - 클라이언트에서는 대상의 ID와 바꿀 값만 받는다. 소유자, 금액, 상태 같은 값은 서버에서 세션 기준으로 다시 읽는다. 스키마 검증은 모양만 확인할 뿐 소유권을 확인하지 않는다.
+  - 반환값은 화면에 필요한 값만 담는다. DB 레코드를 그대로 돌려주지 않는다.
+  - 삭제·결제 취소처럼 되돌릴 수 없는 동작은 권한을 한 번 더 확인한다.
 - 반드시 지킬 것:
   - 서버에서 다시 검증한다. 클라이언트 검증은 사용성을 위한 것일 뿐이다.
   - 에러 메시지는 한국어로 해당 필드 바로 아래에 보여주고, `aria-invalid`, `aria-describedby`를 연결한다.
@@ -146,6 +165,8 @@
   - 리다이렉트 횟수, 응답 크기, 시간 제한을 둔다. 이 검사는 서버(`server/`)에서 한다.
 - 폼·진단 요청에는 반복 제출 제한(같은 IP·같은 주소 기준)을 둔다.
 - 비밀키, 토큰, 고객 데이터를 클라이언트 코드, 로그, 이벤트 속성에 남기지 않는다.
+- server action 보안 규칙은 8번을 따른다. 서버를 여러 대로 운영하면 `NEXT_SERVER_ACTIONS_ENCRYPTION_KEY`를 모든 서버에 같은 값으로 설정한다.
+- 환경변수와 외부 API 접근은 `server/`(데이터 접근 계층)에서만 한다 (5번).
 
 ## 11. 스타일
 
@@ -181,6 +202,7 @@
 - 승인되면 정확한 버전으로 설치하고 dependencies와 devDependencies를 구분한다.
 - 쓰지 않기로 한 것: shadcn/ui를 포함한 UI 키트
 - 필요해지면 제안할 후보: zod(스키마), clsx + tailwind-merge(`cn()` 교체), lucide-react(아이콘), motion(애니메이션), sonner(알림)
+- 보류 중 (지원 상황이 바뀌면 18번으로 제안): TypeScript 7(typescript-eslint 미지원), ESLint 10(eslint-config-next 플러그인 미지원), Oxlint·Oxfmt(eslint-plugin-boundaries 대체 불가)
 
 ## 14. 화면 품질 체크
 
@@ -196,6 +218,7 @@
 - [ ] `npm run build` 통과
 - [ ] `npm run knip`에 내 작업으로 생긴 새 미사용 항목이 없음
 - [ ] 375px과 1440px 화면에서 확인
+- [ ] 개발 서버에 오류가 없음 (`next-devtools-mcp`의 `get_errors` 또는 브라우저 콘솔)
 - [ ] 새 경로는 `routes.ts`에 등록, 공개 페이지면 `sitemap.ts`에도 추가
 - [ ] 필요한 전환 이벤트를 심음 (9번)
 - [ ] 구조가 바뀌었으면 `ARCHITECTURE.md` 갱신

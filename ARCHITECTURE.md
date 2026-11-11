@@ -77,17 +77,22 @@ src/
 | 회원 유형 (일반 / 구독 / 클라이언트)                                 | `server/auth/session.ts`                                      |
 | 코어 서버 (인스턴스 상태·사용량 → 서버 운영비 근거)                  | `server/core/client.ts`                                       |
 | 토스 결제 3유형 (단건 / 구독 / 변동 청구)                            | `server/payments/toss.ts`, `features/billing`                 |
-| saffirgeo 301 리다이렉트                                             | `next.config.ts` redirects                                    |
+| saffirgeo 301 리다이렉트                                             | `src/proxy.ts` (호스트 기준)                                  |
 
 ## 새 페이지 추가 순서
 
-1. `shared/config/routes.ts`에 경로 추가
-2. `features/<서비스>/components/`에 화면 작성 → `index.ts`에서 export
-3. `app/(marketing|portal)/<경로>/page.tsx`에서 import + metadata
+1. `features/<서비스>/components/`에 화면 작성 → `index.ts`에서 export
+2. `app/(marketing|auth|portal)/<경로>/page.tsx` 작성 (metadata + 화면 import)
+3. `npm run typecheck` (또는 `npm run dev`)로 라우트 타입을 다시 만든 뒤 `shared/config/routes.ts`에 경로 추가
+   - typedRoutes는 실제 page.tsx가 있는 경로만 `Route`로 인정하므로, 페이지보다 경로를 먼저 추가하면 타입 오류가 난다
 4. 공개 페이지면 `app/sitemap.ts`에 추가
+5. `npm run check`
 
 ## 참고
 
+- Node.js 24 LTS, TypeScript 6.0, React Compiler 1.0 켜짐 (`useMemo`·`useCallback` 직접 쓰지 않음).
+- typedRoutes 켜짐: 경로 타입은 `Route`. 없는 경로로 가는 `Link`는 타입 오류.
+- saffirgeo 리다이렉트를 `next.config.ts` redirects에 두지 않는 이유: `"/:path*"` 규칙이 typedRoutes에서 모든 경로를 유효로 만들어 오타를 못 잡는다.
 - Next.js 16 (App Router, Cache Components 켜짐). 쿠키·세션처럼 요청마다 달라지는 값은
   `<Suspense>` 안에서 읽어야 합니다. 예: `app/(portal)/dashboard/projects/[projectId]/page.tsx`
 - Next 16 문서는 `node_modules/next/dist/docs/`에 있습니다 (AGENTS.md 참고).

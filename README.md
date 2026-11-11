@@ -4,6 +4,8 @@ saffir.co.kr — 사피어 회사 사이트 + 고객 포털 (Next.js 16 · TypeS
 
 ## 시작
 
+Node.js 24 LTS가 필요합니다 (`node -v`로 확인, nvm 사용 시 `nvm use`).
+
 ```bash
 npm install
 cp .env.example .env.local   # Windows: copy .env.example .env.local
@@ -13,6 +15,7 @@ npm run dev
 http://localhost:3000
 
 - 포털 화면(/dashboard)을 로그인 없이 보려면 `.env.local`에 `PORTAL_AUTH_BYPASS=1`
+- Claude Code·Codex 등 에이전트는 `.mcp.json`의 `next-devtools-mcp`로 실행 중인 개발 서버의 오류·라우트를 확인합니다. 개발 지침은 [docs/frontend-guide.md](./docs/frontend-guide.md)
 
 ## 명령어
 

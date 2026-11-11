@@ -68,8 +68,9 @@ async function ProjectDetail({ params }: { params: Promise<{ projectId: string }
 
 ## 새 페이지 추가 순서
 
-1. `shared/config/routes.ts`에 경로 추가
-2. `features/<서비스>/components/`에 화면 작성 → `index.ts`에서 export
-3. `app/(marketing|auth|portal)/<경로>/page.tsx` 작성 (위 모양)
+1. `features/<서비스>/components/`에 화면 작성 → `index.ts`에서 export
+2. `app/(marketing|auth|portal)/<경로>/page.tsx` 작성 (metadata + 화면 import)
+3. `npm run typecheck` (또는 `npm run dev`)로 라우트 타입을 다시 만든 뒤 `shared/config/routes.ts`에 경로 추가
+   - typedRoutes는 실제 page.tsx가 있는 경로만 `Route`로 인정하므로, 페이지보다 경로를 먼저 추가하면 타입 오류가 난다
 4. 공개 페이지면 `app/sitemap.ts`에 추가
 5. `npm run check`

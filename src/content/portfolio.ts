@@ -1,3 +1,5 @@
+import type { Route } from "next";
+
 /** 포트폴리오 20건, 5개 묶음 (기획서 "맞춤 개발과 포트폴리오") */
 export type PortfolioGroup = "medical" | "commerce" | "ai" | "iot" | "app";
 export type Tech = "web" | "app" | "ai" | "iot" | "erp";
@@ -8,7 +10,7 @@ export type PortfolioItem = {
   group: PortfolioGroup;
   tech: Tech[];
   /** 이 사례와 연결되는 솔루션 페이지 경로 ("이 기능을 솔루션으로 도입하기") */
-  relatedSolution?: string;
+  relatedSolution?: Route;
 };
 
 export const portfolioGroups: Record<PortfolioGroup, string> = {
