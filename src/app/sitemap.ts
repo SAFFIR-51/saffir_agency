@@ -1,5 +1,5 @@
-import { routes, site } from "@/shared/config";
 import type { MetadataRoute } from "next";
+import { routes, site } from "@/shared/config";
 
 const publicPaths = [
   routes.home,

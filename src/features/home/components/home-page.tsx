@@ -1,6 +1,6 @@
 import { businessModels, developmentAreas, modules, workflow } from "@/content/company";
 import { portfolioGroups, portfolioItems } from "@/content/portfolio";
-import { geoPlans, hospitalWebsitePlans, solutionPlans } from "@/content/pricing";
+import { geoPlans, outsourcingDeposits, solutionPlans } from "@/content/pricing";
 import { listServices, serviceLines } from "@/content/services";
 import { routes, site } from "@/shared/config";
 import { formatKRW } from "@/shared/lib";
@@ -14,9 +14,9 @@ import {
   PageHeader,
   Section,
   WireBox,
-  WireInput,
 } from "@/shared/ui";
 import { homeContent as c } from "../model/content";
+import { EntryCard } from "./entry-card";
 
 function minPrice(values: Array<number | null | undefined>) {
   const prices = values.filter((v): v is number => typeof v === "number" && v > 0);
@@ -31,22 +31,30 @@ export function HomePage() {
       count: portfolioItems.filter((item) => item.group === group).length,
     }))
     .filter((g) => g.count > 0);
-  const featured = c.featuredSlugs
-    .map((slug) => portfolioItems.find((item) => item.slug === slug))
-    .filter((item) => item !== undefined);
+  const featured = c.featured.flatMap((f) => {
+    const item = portfolioItems.find((p) => p.slug === f.slug);
+    return item ? [{ ...item, tag: f.tag }] : [];
+  });
+  /** 시작 가격은 세 갈래에 한 줄씩 */
+  const businessIds = listServices("business").map((s) => s.id as string);
   const startingPrices = [
-    { name: "AI 검색 최적화", value: minPrice(geoPlans.map((p) => p.monthly)), basis: "월 구독" },
     {
-      name: "병원 홈페이지",
-      value: minPrice(hospitalWebsitePlans.map((p) => p.setup)),
-      basis: "제작비",
+      name: serviceLines.hospital.name,
+      value: minPrice(geoPlans.map((p) => p.monthly)),
+      basis: "월 구독 (AI 검색 최적화)",
     },
     {
-      name: "구축형 솔루션",
-      value: minPrice(solutionPlans.map((p) => p.setup)),
+      name: serviceLines.business.name,
+      value: minPrice(solutionPlans.filter((p) => businessIds.includes(p.id)).map((p) => p.setup)),
       basis: "도입 세팅비",
     },
+    {
+      name: "맞춤 개발",
+      value: minPrice(outsourcingDeposits.map((p) => p.setup)),
+      basis: "정찰가 계약금",
+    },
   ];
+  const lines = c.entry.lines;
 
   return (
     <>
@@ -67,37 +75,45 @@ export function HomePage() {
 
       <Section label="S2 · 세 갈래" title={c.entry.title}>
         <CardGrid>
-          <LinkCard
-            href={routes.hospital.root}
+          <EntryCard
             title={serviceLines.hospital.name}
-            description={c.entry.hospital}
+            href={routes.hospital.root}
+            description={lines.hospital.description}
+            start={lines.hospital.start}
+            moreLabel={c.entry.more}
           >
             <BulletList items={listServices("hospital").map((s) => s.name)} />
-          </LinkCard>
-          <LinkCard
-            href={routes.solutions.root}
+          </EntryCard>
+          <EntryCard
             title={serviceLines.business.name}
-            description={c.entry.business}
+            href={routes.solutions.root}
+            description={lines.business.description}
+            start={lines.business.start}
+            moreLabel={c.entry.more}
           >
             <BulletList items={listServices("business").map((s) => s.name)} />
-          </LinkCard>
-          <LinkCard
-            href={routes.development.root}
+          </EntryCard>
+          <EntryCard
             title="맞춤 개발"
-            description={c.entry.development}
+            href={routes.development.root}
+            description={lines.development.description}
+            start={lines.development.start}
+            moreLabel={c.entry.more}
           >
             <BulletList items={developmentAreas} />
-          </LinkCard>
+          </EntryCard>
         </CardGrid>
-        <ButtonLink href={`${routes.hospital.geo}#diagnosis`} variant="secondary">
-          {c.entry.hospitalShortcut}
-        </ButtonLink>
       </Section>
 
       <Section label="S3 · 대표 사례" title={c.cases.title}>
         <CardGrid>
           {featured.map((item) => (
-            <LinkCard key={item.slug} href={routes.portfolioDetail(item.slug)} title={item.title}>
+            <LinkCard
+              key={item.slug}
+              href={routes.portfolioDetail(item.slug)}
+              title={item.title}
+              description={item.tag}
+            >
               <WireBox label="이미지" size="sm" />
             </LinkCard>
           ))}
@@ -107,30 +123,21 @@ export function HomePage() {
         </ButtonLink>
       </Section>
 
-      <Section
-        label="S4 · 무료 진단"
-        title={c.diagnosis.title}
-        description={c.diagnosis.description}
-      >
-        <WireInput label="홈페이지 주소" placeholder="https://" />
-        <ButtonLink href={routes.hospital.geo}>무료 진단하기</ButtonLink>
-      </Section>
-
-      <Section label="S5 · 일하는 방식" title={c.models.title}>
+      <Section label="S4 · 제공 방식" title={c.models.title} description={c.models.note}>
         <DataTable
-          columns={["방식", "대표 상품", "제공 방식", "요금 방식", "소스·데이터"]}
-          rows={businessModels.map((m) => [m.type, m.products, m.delivery, m.revenue, m.ownership])}
+          columns={["방식", "대표 상품", "제공 방식", "요금 방식"]}
+          rows={businessModels.map((m) => [m.type, m.products, m.delivery, m.revenue])}
         />
       </Section>
 
-      <Section label="S6 · 진행 순서" title={c.workflow.title}>
+      <Section label="S5 · 진행 순서" title={c.workflow.title}>
         <DataTable
           columns={["단계", "내용"]}
           rows={workflow.map((w, index) => [`${index + 1}. ${w.step}`, w.detail])}
         />
       </Section>
 
-      <Section label="S7 · 보유 모듈" title={c.modules.title} description={c.modules.description}>
+      <Section label="S6 · 보유 모듈" title={c.modules.title} description={c.modules.description}>
         <CardGrid>
           {modules.map((m) => (
             <IconTile key={m} label={m} />
@@ -138,9 +145,9 @@ export function HomePage() {
         </CardGrid>
       </Section>
 
-      <Section label="S8 · 요금" title={c.pricing.title} description="금액은 VAT 포함입니다.">
+      <Section label="S7 · 요금" title={c.pricing.title} description="금액은 VAT 포함입니다.">
         <DataTable
-          columns={["서비스", "시작 가격", "기준"]}
+          columns={["갈래", "시작 가격", "기준"]}
           rows={startingPrices.map((p) => [
             p.name,
             p.value === null ? "별도 견적" : `${formatKRW(p.value)}부터`,
@@ -152,9 +159,9 @@ export function HomePage() {
         </ButtonLink>
       </Section>
 
-      <Section label="S9 · 상담" title={c.closing.title} description={c.closing.description}>
+      <Section label="S8 · 상담" title={c.closing.title} description={c.closing.description}>
         <div className="flex flex-wrap gap-3">
-          <ButtonLink href={routes.contact}>무료 상담</ButtonLink>
+          <ButtonLink href={routes.contact}>{c.hero.primaryCta}</ButtonLink>
           <ButtonLink href={routes.development.estimate} variant="secondary">
             맞춤 개발 견적
           </ButtonLink>
