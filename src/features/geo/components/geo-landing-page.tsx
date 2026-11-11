@@ -1,7 +1,7 @@
 import { geoPlans, geoPricingHeadline } from "@/content/pricing";
 import { SolutionTemplate } from "@/shared/sections";
 import { PlanTable, Subheading, TrackedButtonLink, WireBox, WireInput } from "@/shared/ui";
-import { geoContent, geoResultActions } from "../model/content";
+import { geoContent, geoLockedResult, geoResultActions } from "../model/content";
 
 export function GeoLandingPage() {
   return (
@@ -14,6 +14,7 @@ export function GeoLandingPage() {
             <Subheading>무료 진단</Subheading>
             <WireInput label="홈페이지 주소" placeholder="https://" />
             <WireBox label="진단 결과 · 총점, 영역별 점수, 우선 개선 항목" size="lg" />
+            <WireBox label={geoLockedResult} />
             <div className="flex flex-wrap gap-3">
               {geoResultActions.map((a) => (
                 <TrackedButtonLink
@@ -21,7 +22,7 @@ export function GeoLandingPage() {
                   href={a.href}
                   event="geo_result_cta_clicked"
                   eventProps={{ action: a.action }}
-                  variant="secondary"
+                  variant={a.action === "signup" ? "primary" : "secondary"}
                 >
                   {a.label}
                 </TrackedButtonLink>

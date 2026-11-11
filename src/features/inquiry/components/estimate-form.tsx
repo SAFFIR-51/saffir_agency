@@ -13,6 +13,7 @@ import {
   estimateContent,
 } from "../model/content";
 import { estimateSchema, type EstimateInput } from "../model/schema";
+import { DoneView } from "./done-view";
 
 const defaultValues: EstimateInput = {
   company: "",
@@ -47,13 +48,7 @@ export function EstimateForm() {
     setDone(true);
   });
 
-  if (done) {
-    return (
-      <p role="status" className="rounded-md border border-foreground/20 p-5">
-        {estimateContent.done}
-      </p>
-    );
-  }
+  if (done) return <DoneView content={estimateContent.done} />;
 
   return (
     <form onSubmit={onSubmit} noValidate className="max-w-xl space-y-4">

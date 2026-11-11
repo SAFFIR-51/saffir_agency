@@ -21,7 +21,7 @@ export const connectContent: SolutionPageContent = {
     { step: "운영", detail: "전용 서버에서 재고와 주문을 동기화합니다." },
   ],
   faq: [],
-  cta: { label: "도입 상담", href: routes.contact },
+  cta: { label: "도입 상담", href: routes.contactFor("connect") },
 };
 
 export const erpContent: SolutionPageContent = {
@@ -43,7 +43,7 @@ export const erpContent: SolutionPageContent = {
     { step: "데이터 이관", detail: "기존 엑셀 데이터를 옮깁니다." },
   ],
   faq: [],
-  cta: { label: "1단계 진단 신청", href: routes.contact },
+  cta: { label: "1단계 진단 신청", href: routes.contactFor("erp") },
 };
 
 export const aiChatbotContent: SolutionPageContent = {
@@ -64,7 +64,7 @@ export const aiChatbotContent: SolutionPageContent = {
     { step: "확장", detail: "범위를 넓혀 도입합니다." },
   ],
   faq: [],
-  cta: { label: "PoC 신청", href: routes.contact },
+  cta: { label: "PoC 신청", href: routes.contactFor("ai-chatbot") },
 };
 
 /** 요금표 아래 한 줄 */

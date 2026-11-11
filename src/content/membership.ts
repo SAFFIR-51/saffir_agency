@@ -24,4 +24,15 @@ export const memberTypes = [
 ];
 
 /** 무료 회원가입으로 열리는 것 (병원 고객 흐름 2단계) */
-export const signupBenefits = ["전체 근거·수정 코드 열람", "진단 기록 저장"];
+export const signupBenefits = [
+  "GEO 진단 전체 근거·수정 코드 열람",
+  "진단·광고 검사 기록 저장",
+  "데모 신청·견적 요청 내역 확인",
+];
+
+/** 가입한 뒤 이동하는 곳 */
+export const afterSignupRows = [
+  { from: "GEO 진단 결과에서 가입", to: "방금 본 진단 결과 (전체 근거가 열린 상태)" },
+  { from: "의료광고 검사 결과에서 가입", to: "방금 본 검사 결과 (기록 저장됨)" },
+  { from: "직접 가입", to: "포털 홈" },
+];

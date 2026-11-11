@@ -22,11 +22,14 @@ export function PlanTable({
   setupLabel = "1회",
   monthlyLabel = "월",
   caption,
+  action,
 }: {
   plans: PlanRow[];
   setupLabel?: string;
   monthlyLabel?: string;
   caption?: string;
+  /** 상품마다 버튼 (결제하기, 상담 등). 없으면 열을 만들지 않는다 */
+  action?: (plan: PlanRow) => React.ReactNode;
 }) {
   const hasSetup = plans.some((p) => p.setup !== undefined);
   const hasMonthly = plans.some((p) => p.monthly !== undefined);
@@ -37,6 +40,7 @@ export function PlanTable({
     ...(hasSetup ? [setupLabel] : []),
     ...(hasMonthly ? [monthlyLabel] : []),
     ...(hasNote ? ["비고"] : []),
+    ...(action ? ["신청"] : []),
   ];
   const rows = plans.map((p) => [
     p.name,
@@ -44,6 +48,7 @@ export function PlanTable({
     ...(hasSetup ? [price(p.setup)] : []),
     ...(hasMonthly ? [price(p.monthly)] : []),
     ...(hasNote ? [p.note ?? ""] : []),
+    ...(action ? [action(p)] : []),
   ]);
   return <DataTable columns={columns} rows={rows} caption={caption} />;
 }

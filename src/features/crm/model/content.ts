@@ -25,6 +25,6 @@ export const crmContent: SolutionPageContent = {
     { step: "운영", detail: "포털에서 서버 상태와 사용량을 확인합니다." },
   ],
   faq: [],
-  cta: { label: "데모 신청", href: routes.contact },
-  secondaryCta: { label: "도입 신청", href: routes.contact },
+  cta: { label: "데모 신청", href: routes.contactFor("crm-demo") },
+  secondaryCta: { label: "도입 신청", href: routes.contactFor("crm-adopt") },
 };

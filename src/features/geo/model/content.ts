@@ -32,11 +32,23 @@ export const geoContent: SolutionPageContent = {
   secondaryCta: { label: "요금 보기", href: `${routes.pricing}#geo` },
 };
 
-/** 진단 결과 아래 두 갈래. action은 전환 이벤트(geo_result_cta_clicked) 속성으로 남긴다 */
-export const geoResultActions: { action: "fix" | "track"; label: string; href: Route }[] = [
-  { action: "fix", label: "사피어가 고쳐드립니다", href: routes.hospital.website },
+/** 진단 결과 아래 세 갈래. action은 전환 이벤트(geo_result_cta_clicked) 속성으로 남긴다 */
+export const geoResultActions: {
+  action: "signup" | "fix" | "track";
+  label: string;
+  href: Route;
+}[] = [
+  {
+    action: "signup",
+    label: "가입하고 전체 보기",
+    href: routes.auth.signupFrom(`${routes.hospital.geo}#diagnosis`),
+  },
+  { action: "fix", label: "사피어가 고쳐드립니다", href: routes.contactFor("geo-fix") },
   { action: "track", label: "매달 추적하기", href: `${routes.pricing}#geo` },
 ];
+
+/** 진단 결과 중 가입해야 보이는 부분 */
+export const geoLockedResult = "전체 근거 · 수정 코드 (가입하면 바로 열립니다)";
 
 export const adCheckContent: SolutionPageContent = {
   path: routes.hospital.adCheck,

@@ -1,3 +1,3 @@
 export { site } from "./site";
-export { routes } from "./routes";
+export { routes, type ContactTopic } from "./routes";
 export * from "./navigation";

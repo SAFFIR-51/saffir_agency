@@ -1,5 +1,16 @@
 import type { Route } from "next";
 
+/** 문의 유형을 미리 골라 두고 문의 페이지로 보낼 때 쓰는 값 (/contact?type=...) */
+export type ContactTopic =
+  | "geo-fix"
+  | "hospital-website"
+  | "crm-demo"
+  | "crm-adopt"
+  | "hospital-bundle"
+  | "connect"
+  | "erp"
+  | "ai-chatbot";
+
 /**
  * 모든 내부 경로는 여기서만 정의합니다. 화면 코드에 문자열 경로를 직접 쓰지 않습니다.
  * typedRoutes가 켜져 있어서 실제로 없는 경로를 적으면 타입 오류가 납니다.
@@ -31,6 +42,10 @@ export const routes = {
   portfolioDetail: (slug: string) => `/portfolio/${slug}` as Route,
   pricing: "/pricing",
   contact: "/contact",
+  /** 문의 유형을 미리 선택한 문의 페이지 */
+  contactFor: (topic: ContactTopic) => `/contact?type=${topic}` as Route,
+  /** 주문서 (요금표의 결제 버튼) */
+  order: (planId: string) => `/order?plan=${planId}` as Route,
   faq: "/faq",
   legal: {
     terms: "/terms",
@@ -45,6 +60,8 @@ export const routes = {
   auth: {
     login: "/login",
     signup: "/signup",
+    /** 가입 후 next로 돌아간다 (예: 방금 본 진단 결과) */
+    signupFrom: (next: string) => `/signup?next=${encodeURIComponent(next)}` as Route,
   },
   portal: {
     home: "/dashboard",

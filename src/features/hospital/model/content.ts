@@ -37,6 +37,6 @@ export const hospitalWebsiteContent: SolutionPageContent = {
     { step: "관리", detail: "GEO 관리형 또는 단순 유지보수를 고릅니다." },
   ],
   faq: [],
-  cta: { label: "제작 상담", href: routes.contact },
-  secondaryCta: { label: "기본형 결제", href: `${routes.pricing}#hospital-website` },
+  cta: { label: "제작 상담", href: routes.contactFor("hospital-website") },
+  secondaryCta: { label: "기본형 결제", href: routes.order("web-basic") },
 };

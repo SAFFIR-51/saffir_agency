@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { DataTable, PageHeader, Section } from "@/shared/ui";
+import { Suspense } from "react";
+import { DataTable, PageHeader, Section, WireBox } from "@/shared/ui";
 import { contactContent as c, contactTypes } from "../model/content";
 import { ContactForm } from "./contact-form";
 
@@ -19,7 +20,10 @@ export function ContactPage() {
         />
       </Section>
       <Section label="S3 · 문의서" title="문의 남기기">
-        <ContactForm />
+        {/* 주소의 ?type= 값을 읽으므로 Suspense 안에서 그린다 */}
+        <Suspense fallback={<WireBox label="문의서" size="lg" />}>
+          <ContactForm />
+        </Suspense>
       </Section>
     </>
   );

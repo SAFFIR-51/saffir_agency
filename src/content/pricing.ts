@@ -135,6 +135,19 @@ export const serverTiers: Plan[] = [
   },
 ];
 
+/**
+ * 요금표에서 바로 결제(주문서)로 가는 상품. 나머지는 상담 후 결제.
+ * (안) GEO 유료 구독, 병원 홈페이지 기본형, 외주 계약금. 솔루션 세팅비는 상담 후 결제.
+ */
+export const orderablePlanIds = [
+  "geo-monitoring",
+  "geo-pro",
+  "geo-managed",
+  "web-basic",
+  "dev-website-deposit",
+  "dev-mvp-deposit",
+] as const;
+
 export const overage = { storagePer10GB: 11000, trafficPer100GB: 22000 };
 
 export const messageUnitPrices = { alimtalk: 15, sms: 25, lms: 60 };

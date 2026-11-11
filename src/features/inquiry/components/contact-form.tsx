@@ -1,13 +1,20 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { applyFieldErrors, track } from "@/shared/lib";
 import { Button, ConsentField, FormField, Input, Select, Textarea, fieldA11y } from "@/shared/ui";
 import { submitContact } from "../api/submit-contact";
-import { consentText, contactContent, contactTypeLabels } from "../model/content";
+import {
+  consentText,
+  contactContent,
+  contactTypeLabelFor,
+  contactTypeLabels,
+} from "../model/content";
 import { contactSchema, type ContactInput } from "../model/schema";
+import { DoneView } from "./done-view";
 
 const defaultValues: ContactInput = {
   organization: "",
@@ -18,7 +25,9 @@ const defaultValues: ContactInput = {
   agree: false,
 };
 
+/** 다른 페이지 버튼에서 ?type=으로 문의 유형을 미리 골라 온다 */
 export function ContactForm() {
+  const preselected = contactTypeLabelFor(useSearchParams().get("type"));
   const [serverError, setServerError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
   const {
@@ -26,7 +35,10 @@ export function ContactForm() {
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },
-  } = useForm<ContactInput>({ resolver: zodResolver(contactSchema), defaultValues });
+  } = useForm<ContactInput>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: { ...defaultValues, type: preselected },
+  });
 
   const onSubmit = handleSubmit(async (values) => {
     setServerError(null);
@@ -40,13 +52,7 @@ export function ContactForm() {
     setDone(true);
   });
 
-  if (done) {
-    return (
-      <p role="status" className="rounded-md border border-foreground/20 p-5">
-        {contactContent.done}
-      </p>
-    );
-  }
+  if (done) return <DoneView content={contactContent.done} />;
 
   return (
     <form onSubmit={onSubmit} noValidate className="max-w-xl space-y-4">
@@ -86,6 +92,8 @@ export function ContactForm() {
       <FormField id="type" label="문의 유형" required error={errors.type?.message}>
         <Select
           options={contactTypeLabels}
+          // 서버에서 그린 select에도 미리 고른 값이 보이도록 DOM 기본값을 함께 준다
+          defaultValue={preselected}
           {...fieldA11y("type", errors.type?.message)}
           {...register("type")}
         />
