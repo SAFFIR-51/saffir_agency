@@ -8,9 +8,9 @@ import { PortalSidebar } from "@/shared/layout";
  */
 export default function PortalLayout({ children }: LayoutProps<"/dashboard">) {
   return (
-    <div className="flex flex-1">
-      <aside className="hidden w-60 shrink-0 border-r border-foreground/10 p-4 md:block">
-        <Link href={routes.home} className="mb-6 block px-3 text-lg font-bold">
+    <div className="flex flex-1 flex-col md:flex-row">
+      <aside className="shrink-0 border-b border-foreground/10 p-4 md:w-60 md:border-r md:border-b-0">
+        <Link href={routes.home} className="mb-4 block px-3 text-lg font-bold">
           {site.name}
         </Link>
         <PortalSidebar />

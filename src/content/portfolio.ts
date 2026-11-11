@@ -96,3 +96,29 @@ export const portfolioItems: PortfolioItem[] = [
 export function getPortfolioItem(slug: string) {
   return portfolioItems.find((item) => item.slug === slug);
 }
+
+/** 묶음별 사이트에서의 역할 (기획서 표) */
+export const portfolioGroupRoles: Record<PortfolioGroup, string> = {
+  medical: "병원 솔루션의 근거",
+  commerce: "커머스 연동 솔루션 + 외주",
+  ai: "AI 챗봇 솔루션 + 외주",
+  iot: "외주 차별점",
+  app: "외주",
+};
+
+export const techLabels: Record<Tech, string> = {
+  web: "웹",
+  app: "앱",
+  ai: "AI",
+  iot: "IoT",
+  erp: "ERP",
+};
+
+/** 업종 필터 (기획서: 의료, 커머스, 라이프스타일 등) */
+export const industryFilters = ["의료", "커머스", "라이프스타일"];
+
+export const portfolioNotes = [
+  "의료·헬스케어가 8건으로 가장 많아, 병원을 대표 솔루션 라인으로 세우는 근거가 됩니다.",
+  "기획서의 묶음별 건수 합은 22건입니다. 감정 AI 코칭·이명 케어가 의료와 AI 묶음에 함께 들어가 있어, 고유 프로젝트 20건 기준으로 표시합니다.",
+  "각 항목에 관련 솔루션 링크를 달아 이 기능을 솔루션으로 도입하기로 이어집니다.",
+];

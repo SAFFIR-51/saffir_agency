@@ -1,11 +1,23 @@
-import { PagePlaceholder } from "@/shared/layout";
+import { SolutionTemplate } from "@/shared/sections";
+import { Note, Todo } from "@/shared/ui";
+import { adCheckContent, adCheckDisclaimer } from "../model/content";
 
 export function AdCheckPage() {
   return (
-    <PagePlaceholder
-      title="사피어 의료광고 검사기"
-      description="의료법 제56조 위험 표현을 미리 찾아드립니다."
-      sections={["문구 입력창 (무료 검사하기)", "결과", "법률 자문 아님 고지"]}
+    <SolutionTemplate
+      content={adCheckContent}
+      slots={{
+        afterFeatures: (
+          <Note title="고지">
+            <p>{adCheckDisclaimer}</p>
+          </Note>
+        ),
+        demo: (
+          <div id="check">
+            <Todo>광고 문구 입력창 (검사 기능 연결 예정)</Todo>
+          </div>
+        ),
+      }}
     />
   );
 }

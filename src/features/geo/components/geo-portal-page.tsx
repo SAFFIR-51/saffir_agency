@@ -1,10 +1,6 @@
-import { PagePlaceholder } from "@/shared/layout";
+import { ScreenOutline } from "@/shared/layout";
+import { geoPortalItems } from "../model/content";
 
 export function GeoPortalPage() {
-  return (
-    <PagePlaceholder
-      title="GEO"
-      sections={["진단 리포트", "AI 가시성", "진단 기록", "의료광고 점검"]}
-    />
-  );
+  return <ScreenOutline eyebrow="포털" title="GEO" items={geoPortalItems} />;
 }

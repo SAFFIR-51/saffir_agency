@@ -36,6 +36,10 @@ export const routes = {
     refund: "/refund",
     security: "/security",
   },
+  /** 내부 검토용 (운영 환경에서는 404) */
+  internal: {
+    plan: "/internal/plan",
+  },
   auth: {
     login: "/login",
     signup: "/signup",

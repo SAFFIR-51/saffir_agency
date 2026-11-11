@@ -1,7 +1,6 @@
-import { PagePlaceholder } from "@/shared/layout";
+import { ScreenOutline } from "@/shared/layout";
+import { menuItems } from "../model/content";
 
 export function ProjectsPage() {
-  return (
-    <PagePlaceholder title="프로젝트" sections={["착수 → 기획 → 디자인 → 개발 → 검수 → 운영"]} />
-  );
+  return <ScreenOutline eyebrow="포털" title="프로젝트" items={menuItems("프로젝트")} />;
 }

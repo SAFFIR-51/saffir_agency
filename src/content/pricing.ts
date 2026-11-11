@@ -162,3 +162,137 @@ export const hospitalGrowthBundle = {
   monthly: 690000,
   note: "홈페이지 신규 제작 병원이 12개월 이용 시 기본형 제작비 50% 할인",
 };
+
+/** 요금 공통 안내 (기획서 "요금 체계") */
+export const pricingNotes = [
+  "요금은 /pricing 한 페이지에 모두 공개합니다. 금액은 VAT 포함입니다.",
+  "아래 금액은 경쟁사 공개 가격을 기준으로 잡은 제안가이며, 원가 확인 후 대표가 확정합니다.",
+];
+
+/** AI 검색 최적화 요금 원칙 */
+export const geoPricingPrinciple = {
+  headline: "한 번 보는 정보는 무료, 계속 지켜보는 건 유료",
+  reason: "AI 가시성 측정은 LLM API를 매번 호출해 원가가 반복해서 들기 때문입니다.",
+  notes: [
+    "관리형은 기존 병원 홈페이지 월 유지보수(33,000원)를 흡수합니다. 상품은 하나 줄고 객단가는 올라갑니다.",
+  ],
+};
+
+/** 메시지 발송(CRM) 건별 단가 표시용 */
+export const messagePriceRows = [
+  { name: "알림톡", unit: messageUnitPrices.alimtalk },
+  { name: "문자(SMS)", unit: messageUnitPrices.sms },
+  { name: "장문(LMS)", unit: messageUnitPrices.lms },
+];
+
+export const messagePriceNote =
+  "메시지 발송(CRM)은 건별로 받습니다. 예시 단가이며, 발송 대행사 원가를 확인한 뒤 확정합니다.";
+
+export const serverTierNotes = [
+  "서버 운영비 구간의 기준값은 예시이며, 실제 AWS 비용을 보고 확정합니다.",
+  "구간을 넘는 사용량은 저장공간 10GB당 11,000원, 트래픽 100GB당 22,000원으로 정산합니다 (예시, AWS 청구서 확인 후 확정).",
+];
+
+export const hospitalWebsiteNotes = [
+  "두 사이트의 가격(saffirgeo 200만·500만·1,000만 원 이상, 사피어 기본형 1,045,000원)을 하나로 맞춥니다.",
+  "기본형은 크몽 병원 홈페이지 상위 상품(1,650,000원, 15면)과 같은 수준으로 두고, GEO 세팅을 기본 포함해 차별화합니다.",
+  "납품 후에는 GEO 관리형(월 550,000원)이나 단순 유지보수(월 33,000원, 현행 유지)를 선택합니다.",
+];
+
+export const growthBundleNotes = [
+  "GEO 관리형(550,000원) + 병원 CRM 베이직(220,000원)을 묶어 월 690,000원(약 10% 할인)에 판매합니다.",
+  "홈페이지를 새로 만드는 병원은 패키지를 12개월 이용하면 기본형 제작비를 50% 할인합니다.",
+];
+
+export const outsourcingNotes = [
+  "홈페이지 제작 계약금(1,100,000원), 웹앱 MVP 계약금(2,200,000원)은 정찰가로 유지합니다.",
+  "나머지 맞춤형 개발은 견적 요청으로 받습니다.",
+];
+
+/** 결제 유형 (기획서 "결제와 토스페이먼츠 심사") */
+export const paymentTypes = [
+  {
+    type: "단건 결제",
+    products: "홈페이지 기본형, 외주 계약금, 솔루션 세팅비",
+    where: "요금 페이지 → 주문서",
+    toss: "결제창 (카드·계좌이체·가상계좌)",
+  },
+  {
+    type: "정액 구독",
+    products: "GEO 등급, 솔루션 월 이용료",
+    where: "포털 구독 관리",
+    toss: "자동결제(빌링), 추가 신청 필요",
+  },
+  {
+    type: "변동 청구",
+    products: "서버 운영비, 메시지 발송료, 외주 잔금",
+    where: "포털 청구 목록",
+    toss: "결제창, 자동결제 등록 고객은 확정 금액 자동 승인",
+  },
+];
+
+/** 가격 근거 — 내부 검토용. 공개 페이지에 노출하지 않는다. */
+export const priceBenchmarks = [
+  {
+    field: "AI 가시성 도구",
+    competitor: "Otterly.AI Lite",
+    price: "$29/월 (질문 15개)",
+    ours: "모니터링 49,000원 (질문 20개)",
+    judgement: "비슷한 가격, 병원 특화·한국어·네이버 진단 포함",
+  },
+  {
+    field: "AI 가시성 도구",
+    competitor: "Peec AI Starter",
+    price: "$95/월 (질문 50개)",
+    ours: "프로 149,000원 (질문 50개)",
+    judgement: "비슷한 가격, 경쟁 병원 비교 포함",
+  },
+  {
+    field: "병원 GEO 대행",
+    competitor: "크몽 병원 AEO·GEO",
+    price: "1,320,000~2,420,000원/30일",
+    ours: "관리형 550,000원",
+    judgement: "블로그 물량 대신 홈페이지 자체 개선으로 절반 이하 가격",
+  },
+  {
+    field: "병원 홈페이지",
+    competitor: "크몽 병원 홈페이지 스탠다드",
+    price: "1,650,000원~ (15면, 20일)",
+    ours: "기본형 1,650,000원",
+    judgement: "같은 가격, GEO 세팅 포함",
+  },
+  {
+    field: "병원 CRM",
+    competitor: "톡CRM 스탠다드",
+    price: "1인당 40,000원, 최소 5인 (월 200,000원~)",
+    ours: "베이직 220,000원",
+    judgement: "비슷한 가격, 병원 전용 서버·사용자 수 무관",
+  },
+  {
+    field: "병원 CRM",
+    competitor: "톡CRM 프리미엄",
+    price: "1인당 40,000원, 최소 10인 (월 400,000원~)",
+    ours: "스탠다드 440,000원",
+    judgement: "비슷한 가격",
+  },
+  {
+    field: "병원 CRM 제작",
+    competitor: "크몽 병원 CRM 제작",
+    price: "1,500,000~3,000,000원 (1회)",
+    ours: "세팅비 990,000~1,650,000원 + 월 이용료",
+    judgement: "초기 부담은 낮고 업데이트·운영 포함",
+  },
+  {
+    field: "홈페이지 유지보수",
+    competitor: "크몽 유지보수 시세",
+    price: "월 5만 원대~20만 원대 (평균 20만 원대)",
+    ours: "33,000원 / 관리형 550,000원",
+    judgement: "저가 입문 + 고급 관리",
+  },
+];
+
+export const priceBenchmarkNotes = [
+  "가격 근거는 2026년 11월 기준 경쟁사 공개 가격입니다.",
+  "크몽 가격에는 결제 수수료 4.5%가 별도로 붙습니다.",
+  "해외 도구는 달러 1,450원 안팎으로 보고 비교했습니다.",
+];

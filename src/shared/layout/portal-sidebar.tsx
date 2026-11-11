@@ -8,7 +8,7 @@ export function PortalSidebar({
   visible?: (item: PortalNavItem) => boolean;
 }) {
   return (
-    <nav aria-label="포털 메뉴" className="flex flex-col gap-1 text-sm">
+    <nav aria-label="포털 메뉴" className="flex flex-wrap gap-1 text-sm md:flex-col">
       {portalNav.filter(visible).map((item) => (
         <Link
           key={item.href}

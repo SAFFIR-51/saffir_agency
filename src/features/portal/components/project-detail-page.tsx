@@ -1,10 +1,12 @@
-import { PagePlaceholder } from "@/shared/layout";
+import { ScreenOutline } from "@/shared/layout";
+import { menuItems } from "../model/content";
 
 export function ProjectDetailPage({ projectId }: { projectId: string }) {
   return (
-    <PagePlaceholder
+    <ScreenOutline
+      eyebrow="포털 · 프로젝트"
       title={`프로젝트 ${projectId}`}
-      sections={["단계·진행률", "일정", "산출물", "확인·승인 버튼"]}
+      items={menuItems("프로젝트")}
     />
   );
 }

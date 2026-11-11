@@ -1,5 +1,6 @@
-import { PagePlaceholder } from "@/shared/layout";
+import { ScreenOutline } from "@/shared/layout";
+import { menuItems } from "../model/content";
 
 export function ReportsPage() {
-  return <PagePlaceholder title="작업 보고" sections={["주간 스프린트 보고", "정례 미팅 기록"]} />;
+  return <ScreenOutline eyebrow="포털" title="작업 보고" items={menuItems("작업 보고")} />;
 }

@@ -48,20 +48,33 @@ src/
 │  ├─ (portal)/dashboard/         고객 포털 — 사이드바
 │  │  ├─ projects/ (+ [projectId]) reports/ requests/
 │  │  └─ solutions/ geo/ billing/ account/
+│  ├─ (internal)/internal/plan/   기획 메모 (내부 검토용, 운영에서는 404)
 │  ├─ robots.ts sitemap.ts not-found.tsx
 ├─ features/
 │  ├─ home/ hospital/ geo/ crm/ solutions/
 │  ├─ development/ inquiry/ portfolio/ pricing/ support/ legal/
-│  ├─ auth/ portal/ billing/
+│  ├─ auth/ portal/ billing/ plan-notes/
 │  └─ <각 feature>/
 │     ├─ components/   화면·UI (이 feature 전용)
 │     ├─ model/        타입, 화면 문구·설정
 │     ├─ api/          데이터 조회·server action (server, content 호출)
 │     └─ index.ts      공개 API — 밖에서는 이것만 import
-├─ server/  auth/ core/ payments/ db/
-├─ shared/  config/ ui/ layout/ sections/ lib/
-├─ content/ pricing.ts portfolio.ts faq.ts
-└─ proxy.ts                        /dashboard 1차 로그인 확인 (Next 16의 middleware)
+├─ server/  auth/ core/ payments/ db/ env.ts
+├─ shared/
+│  ├─ config/    site, routes(Route 타입), navigation
+│  ├─ ui/        Container, Section, PageHeader, Subheading, BulletList, DataTable, PlanTable,
+│  │             Note, Todo(작성 예정 표시), LinkCard·CardGrid, ButtonLink
+│  ├─ layout/    SiteHeader, SiteFooter, PortalSidebar, ScreenOutline(포털 화면 뼈대)
+│  ├─ sections/  SolutionTemplate (솔루션 페이지 8단계 순서)
+│  └─ lib/       cn, formatKRW
+├─ content/
+│  ├─ company.ts     한눈에 보기, 사업 구조, 시스템 구성, 일하는 방식, 보유 모듈
+│  ├─ services.ts    서비스 7개 (메시지, 주요 내용, 다음 행동, 근거)
+│  ├─ hospital.ts    병원 고객 흐름, 차별점, CRM 보안·데모
+│  ├─ membership.ts  로그인 용도, 회원 유형
+│  ├─ pricing.ts     요금 전체, 결제 유형, 가격 근거(내부)
+│  └─ portfolio.ts   20건·5묶음, 묶음 역할, 필터
+└─ proxy.ts         saffirgeo 301 + /dashboard 1차 로그인 확인 (Next 16의 middleware)
 ```
 
 ## 기획서 → 코드 위치

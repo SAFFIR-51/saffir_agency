@@ -3,7 +3,9 @@ import { site } from "@/shared/config";
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: [{ userAgent: "*", allow: "/", disallow: ["/dashboard", "/login", "/signup"] }],
+    rules: [
+      { userAgent: "*", allow: "/", disallow: ["/dashboard", "/login", "/signup", "/internal"] },
+    ],
     sitemap: `${site.domain}/sitemap.xml`,
   };
 }

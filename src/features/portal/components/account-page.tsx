@@ -1,5 +1,6 @@
-import { PagePlaceholder } from "@/shared/layout";
+import { ScreenOutline } from "@/shared/layout";
+import { menuItems } from "../model/content";
 
 export function AccountPage() {
-  return <PagePlaceholder title="계정" sections={["회사·병원 정보", "담당자 추가"]} />;
+  return <ScreenOutline eyebrow="포털" title="계정" items={menuItems("계정")} />;
 }
