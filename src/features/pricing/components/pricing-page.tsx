@@ -6,7 +6,6 @@ import {
   hospitalWebsitePlans,
   messagePriceNote,
   messagePriceRows,
-  orderablePlanIds,
   outsourcingDeposits,
   outsourcingNotes,
   paymentTypes,
@@ -14,58 +13,9 @@ import {
   serverTiers,
   solutionPlans,
 } from "@/content/pricing";
-import { routes, type ContactTopic } from "@/shared/config";
+import { routes } from "@/shared/config";
 import { formatKRW } from "@/shared/lib";
-import {
-  ButtonLink,
-  DataTable,
-  PageHeader,
-  PlanTable,
-  Section,
-  TrackPageView,
-  type PlanRow,
-} from "@/shared/ui";
-
-const orderable = new Set<string>(orderablePlanIds);
-
-/** 솔루션 요금 행 → 미리 고를 문의 유형 */
-const solutionTopic: Record<string, ContactTopic> = {
-  "crm-basic": "crm-adopt",
-  "crm-standard": "crm-adopt",
-  "crm-network": "crm-adopt",
-  connect: "connect",
-  erp: "erp",
-  "ai-chatbot": "ai-chatbot",
-};
-
-function TableLink({
-  href,
-  children,
-}: {
-  href: Parameters<typeof ButtonLink>[0]["href"];
-  children: React.ReactNode;
-}) {
-  return (
-    <ButtonLink href={href} variant="secondary" className="h-9 px-4 whitespace-nowrap">
-      {children}
-    </ButtonLink>
-  );
-}
-
-/** 바로 결제할 수 있는 상품은 주문서로, 아니면 상담으로 */
-function orderOrConsult(fallback: ContactTopic, label = "상담") {
-  function PlanAction(plan: PlanRow) {
-    if (orderable.has(plan.id)) {
-      return (
-        <TableLink href={routes.order(plan.id)}>{plan.monthly ? "구독하기" : "결제하기"}</TableLink>
-      );
-    }
-    return (
-      <TableLink href={routes.contactFor(solutionTopic[plan.id] ?? fallback)}>{label}</TableLink>
-    );
-  }
-  return PlanAction;
-}
+import { ButtonLink, DataTable, PageHeader, PlanTable, Section, TrackPageView } from "@/shared/ui";
 
 export function PricingPage() {
   const bundle = hospitalGrowthBundle;
@@ -78,13 +28,10 @@ export function PricingPage() {
         <PlanTable
           plans={geoPlans}
           caption={geoPricingHeadline}
-          action={(plan) =>
-            plan.monthly === 0 ? (
-              <TableLink href={`${routes.hospital.geo}#diagnosis`}>무료 진단</TableLink>
-            ) : (
-              orderOrConsult("geo-fix")(plan)
-            )
-          }
+          actions={{
+            consultFallback: "geo-fix",
+            free: { label: "무료 진단", href: `${routes.hospital.geo}#diagnosis` },
+          }}
         />
       </Section>
 
@@ -93,7 +40,7 @@ export function PricingPage() {
           plans={solutionPlans}
           setupLabel="도입 세팅비"
           monthlyLabel="월 이용료"
-          action={orderOrConsult("crm-adopt", "도입 상담")}
+          actions={{ consultFallback: "crm-adopt", consultLabel: "도입 상담" }}
         />
       </Section>
 
@@ -114,7 +61,7 @@ export function PricingPage() {
           plans={hospitalWebsitePlans}
           setupLabel="제작비"
           caption={hospitalWebsiteNotes.join(" ")}
-          action={orderOrConsult("hospital-website", "제작 상담")}
+          actions={{ consultFallback: "hospital-website", consultLabel: "제작 상담" }}
         />
       </Section>
 
@@ -133,7 +80,7 @@ export function PricingPage() {
           plans={outsourcingDeposits}
           setupLabel="계약금"
           caption={outsourcingNotes.join(" ")}
-          action={orderOrConsult("hospital-website")}
+          actions={{ consultFallback: "hospital-website" }}
         />
         <ButtonLink href={routes.development.estimate} variant="secondary">
           맞춤 개발 견적 요청

@@ -1,6 +1,7 @@
 import { installedSolutionRows } from "@/content/company";
 import { listServices } from "@/content/services";
-import { CardGrid, DataTable, LinkCard, PageHeader, Section } from "@/shared/ui";
+import { routes } from "@/shared/config";
+import { ButtonLink, CardGrid, DataTable, LinkCard, PageHeader, Section } from "@/shared/ui";
 import { solutionsOverviewContent as c } from "../model/content";
 
 export function SolutionsOverviewPage() {
@@ -19,6 +20,14 @@ export function SolutionsOverviewPage() {
           columns={["항목", "내용"]}
           rows={installedSolutionRows.map((r) => [r.item, r.detail])}
         />
+      </Section>
+      <Section label="S4 · 상담" title={c.closing.title} description={c.closing.description}>
+        <div className="flex flex-wrap gap-3">
+          <ButtonLink href={routes.contact}>도입 상담</ButtonLink>
+          <ButtonLink href={`${routes.pricing}#solutions`} variant="secondary">
+            요금 보기
+          </ButtonLink>
+        </div>
       </Section>
     </>
   );

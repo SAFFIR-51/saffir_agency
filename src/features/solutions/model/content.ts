@@ -2,6 +2,10 @@ import { routes } from "@/shared/config";
 import type { SolutionPageContent } from "@/shared/sections";
 
 export const solutionsOverviewContent = {
+  closing: {
+    title: "어떤 솔루션이 맞을지 모르겠다면",
+    description: "지금 일하는 방식을 들려주시면 맞는 솔루션이나 개발 범위를 안내해 드립니다.",
+  },
   title: "비즈니스 솔루션",
   lead: "반복해서 만들어 온 기능을 솔루션으로 갖췄습니다. 개발 대신 세팅으로 도입합니다.",
 };

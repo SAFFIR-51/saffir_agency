@@ -8,7 +8,11 @@ export function EstimatePage() {
     <>
       <PageHeader eyebrow="맞춤 개발" title={c.title} lead={c.lead} />
       <Section label="S2 · 정찰가" title="정찰가 패키지" description="금액은 VAT 포함입니다.">
-        <PlanTable plans={outsourcingDeposits} setupLabel="계약금" />
+        <PlanTable
+          plans={outsourcingDeposits}
+          setupLabel="계약금"
+          actions={{ consultFallback: "hospital-website" }}
+        />
       </Section>
       <Section label="S3 · 요청서" title="견적 요청서">
         <EstimateForm />

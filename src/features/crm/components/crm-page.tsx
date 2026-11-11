@@ -32,6 +32,7 @@ export function CrmPage() {
               plans={solutionPlans.filter((p) => p.id.startsWith("crm-"))}
               setupLabel="도입 세팅비"
               monthlyLabel="월 이용료"
+              actions={{ consultFallback: "crm-adopt", consultLabel: "도입 상담" }}
             />
             <DataTable
               columns={["메시지", "건당"]}

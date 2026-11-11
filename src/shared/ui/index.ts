@@ -10,7 +10,7 @@ export { PageHeader } from "./page-header";
 export { Subheading } from "./subheading";
 export { BulletList } from "./bullet-list";
 export { DataTable } from "./data-table";
-export { PlanTable, type PlanRow } from "./plan-table";
+export { PlanTable } from "./plan-table";
 export { Note } from "./note";
 export { WireBox } from "./wire-box";
 export { WireInput, WireButton } from "./wire-input";

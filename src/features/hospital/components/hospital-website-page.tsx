@@ -13,6 +13,7 @@ export function HospitalWebsitePage() {
             plans={hospitalWebsitePlans}
             setupLabel="제작비"
             caption={hospitalWebsiteNotes.join(" ")}
+            actions={{ consultFallback: "hospital-website", consultLabel: "제작 상담" }}
           />
         ),
       }}

@@ -89,40 +89,12 @@ export function HomePage() {
             <BulletList items={developmentAreas} />
           </LinkCard>
         </CardGrid>
+        <ButtonLink href={`${routes.hospital.geo}#diagnosis`} variant="secondary">
+          {c.entry.hospitalShortcut}
+        </ButtonLink>
       </Section>
 
-      <Section
-        label="S3 · 무료 진단"
-        title={c.diagnosis.title}
-        description={c.diagnosis.description}
-      >
-        <WireInput label="홈페이지 주소" placeholder="https://" />
-        <ButtonLink href={routes.hospital.geo}>무료 진단하기</ButtonLink>
-      </Section>
-
-      <Section label="S4 · 일하는 방식" title={c.models.title}>
-        <DataTable
-          columns={["방식", "대표 상품", "제공 방식", "요금 방식", "소스·데이터"]}
-          rows={businessModels.map((m) => [m.type, m.products, m.delivery, m.revenue, m.ownership])}
-        />
-      </Section>
-
-      <Section label="S5 · 진행 순서" title={c.workflow.title}>
-        <DataTable
-          columns={["단계", "내용"]}
-          rows={workflow.map((w, index) => [`${index + 1}. ${w.step}`, w.detail])}
-        />
-      </Section>
-
-      <Section label="S6 · 보유 모듈" title={c.modules.title} description={c.modules.description}>
-        <CardGrid>
-          {modules.map((m) => (
-            <IconTile key={m} label={m} />
-          ))}
-        </CardGrid>
-      </Section>
-
-      <Section label="S7 · 대표 사례" title={c.cases.title}>
+      <Section label="S3 · 대표 사례" title={c.cases.title}>
         <CardGrid>
           {featured.map((item) => (
             <LinkCard key={item.slug} href={routes.portfolioDetail(item.slug)} title={item.title}>
@@ -133,6 +105,37 @@ export function HomePage() {
         <ButtonLink href={routes.portfolio} variant="secondary">
           포트폴리오 전체 보기
         </ButtonLink>
+      </Section>
+
+      <Section
+        label="S4 · 무료 진단"
+        title={c.diagnosis.title}
+        description={c.diagnosis.description}
+      >
+        <WireInput label="홈페이지 주소" placeholder="https://" />
+        <ButtonLink href={routes.hospital.geo}>무료 진단하기</ButtonLink>
+      </Section>
+
+      <Section label="S5 · 일하는 방식" title={c.models.title}>
+        <DataTable
+          columns={["방식", "대표 상품", "제공 방식", "요금 방식", "소스·데이터"]}
+          rows={businessModels.map((m) => [m.type, m.products, m.delivery, m.revenue, m.ownership])}
+        />
+      </Section>
+
+      <Section label="S6 · 진행 순서" title={c.workflow.title}>
+        <DataTable
+          columns={["단계", "내용"]}
+          rows={workflow.map((w, index) => [`${index + 1}. ${w.step}`, w.detail])}
+        />
+      </Section>
+
+      <Section label="S7 · 보유 모듈" title={c.modules.title} description={c.modules.description}>
+        <CardGrid>
+          {modules.map((m) => (
+            <IconTile key={m} label={m} />
+          ))}
+        </CardGrid>
       </Section>
 
       <Section label="S8 · 요금" title={c.pricing.title} description="금액은 VAT 포함입니다.">

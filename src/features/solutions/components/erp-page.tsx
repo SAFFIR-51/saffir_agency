@@ -15,6 +15,7 @@ export function ErpPage() {
             setupLabel="1단계 진단·설계"
             monthlyLabel="월 이용료"
             caption={pricingCaptions.erp}
+            actions={{ consultFallback: "erp", consultLabel: "1단계 진단 신청" }}
           />
         ),
         afterProcess: (

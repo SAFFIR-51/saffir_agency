@@ -15,6 +15,7 @@ export function ConnectPage() {
             plans={solutionPlans.filter((p) => p.id === "connect")}
             setupLabel="도입 세팅비"
             monthlyLabel="월 이용료"
+            actions={{ consultFallback: "connect", consultLabel: "도입 상담" }}
           />
         ),
         afterProcess: (

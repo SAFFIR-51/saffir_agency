@@ -10,6 +10,7 @@ import {
   Section,
   WireBox,
   WireButton,
+  TrackPageView,
   WireInput,
 } from "@/shared/ui";
 import { findOrderItem, orderContent as c } from "../model/order";
@@ -35,6 +36,7 @@ async function OrderBody({ searchParams }: { searchParams: SearchParams }) {
   const amount = subscription ? item.monthly : item.setup;
   return (
     <>
+      <TrackPageView event="order_started" eventProps={{ plan: item.id }} />
       <Section label="S2 · 주문 상품" title="주문 상품">
         <DataTable
           columns={["상품", "포함", "금액", "결제 방식"]}

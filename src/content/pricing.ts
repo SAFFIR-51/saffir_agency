@@ -7,6 +7,10 @@ export type Plan = {
   monthly?: number | null;
   setup?: number | null;
   note?: string;
+  /** true면 요금표 버튼이 주문서로 간다 (바로 결제). 아니면 상담 */
+  checkout?: boolean;
+  /** 상담으로 보낼 때 미리 고를 문의 유형 (shared/config의 ContactTopic 값) */
+  consult?: string;
 };
 
 export const geoPlans: Plan[] = [
@@ -18,6 +22,7 @@ export const geoPlans: Plan[] = [
   },
   {
     id: "geo-monitoring",
+    checkout: true,
     name: "모니터링",
     includes:
       "월 재진단, AI 가시성 월 1회 측정(질문 20개 × AI 4종), 점수 추이, 의료광고 검사 무제한",
@@ -25,12 +30,14 @@ export const geoPlans: Plan[] = [
   },
   {
     id: "geo-pro",
+    checkout: true,
     name: "프로",
     includes: "모니터링 + 주간 측정(질문 50개), 경쟁 병원 3곳 비교, 월간 PDF 리포트",
     monthly: 149000,
   },
   {
     id: "geo-managed",
+    checkout: true,
     name: "관리형",
     includes: "프로 + 수정 반영 대행, 구조화데이터 세팅, 월 콘텐츠 4편, 홈페이지 유지보수 포함",
     monthly: 550000,
@@ -40,6 +47,7 @@ export const geoPlans: Plan[] = [
 export const solutionPlans: Plan[] = [
   {
     id: "crm-basic",
+    consult: "crm-adopt",
     name: "병원 CRM 베이직 (의사 1~2인)",
     includes: "스타터 서버 포함, 데이터 이관 포함",
     setup: 990000,
@@ -47,6 +55,7 @@ export const solutionPlans: Plan[] = [
   },
   {
     id: "crm-standard",
+    consult: "crm-adopt",
     name: "병원 CRM 스탠다드 (의사 3~5인)",
     includes: "스탠다드 서버 포함, EMR 연동 협의",
     setup: 1650000,
@@ -54,6 +63,7 @@ export const solutionPlans: Plan[] = [
   },
   {
     id: "crm-network",
+    consult: "crm-adopt",
     name: "병원 CRM 네트워크 (다지점)",
     includes: "지점 통합 대시보드",
     setup: null,
@@ -61,6 +71,7 @@ export const solutionPlans: Plan[] = [
   },
   {
     id: "connect",
+    consult: "connect",
     name: "커머스 연동",
     includes: "마켓 2곳, 마켓 추가 시 세팅비 별도",
     setup: 2200000,
@@ -68,6 +79,7 @@ export const solutionPlans: Plan[] = [
   },
   {
     id: "erp",
+    consult: "erp",
     name: "업무 통합 ERP",
     includes: "1단계 진단·설계, 구축 후 견적, 단계별 계약",
     setup: 1100000,
@@ -75,6 +87,7 @@ export const solutionPlans: Plan[] = [
   },
   {
     id: "ai-chatbot",
+    consult: "ai-chatbot",
     name: "AI 챗봇",
     includes: "PoC, AI API 사용량 별도 정산",
     setup: 2200000,
@@ -86,6 +99,7 @@ export const solutionPlans: Plan[] = [
 export const hospitalWebsitePlans: Plan[] = [
   {
     id: "web-basic",
+    checkout: true,
     name: "기본형",
     includes:
       "유니크 3면 + 반복 7면, 검색 등록, GA4, GEO 기본 세팅, 네이버 예약·카카오 채널 연결 (3~4주)",
@@ -135,19 +149,6 @@ export const serverTiers: Plan[] = [
   },
 ];
 
-/**
- * 요금표에서 바로 결제(주문서)로 가는 상품. 나머지는 상담 후 결제.
- * (안) GEO 유료 구독, 병원 홈페이지 기본형, 외주 계약금. 솔루션 세팅비는 상담 후 결제.
- */
-export const orderablePlanIds = [
-  "geo-monitoring",
-  "geo-pro",
-  "geo-managed",
-  "web-basic",
-  "dev-website-deposit",
-  "dev-mvp-deposit",
-] as const;
-
 export const overage = { storagePer10GB: 11000, trafficPer100GB: 22000 };
 
 export const messageUnitPrices = { alimtalk: 15, sms: 25, lms: 60 };
@@ -155,11 +156,18 @@ export const messageUnitPrices = { alimtalk: 15, sms: 25, lms: 60 };
 export const outsourcingDeposits: Plan[] = [
   {
     id: "dev-website-deposit",
+    checkout: true,
     name: "홈페이지 제작 계약금",
     includes: "정찰가 패키지",
     setup: 1100000,
   },
-  { id: "dev-mvp-deposit", name: "웹앱 MVP 계약금", includes: "정찰가 패키지", setup: 2200000 },
+  {
+    id: "dev-mvp-deposit",
+    checkout: true,
+    name: "웹앱 MVP 계약금",
+    includes: "정찰가 패키지",
+    setup: 2200000,
+  },
 ];
 
 export const hospitalGrowthBundle = {

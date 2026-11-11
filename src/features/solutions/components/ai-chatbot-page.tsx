@@ -15,6 +15,7 @@ export function AiChatbotPage() {
             setupLabel="PoC"
             monthlyLabel="월 이용료"
             caption={pricingCaptions.aiChatbot}
+            actions={{ consultFallback: "ai-chatbot", consultLabel: "PoC 신청" }}
           />
         ),
         afterProcess: (

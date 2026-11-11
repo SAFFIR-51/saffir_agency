@@ -1,4 +1,5 @@
 import { geoPlans, geoPricingHeadline } from "@/content/pricing";
+import { routes } from "@/shared/config";
 import { SolutionTemplate } from "@/shared/sections";
 import { PlanTable, Subheading, TrackedButtonLink, WireBox, WireInput } from "@/shared/ui";
 import { geoContent, geoLockedResult, geoResultActions } from "../model/content";
@@ -30,7 +31,16 @@ export function GeoLandingPage() {
             </div>
           </div>
         ),
-        pricing: <PlanTable plans={geoPlans} caption={geoPricingHeadline} />,
+        pricing: (
+          <PlanTable
+            plans={geoPlans}
+            caption={geoPricingHeadline}
+            actions={{
+              consultFallback: "geo-fix",
+              free: { label: "무료 진단", href: `${routes.hospital.geo}#diagnosis` },
+            }}
+          />
+        ),
       }}
     />
   );

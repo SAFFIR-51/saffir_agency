@@ -66,6 +66,7 @@ export function DevelopmentPage() {
           plans={outsourcingDeposits}
           setupLabel="계약금"
           caption={outsourcingNotes.join(" ")}
+          actions={{ consultFallback: "hospital-website" }}
         />
       </Section>
 

@@ -1,16 +1,10 @@
-import {
-  geoPlans,
-  hospitalWebsitePlans,
-  orderablePlanIds,
-  outsourcingDeposits,
-  type Plan,
-} from "@/content/pricing";
+import { geoPlans, hospitalWebsitePlans, outsourcingDeposits, type Plan } from "@/content/pricing";
 
 export type OrderItem = Plan & { kind: "subscription" | "once" };
 
 /** 주문서에서 받을 수 있는 상품. 월 요금이 있으면 정기 구독, 아니면 단건 결제 */
 export function findOrderItem(planId: string | undefined): OrderItem | null {
-  if (!planId || !(orderablePlanIds as readonly string[]).includes(planId)) return null;
+  if (!planId) return null;
   // 요금표의 짧은 이름(예: 프로) 앞에 상품군을 붙여 주문서에서 헷갈리지 않게 한다
   const groups: { prefix: string; plans: Plan[] }[] = [
     { prefix: "AI 검색 최적화 ", plans: geoPlans },
@@ -18,7 +12,7 @@ export function findOrderItem(planId: string | undefined): OrderItem | null {
     { prefix: "", plans: outsourcingDeposits },
   ];
   for (const group of groups) {
-    const plan = group.plans.find((p) => p.id === planId);
+    const plan = group.plans.find((p) => p.id === planId && p.checkout);
     if (plan) {
       return {
         ...plan,

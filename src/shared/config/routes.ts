@@ -11,6 +11,21 @@ export type ContactTopic =
   | "erp"
   | "ai-chatbot";
 
+const contactTopicValues: readonly string[] = [
+  "geo-fix",
+  "hospital-website",
+  "crm-demo",
+  "crm-adopt",
+  "hospital-bundle",
+  "connect",
+  "erp",
+  "ai-chatbot",
+] satisfies ContactTopic[];
+
+export function isContactTopic(value: string | undefined): value is ContactTopic {
+  return value !== undefined && contactTopicValues.includes(value);
+}
+
 /**
  * 모든 내부 경로는 여기서만 정의합니다. 화면 코드에 문자열 경로를 직접 쓰지 않습니다.
  * typedRoutes가 켜져 있어서 실제로 없는 경로를 적으면 타입 오류가 납니다.

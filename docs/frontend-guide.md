@@ -144,14 +144,18 @@
 첫 출시 성과는 **무료 진단 완료 → 유효 상담 접수**로 본다. 화면을 만들 때 아래 이벤트를 같이 심는다.
 이벤트는 `shared/lib/analytics.ts`의 `track()`으로만 보낸다 (분석 도구가 정해지면 이 함수 안만 바꾼다).
 
-| 이벤트                    | 언제                     | 속성 예                         |
-| ------------------------- | ------------------------ | ------------------------------- |
-| `geo_diagnosis_started`   | 주소 입력 후 진단 시작   | -                               |
-| `geo_diagnosis_completed` | 결과 화면 표시           | `score`                         |
-| `geo_result_cta_clicked`  | 결과에서 다음 행동 클릭  | `action`: fix / consult / track |
-| `consult_submitted`       | 상담 신청 성공           | `source`                        |
-| `estimate_submitted`      | 맞춤 개발 견적 요청 성공 | `type`                          |
-| `pricing_viewed`          | 요금 페이지 진입         | -                               |
+| 이벤트                    | 언제                                       | 속성 예                         |
+| ------------------------- | ------------------------------------------ | ------------------------------- |
+| `geo_diagnosis_started`   | 주소 입력 후 진단 시작 (진단 기능 때 연결) | -                               |
+| `geo_diagnosis_completed` | 결과 화면 표시 (진단 기능 때 연결)         | `score`                         |
+| `geo_result_cta_clicked`  | 결과에서 다음 행동 클릭                    | `action`: signup / fix / track  |
+| `consult_submitted`       | 상담 신청 성공                             | `source`, `type`                |
+| `estimate_submitted`      | 맞춤 개발 견적 요청 성공                   | `area`                          |
+| `pricing_viewed`          | 요금 페이지 진입                           | -                               |
+| `order_started`           | 주문서 진입                                | `plan`                          |
+| `ad_check_run`            | 의료광고 검사 실행 (검사 기능 때 연결)     | -                               |
+| `payment_completed`       | 결제 완료 (결제 기능 때 연결)              | `plan`                          |
+| `signup_completed`        | 가입 완료 (가입 기능 때 연결)              | `from`: geo / ad-check / direct |
 
 - 목록에 없는 이벤트가 필요하면 `EventName`에 추가하고 이 표도 같이 고친다.
 - 속성에 개인정보(이름, 연락처, 이메일, 병원 주소)를 넣지 않는다.

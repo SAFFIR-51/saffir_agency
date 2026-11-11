@@ -9,7 +9,12 @@ export type EventName =
   | "geo_result_cta_clicked"
   | "consult_submitted"
   | "estimate_submitted"
-  | "pricing_viewed";
+  | "pricing_viewed"
+  | "order_started"
+  // 아래 3개는 기능 개발 때 연결 (이름만 미리 정함)
+  | "ad_check_run"
+  | "payment_completed"
+  | "signup_completed";
 
 export type EventProps = Record<string, string | number | boolean>;
 

@@ -46,9 +46,12 @@ export function HospitalOverviewPage() {
             [bundle.includesLabel, formatKRW(bundle.monthly), formatKRW(separate), bundle.benefit],
           ]}
         />
-        <ButtonLink href={`${routes.pricing}#bundle`} variant="secondary">
-          요금 안내 보기
-        </ButtonLink>
+        <div className="flex flex-wrap gap-3">
+          <ButtonLink href={routes.contactFor("hospital-bundle")}>패키지 상담</ButtonLink>
+          <ButtonLink href={`${routes.pricing}#bundle`} variant="secondary">
+            요금 안내 보기
+          </ButtonLink>
+        </div>
       </Section>
     </>
   );

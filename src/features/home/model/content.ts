@@ -5,6 +5,8 @@ export const homeContent = {
   entry: {
     title: "어떤 일이 필요하세요?",
     hospital: "병원 홈페이지 진단부터 환자 관리까지",
+    /** 병원 방문자용 바로가기. 링크 카드 안에 링크를 넣을 수 없어 카드 아래에 둔다 */
+    hospitalShortcut: "병원이라면: 홈페이지 무료 진단부터",
     business: "재고·주문·업무 시스템을 세팅으로",
     development: "필요한 서비스를 만들고 운영까지",
   },
