@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { installedSolutionNotes } from "@/content/company";
+import { installedSolutionRows } from "@/content/company";
 import { crmDemo, crmSecurity } from "@/content/hospital";
 import { messagePriceNote, messagePriceRows, solutionPlans } from "@/content/pricing";
 import { routes } from "@/shared/config";
 import { formatKRW } from "@/shared/lib";
 import { SolutionTemplate } from "@/shared/sections";
-import { BulletList, DataTable, Note, PlanTable, Subheading } from "@/shared/ui";
+import { BulletList, DataTable, PlanTable, Subheading } from "@/shared/ui";
 import { crmContent } from "../model/content";
 
 export function CrmPage() {
@@ -16,8 +16,7 @@ export function CrmPage() {
         afterFeatures: (
           <>
             <Subheading>보안</Subheading>
-            <BulletList items={crmSecurity.items} />
-            <p>{crmSecurity.messaging}</p>
+            <BulletList items={[...crmSecurity.items, crmSecurity.messaging]} />
             <Link
               href={routes.legal.security}
               className="inline-block underline underline-offset-4"
@@ -26,7 +25,7 @@ export function CrmPage() {
             </Link>
           </>
         ),
-        demo: <BulletList items={crmDemo} />,
+        screens: <BulletList items={crmDemo} />,
         pricing: (
           <>
             <PlanTable
@@ -34,18 +33,21 @@ export function CrmPage() {
               setupLabel="도입 세팅비"
               monthlyLabel="월 이용료"
             />
-            <Subheading>메시지 발송 (건별)</Subheading>
             <DataTable
-              columns={["종류", "건당"]}
+              columns={["메시지", "건당"]}
               rows={messagePriceRows.map((m) => [m.name, formatKRW(m.unit)])}
+              caption={messagePriceNote}
             />
-            <p className="text-sm text-foreground/70">{messagePriceNote}</p>
           </>
         ),
         afterProcess: (
-          <Note title="제공 방식">
-            <BulletList items={installedSolutionNotes} />
-          </Note>
+          <>
+            <Subheading>제공 방식</Subheading>
+            <DataTable
+              columns={["항목", "내용"]}
+              rows={installedSolutionRows.map((r) => [r.item, r.detail])}
+            />
+          </>
         ),
       }}
     />

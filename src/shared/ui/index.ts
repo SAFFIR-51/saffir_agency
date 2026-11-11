@@ -7,5 +7,7 @@ export { BulletList } from "./bullet-list";
 export { DataTable } from "./data-table";
 export { PlanTable } from "./plan-table";
 export { Note } from "./note";
-export { Todo } from "./todo";
+export { WireBox } from "./wire-box";
+export { WireInput, WireButton } from "./wire-input";
+export { IconTile } from "./icon-tile";
 export { LinkCard, CardGrid } from "./link-card";

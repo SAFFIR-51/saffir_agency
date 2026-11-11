@@ -1,6 +1,6 @@
 import { hospitalWebsiteNotes, hospitalWebsitePlans } from "@/content/pricing";
 import { SolutionTemplate } from "@/shared/sections";
-import { BulletList, PlanTable } from "@/shared/ui";
+import { PlanTable } from "@/shared/ui";
 import { hospitalWebsiteContent } from "../model/content";
 
 export function HospitalWebsitePage() {
@@ -9,10 +9,11 @@ export function HospitalWebsitePage() {
       content={hospitalWebsiteContent}
       slots={{
         pricing: (
-          <>
-            <PlanTable plans={hospitalWebsitePlans} setupLabel="제작비" />
-            <BulletList items={hospitalWebsiteNotes} />
-          </>
+          <PlanTable
+            plans={hospitalWebsitePlans}
+            setupLabel="제작비"
+            caption={hospitalWebsiteNotes.join(" ")}
+          />
         ),
       }}
     />

@@ -1,6 +1,6 @@
-import { BulletList, PageHeader, Section } from "@/shared/ui";
+import { CardGrid, PageHeader, Section, WireBox } from "@/shared/ui";
 
-/** 아직 기능이 없는 화면의 뼈대: 제목 + 이 화면에 들어갈 것 + 추가 설명 */
+/** 포털 화면 와이어프레임: S1 제목 + S2 화면 구성(위젯 자리) + 추가 섹터 */
 export function ScreenOutline({
   eyebrow,
   title,
@@ -16,9 +16,13 @@ export function ScreenOutline({
 }) {
   return (
     <>
-      <PageHeader eyebrow={eyebrow} title={title} lead={lead} />
-      <Section title="이 화면에 들어갈 것">
-        <BulletList items={items} />
+      <PageHeader label="S1 · 제목" eyebrow={eyebrow} title={title} lead={lead} />
+      <Section label="S2 · 화면 구성">
+        <CardGrid columns={2}>
+          {items.map((item) => (
+            <WireBox key={item} label={item} />
+          ))}
+        </CardGrid>
       </Section>
       {children}
     </>

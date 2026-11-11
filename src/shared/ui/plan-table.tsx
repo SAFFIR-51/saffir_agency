@@ -21,10 +21,12 @@ export function PlanTable({
   plans,
   setupLabel = "1회",
   monthlyLabel = "월",
+  caption,
 }: {
   plans: PlanRow[];
   setupLabel?: string;
   monthlyLabel?: string;
+  caption?: string;
 }) {
   const hasSetup = plans.some((p) => p.setup !== undefined);
   const hasMonthly = plans.some((p) => p.monthly !== undefined);
@@ -43,5 +45,5 @@ export function PlanTable({
     ...(hasMonthly ? [price(p.monthly)] : []),
     ...(hasNote ? [p.note ?? ""] : []),
   ]);
-  return <DataTable columns={columns} rows={rows} />;
+  return <DataTable columns={columns} rows={rows} caption={caption} />;
 }

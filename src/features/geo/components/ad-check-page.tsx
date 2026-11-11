@@ -1,6 +1,6 @@
 import { SolutionTemplate } from "@/shared/sections";
-import { Note, Todo } from "@/shared/ui";
-import { adCheckContent, adCheckDisclaimer } from "../model/content";
+import { DataTable, Note, WireBox, WireInput } from "@/shared/ui";
+import { adCheckContent, adCheckDisclaimer, adCheckLimits } from "../model/content";
 
 export function AdCheckPage() {
   return (
@@ -12,10 +12,21 @@ export function AdCheckPage() {
             <p>{adCheckDisclaimer}</p>
           </Note>
         ),
-        demo: (
-          <div id="check">
-            <Todo>광고 문구 입력창 (검사 기능 연결 예정)</Todo>
+        screens: (
+          <div id="check" className="space-y-5">
+            <WireInput
+              label="광고 문구"
+              kind="textarea"
+              placeholder="검사할 문구를 붙여 넣으세요"
+            />
+            <WireBox label="검사 결과 · 위험 표현 표시" size="lg" />
           </div>
+        ),
+        pricing: (
+          <DataTable
+            columns={["등급", "검사 횟수"]}
+            rows={adCheckLimits.map((l) => [l.plan, l.limit])}
+          />
         ),
       }}
     />

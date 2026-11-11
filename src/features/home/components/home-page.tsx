@@ -1,4 +1,4 @@
-import { businessModels, modules, workflow } from "@/content/company";
+import { businessModels, developmentAreas, modules, workflow } from "@/content/company";
 import { portfolioItems } from "@/content/portfolio";
 import { geoPlans, hospitalWebsitePlans, solutionPlans } from "@/content/pricing";
 import { listServices, serviceLines } from "@/content/services";
@@ -9,12 +9,14 @@ import {
   ButtonLink,
   CardGrid,
   DataTable,
+  IconTile,
   LinkCard,
   PageHeader,
   Section,
-  Todo,
+  WireBox,
+  WireInput,
 } from "@/shared/ui";
-import { homeContent } from "../model/content";
+import { homeContent as c } from "../model/content";
 
 function minPrice(values: Array<number | null | undefined>) {
   const prices = values.filter((v): v is number => typeof v === "number" && v > 0);
@@ -23,20 +25,20 @@ function minPrice(values: Array<number | null | undefined>) {
 
 export function HomePage() {
   const medicalCount = portfolioItems.filter((item) => item.group === "medical").length;
-  const featured = homeContent.featuredSlugs
+  const featured = c.featuredSlugs
     .map((slug) => portfolioItems.find((item) => item.slug === slug))
     .filter((item) => item !== undefined);
   const startingPrices = [
-    { label: "AI 검색 최적화", value: minPrice(geoPlans.map((p) => p.monthly)), unit: "월" },
+    { name: "AI 검색 최적화", value: minPrice(geoPlans.map((p) => p.monthly)), basis: "월 구독" },
     {
-      label: "병원 홈페이지",
+      name: "병원 홈페이지",
       value: minPrice(hospitalWebsitePlans.map((p) => p.setup)),
-      unit: "제작",
+      basis: "제작비",
     },
     {
-      label: "구축형 솔루션 세팅비",
+      name: "구축형 솔루션",
       value: minPrice(solutionPlans.map((p) => p.setup)),
-      unit: "1회",
+      basis: "도입 세팅비",
     },
   ];
 
@@ -49,59 +51,77 @@ export function HomePage() {
             맞춤 개발 견적
           </ButtonLink>
         </div>
-        <ul className="mt-8 flex flex-wrap gap-x-8 gap-y-2 text-sm">
+        <ul className="flex flex-wrap gap-x-8 gap-y-2 text-sm">
           <li>포트폴리오 {portfolioItems.length}건</li>
           <li>의료·헬스케어 {medicalCount}건</li>
-          <li>운영 중인 고객사 수 (확인 후 표시)</li>
+          <li>운영 중인 고객사 [ 숫자 ]</li>
         </ul>
+        <WireBox label="이미지 · 대표 화면" size="lg" />
       </PageHeader>
 
-      <Section title="세 갈래로 찾아오세요" description={homeContent.entryIntro}>
+      <Section label="S2 · 세 갈래" title={c.entry.title}>
         <CardGrid>
-          {(["hospital", "business"] as const).map((line) => (
-            <LinkCard
-              key={line}
-              href={line === "hospital" ? routes.hospital.root : routes.solutions.root}
-              title={serviceLines[line].name}
-              description={serviceLines[line].description}
-            >
-              <BulletList items={listServices(line).map((s) => s.name)} />
-            </LinkCard>
-          ))}
+          <LinkCard
+            href={routes.hospital.root}
+            title={serviceLines.hospital.name}
+            description={c.entry.hospital}
+          >
+            <BulletList items={listServices("hospital").map((s) => s.name)} />
+          </LinkCard>
+          <LinkCard
+            href={routes.solutions.root}
+            title={serviceLines.business.name}
+            description={c.entry.business}
+          >
+            <BulletList items={listServices("business").map((s) => s.name)} />
+          </LinkCard>
           <LinkCard
             href={routes.development.root}
             title="맞춤 개발"
-            description={homeContent.developmentCard}
+            description={c.entry.development}
           >
-            <BulletList items={homeContent.developmentAreas} />
+            <BulletList items={developmentAreas} />
           </LinkCard>
         </CardGrid>
       </Section>
 
-      <Section title={homeContent.geoBand.title} description={homeContent.geoBand.description}>
-        <Todo>홈페이지 주소 입력창 (진단 기능 연결 예정)</Todo>
+      <Section
+        label="S3 · 무료 진단"
+        title={c.diagnosis.title}
+        description={c.diagnosis.description}
+      >
+        <WireInput label="홈페이지 주소" placeholder="https://" />
         <ButtonLink href={routes.hospital.geo}>무료 진단하기</ButtonLink>
       </Section>
 
-      <Section title="사피어가 일하는 세 가지 방식">
+      <Section label="S4 · 일하는 방식" title={c.models.title}>
         <DataTable
-          columns={["판매 방식", "대표 상품", "제공 방식", "요금 방식", "소스 소유권"]}
+          columns={["방식", "대표 상품", "제공 방식", "요금 방식", "소스·데이터"]}
           rows={businessModels.map((m) => [m.type, m.products, m.delivery, m.revenue, m.ownership])}
         />
       </Section>
 
-      <Section title="만들고, 돌리고, 보여드립니다">
-        <BulletList ordered items={workflow} />
+      <Section label="S5 · 진행 순서" title={c.workflow.title}>
+        <DataTable
+          columns={["단계", "내용"]}
+          rows={workflow.map((w, index) => [`${index + 1}. ${w.step}`, w.detail])}
+        />
       </Section>
 
-      <Section title="보유 모듈로 빠르게 만듭니다" description={homeContent.modulesDescription}>
-        <BulletList items={modules} />
+      <Section label="S6 · 보유 모듈" title={c.modules.title} description={c.modules.description}>
+        <CardGrid>
+          {modules.map((m) => (
+            <IconTile key={m} label={m} />
+          ))}
+        </CardGrid>
       </Section>
 
-      <Section title="대표 사례">
+      <Section label="S7 · 대표 사례" title={c.cases.title}>
         <CardGrid>
           {featured.map((item) => (
-            <LinkCard key={item.slug} href={routes.portfolioDetail(item.slug)} title={item.title} />
+            <LinkCard key={item.slug} href={routes.portfolioDetail(item.slug)} title={item.title}>
+              <WireBox label="이미지" size="sm" />
+            </LinkCard>
           ))}
         </CardGrid>
         <ButtonLink href={routes.portfolio} variant="secondary">
@@ -109,19 +129,21 @@ export function HomePage() {
         </ButtonLink>
       </Section>
 
-      <Section title="모든 요금을 공개합니다" description="금액은 VAT 포함입니다.">
-        <BulletList
-          items={startingPrices.map(
-            (p) =>
-              `${p.label}: ${p.value === null ? "별도 견적" : `${p.unit} ${formatKRW(p.value)}부터`}`,
-          )}
+      <Section label="S8 · 요금" title={c.pricing.title} description="금액은 VAT 포함입니다.">
+        <DataTable
+          columns={["서비스", "시작 가격", "기준"]}
+          rows={startingPrices.map((p) => [
+            p.name,
+            p.value === null ? "별도 견적" : `${formatKRW(p.value)}부터`,
+            p.basis,
+          ])}
         />
         <ButtonLink href={routes.pricing} variant="secondary">
           요금 안내 보기
         </ButtonLink>
       </Section>
 
-      <Section title={homeContent.closing.title} description={homeContent.closing.description}>
+      <Section label="S9 · 상담" title={c.closing.title} description={c.closing.description}>
         <div className="flex flex-wrap gap-3">
           <ButtonLink href={routes.contact}>무료 상담</ButtonLink>
           <ButtonLink href={routes.development.estimate} variant="secondary">

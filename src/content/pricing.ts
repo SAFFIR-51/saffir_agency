@@ -152,8 +152,9 @@ export const outsourcingDeposits: Plan[] = [
 export const hospitalGrowthBundle = {
   name: "병원 성장 패키지",
   includes: ["geo-managed", "crm-basic"],
+  includesLabel: "GEO 관리형 + 병원 CRM 베이직",
   monthly: 690000,
-  note: "홈페이지 신규 제작 병원이 12개월 이용 시 기본형 제작비 50% 할인",
+  benefit: "홈페이지를 새로 만드는 병원은 12개월 이용 시 기본형 제작비 50% 할인",
 };
 
 /** AI 검색 최적화 요금 원칙 */
@@ -174,11 +175,6 @@ export const serverTierNotes = [
 
 export const hospitalWebsiteNotes = [
   "납품 후에는 GEO 관리형(월 550,000원)이나 단순 유지보수(월 33,000원)를 선택합니다.",
-];
-
-export const growthBundleNotes = [
-  "GEO 관리형(550,000원) + 병원 CRM 베이직(220,000원)을 묶어 월 690,000원(약 10% 할인)에 판매합니다.",
-  "홈페이지를 새로 만드는 병원은 패키지를 12개월 이용하면 기본형 제작비를 50% 할인합니다.",
 ];
 
 export const outsourcingNotes = ["나머지 맞춤형 개발은 견적 요청으로 받습니다."];

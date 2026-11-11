@@ -1,8 +1,8 @@
-import { installedSolutionNotes } from "@/content/company";
+import { installedSolutionRows } from "@/content/company";
 import { solutionPlans } from "@/content/pricing";
 import { SolutionTemplate } from "@/shared/sections";
-import { BulletList, Note, PlanTable } from "@/shared/ui";
-import { erpContent } from "../model/content";
+import { DataTable, PlanTable, Subheading } from "@/shared/ui";
+import { erpContent, pricingCaptions } from "../model/content";
 
 export function ErpPage() {
   return (
@@ -14,12 +14,17 @@ export function ErpPage() {
             plans={solutionPlans.filter((p) => p.id === "erp")}
             setupLabel="1단계 진단·설계"
             monthlyLabel="월 이용료"
+            caption={pricingCaptions.erp}
           />
         ),
         afterProcess: (
-          <Note title="제공 방식">
-            <BulletList items={installedSolutionNotes} />
-          </Note>
+          <>
+            <Subheading>제공 방식</Subheading>
+            <DataTable
+              columns={["항목", "내용"]}
+              rows={installedSolutionRows.map((r) => [r.item, r.detail])}
+            />
+          </>
         ),
       }}
     />

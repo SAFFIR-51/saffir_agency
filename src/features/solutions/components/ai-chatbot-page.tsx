@@ -1,8 +1,8 @@
-import { installedSolutionNotes } from "@/content/company";
+import { installedSolutionRows } from "@/content/company";
 import { solutionPlans } from "@/content/pricing";
 import { SolutionTemplate } from "@/shared/sections";
-import { BulletList, Note, PlanTable } from "@/shared/ui";
-import { aiChatbotContent } from "../model/content";
+import { DataTable, PlanTable, Subheading } from "@/shared/ui";
+import { aiChatbotContent, pricingCaptions } from "../model/content";
 
 export function AiChatbotPage() {
   return (
@@ -14,12 +14,17 @@ export function AiChatbotPage() {
             plans={solutionPlans.filter((p) => p.id === "ai-chatbot")}
             setupLabel="PoC"
             monthlyLabel="월 이용료"
+            caption={pricingCaptions.aiChatbot}
           />
         ),
         afterProcess: (
-          <Note title="제공 방식">
-            <BulletList items={installedSolutionNotes} />
-          </Note>
+          <>
+            <Subheading>제공 방식</Subheading>
+            <DataTable
+              columns={["항목", "내용"]}
+              rows={installedSolutionRows.map((r) => [r.item, r.detail])}
+            />
+          </>
         ),
       }}
     />

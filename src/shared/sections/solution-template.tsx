@@ -1,21 +1,21 @@
 import type { Route } from "next";
 import Link from "next/link";
-import { BulletList, ButtonLink, PageHeader, Section, Todo } from "@/shared/ui";
+import { BulletList, ButtonLink, DataTable, PageHeader, Section, WireBox } from "@/shared/ui";
 
 /**
  * 기획서: 모든 솔루션 페이지는 같은 순서를 따른다.
  * 해결하는 문제 → 주요 기능 → 화면·데모 → 도입 사례 → 요금 → 도입 절차 → FAQ → 신청 버튼
- * 페이지마다 다른 것은 "다음 행동" 버튼(cta)이다.
+ * 페이지마다 다른 것은 신청 버튼(cta)이다. 화면에는 S1 히어로 + 위 8개 = S1~S9 섹터로 보인다.
  */
 export const SOLUTION_SECTION_ORDER = [
-  "해결하는 문제",
-  "주요 기능",
-  "화면·데모",
-  "도입 사례",
-  "요금",
-  "도입 절차",
-  "FAQ",
-  "신청",
+  { label: "문제", title: "이런 상황이라면" },
+  { label: "기능", title: "주요 기능" },
+  { label: "화면", title: "화면 미리보기" },
+  { label: "사례", title: "도입 사례" },
+  { label: "요금", title: "요금" },
+  { label: "절차", title: "도입 절차" },
+  { label: "FAQ", title: "자주 묻는 질문" },
+  { label: "신청", title: "지금 시작하세요" },
 ] as const;
 
 export type SolutionPageContent = {
@@ -25,24 +25,40 @@ export type SolutionPageContent = {
   message: string;
   problems: string[];
   features: string[];
-  demo: string[];
+  /** 화면 미리보기 자리 이름 (예: 대시보드 화면) */
+  screens: string[];
   cases: { title: string; href?: Route }[];
-  pricingNotes: string[];
-  process: string[];
+  process: { step: string; detail: string }[];
   faq: { q: string; a: string }[];
   cta: { label: string; href: Route };
   secondaryCta?: { label: string; href: Route };
 };
 
-/** 섹션마다 화면 전용 내용을 끼워 넣는 자리 (요금표, 입력창 자리, 보안 설명 등) */
+/** 섹터마다 화면 전용 내용을 끼워 넣는 자리 (요금표, 입력창, 보안 설명 등) */
 type Slots = {
   afterFeatures?: React.ReactNode;
-  demo?: React.ReactNode;
+  screens?: React.ReactNode;
   pricing?: React.ReactNode;
   afterProcess?: React.ReactNode;
 };
 
-const title = (index: number) => `${index + 1}. ${SOLUTION_SECTION_ORDER[index]}`;
+const sector = (index: number) => {
+  const s = SOLUTION_SECTION_ORDER[index];
+  return { label: `S${index + 2} · ${s.label}`, title: s.title };
+};
+
+function Buttons({ content }: { content: SolutionPageContent }) {
+  return (
+    <div className="flex flex-wrap gap-3">
+      <ButtonLink href={content.cta.href}>{content.cta.label}</ButtonLink>
+      {content.secondaryCta ? (
+        <ButtonLink href={content.secondaryCta.href} variant="secondary">
+          {content.secondaryCta.label}
+        </ButtonLink>
+      ) : null}
+    </div>
+  );
+}
 
 export function SolutionTemplate({
   content,
@@ -55,84 +71,61 @@ export function SolutionTemplate({
   return (
     <>
       <PageHeader eyebrow={c.eyebrow} title={c.name} lead={c.message}>
-        <div className="flex flex-wrap gap-3">
-          <ButtonLink href={c.cta.href}>{c.cta.label}</ButtonLink>
-          {c.secondaryCta ? (
-            <ButtonLink href={c.secondaryCta.href} variant="secondary">
-              {c.secondaryCta.label}
-            </ButtonLink>
-          ) : null}
-        </div>
+        <Buttons content={c} />
       </PageHeader>
 
-      <Section title={title(0)}>
-        {c.problems.length > 0 ? <BulletList items={c.problems} /> : <Todo>해결하는 문제</Todo>}
+      <Section {...sector(0)}>
+        <BulletList items={c.problems} />
       </Section>
 
-      <Section title={title(1)}>
-        {c.features.length > 0 ? <BulletList items={c.features} /> : <Todo>주요 기능</Todo>}
+      <Section {...sector(1)}>
+        <BulletList items={c.features} />
         {slots.afterFeatures}
       </Section>
 
-      <Section title={title(2)}>
-        {c.demo.length > 0 ? <BulletList items={c.demo} /> : null}
-        {slots.demo}
-        {c.demo.length === 0 && !slots.demo ? <Todo>화면 캡처·데모</Todo> : null}
+      <Section {...sector(2)}>
+        {slots.screens}
+        {c.screens.map((screen) => (
+          <WireBox key={screen} label={screen} size="lg" />
+        ))}
       </Section>
 
-      <Section title={title(3)}>
-        {c.cases.length > 0 ? (
-          <BulletList
-            items={c.cases.map((item) =>
-              item.href ? (
-                <Link key={item.title} href={item.href} className="underline underline-offset-4">
-                  {item.title}
-                </Link>
-              ) : (
-                item.title
-              ),
-            )}
-          />
-        ) : (
-          <Todo>도입 사례</Todo>
-        )}
+      <Section {...sector(3)}>
+        <BulletList
+          items={c.cases.map((item) =>
+            item.href ? (
+              <Link key={item.title} href={item.href} className="underline underline-offset-4">
+                {item.title}
+              </Link>
+            ) : (
+              item.title
+            ),
+          )}
+        />
       </Section>
 
-      <Section title={title(4)} description="금액은 VAT 포함입니다.">
+      <Section {...sector(4)} description="금액은 VAT 포함입니다.">
         {slots.pricing}
-        {c.pricingNotes.length > 0 ? <BulletList items={c.pricingNotes} /> : null}
-        {!slots.pricing && c.pricingNotes.length === 0 ? <Todo>요금</Todo> : null}
       </Section>
 
-      <Section title={title(5)}>
-        {c.process.length > 0 ? <BulletList ordered items={c.process} /> : <Todo>도입 절차</Todo>}
+      <Section {...sector(5)}>
+        <DataTable
+          columns={["단계", "내용"]}
+          rows={c.process.map((p, index) => [`${index + 1}. ${p.step}`, p.detail])}
+        />
         {slots.afterProcess}
       </Section>
 
-      <Section title={title(6)}>
+      <Section {...sector(6)}>
         {c.faq.length > 0 ? (
-          <dl className="space-y-4">
-            {c.faq.map((item) => (
-              <div key={item.q}>
-                <dt className="font-semibold">{item.q}</dt>
-                <dd className="mt-1 text-foreground/70">{item.a}</dd>
-              </div>
-            ))}
-          </dl>
+          <DataTable columns={["질문", "답변"]} rows={c.faq.map((f) => [f.q, f.a])} />
         ) : (
-          <Todo>자주 묻는 질문</Todo>
+          <WireBox label="질문과 답변 목록" />
         )}
       </Section>
 
-      <Section title={title(7)}>
-        <div className="flex flex-wrap gap-3">
-          <ButtonLink href={c.cta.href}>{c.cta.label}</ButtonLink>
-          {c.secondaryCta ? (
-            <ButtonLink href={c.secondaryCta.href} variant="secondary">
-              {c.secondaryCta.label}
-            </ButtonLink>
-          ) : null}
-        </div>
+      <Section {...sector(7)}>
+        <Buttons content={c} />
       </Section>
     </>
   );

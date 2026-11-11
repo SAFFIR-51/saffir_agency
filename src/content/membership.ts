@@ -2,9 +2,8 @@
 
 export const loginPurposes = ["서비스 둘러보기", "고객이 된 뒤 작업 보고·조회·결제"];
 
-export const loginNotes = [
-  "솔루션 자체는 포털 안에서 쓰지 않습니다. CRM 등은 고객사 전용 서버에 설치되고, 포털에는 그 주소로 가는 바로가기만 둡니다.",
-];
+export const loginNote =
+  "솔루션(CRM 등)은 고객사 전용 서버에서 쓰고, 포털에는 그 서버로 가는 바로가기가 있습니다.";
 
 export const memberTypes = [
   {
@@ -26,4 +25,3 @@ export const memberTypes = [
 
 /** 무료 회원가입으로 열리는 것 (병원 고객 흐름 2단계) */
 export const signupBenefits = ["전체 근거·수정 코드 열람", "진단 기록 저장"];
-export const signupCollects = ["병원명", "연락처"];

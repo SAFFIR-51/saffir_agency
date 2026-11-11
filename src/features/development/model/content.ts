@@ -1,8 +1,8 @@
 /** 맞춤 개발 화면 문구 */
 export const developmentContent = {
-  title: "맞춤 개발",
-  lead: "웹·앱, 쇼핑몰, 플랫폼 연동, AI, IoT까지 요구사항대로 개발해 납품하고, 납품 후 유지보수까지 맡습니다.",
-  /** 분야별 관련 포트폴리오 (한 페이지 안의 섹션) */
+  title: "필요한 서비스를 만들고, 운영까지",
+  lead: "웹·앱부터 AI, IoT까지 만들어 납품하고, 납품 후 유지보수까지 맡습니다.",
+  /** 분야별 관련 포트폴리오 */
   areas: [
     { name: "웹·앱", slugs: ["derma-clinic-web", "hearing-health-app", "mentoring-app"] },
     {
@@ -22,11 +22,9 @@ export const developmentContent = {
 
 export const processContent = {
   title: "개발 프로세스",
-  lead: "단계마다 고객이 포털에서 진행 상황을 확인하고 승인합니다.",
-  portal: [
-    "포털 프로젝트 화면에서 단계, 진행률, 일정, 산출물을 확인하고 확인·승인 버튼을 누릅니다.",
-    "작업 보고: 주간 스프린트 보고, 정례 미팅 기록",
-    "요청·문의: 수정 요청, 장애 신고, 처리 상태",
+  lead: "단계마다 포털에서 진행 상황을 확인하고 승인합니다.",
+  contract: [
+    { item: "결제", detail: "계약금 + 잔금" },
+    { item: "납품 후", detail: "유지보수" },
   ],
-  payment: ["계약금 + 잔금", "납품 후 유지보수"],
 };

@@ -1,38 +1,29 @@
-import Link from "next/link";
 import { geoPlans, geoPricingHeadline } from "@/content/pricing";
 import { SolutionTemplate } from "@/shared/sections";
-import { BulletList, Note, PlanTable, Subheading, Todo } from "@/shared/ui";
-import { geoContent, geoResultOutline } from "../model/content";
+import { ButtonLink, PlanTable, Subheading, WireBox, WireInput } from "@/shared/ui";
+import { geoContent, geoResultActions } from "../model/content";
 
 export function GeoLandingPage() {
   return (
     <SolutionTemplate
       content={geoContent}
       slots={{
-        afterFeatures: <Todo>8개 분야 이름과 50여 항목 목록</Todo>,
-        demo: (
-          <div id="diagnosis" className="space-y-4">
-            <Todo>홈페이지 주소 입력창 (진단 기능 연결 예정)</Todo>
-            <Subheading>진단 결과 화면</Subheading>
-            <BulletList items={geoResultOutline.result} />
-            <Subheading>결과 화면 버튼</Subheading>
-            <BulletList
-              items={geoResultOutline.nextActions.map((a) => (
-                <Link key={a.label} href={a.href} className="underline underline-offset-4">
+        afterFeatures: <WireBox label="8개 분야 · 50여 항목 목록" />,
+        screens: (
+          <div id="diagnosis" className="space-y-5">
+            <Subheading>무료 진단</Subheading>
+            <WireInput label="홈페이지 주소" placeholder="https://" />
+            <WireBox label="진단 결과 · 총점, 영역별 점수, 우선 개선 항목" size="lg" />
+            <div className="flex flex-wrap gap-3">
+              {geoResultActions.map((a) => (
+                <ButtonLink key={a.label} href={a.href} variant="secondary">
                   {a.label}
-                </Link>
+                </ButtonLink>
               ))}
-            />
+            </div>
           </div>
         ),
-        pricing: (
-          <>
-            <Note>
-              <p>{geoPricingHeadline}</p>
-            </Note>
-            <PlanTable plans={geoPlans} />
-          </>
-        ),
+        pricing: <PlanTable plans={geoPlans} caption={geoPricingHeadline} />,
       }}
     />
   );
