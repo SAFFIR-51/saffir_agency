@@ -28,7 +28,7 @@ flowchart LR
     B0 --> B7["/signup<br/>⑫ 병원명만 받음"]:::gap
   end
 
-  subgraph A["A. 병원 원장 (주력)"]
+  subgraph A["A. 병원 원장 (대표 솔루션 라인)"]
     direction LR
     A0["검색·AI 답변·광고"] --> A1["/geo<br/>AI 검색 최적화"]
     A0 --> A1b["메인 / 병원 솔루션"] --> A1
