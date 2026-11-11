@@ -1,3 +1,4 @@
+import { faqForService } from "@/content/faq";
 import { routes } from "@/shared/config";
 import type { SolutionPageContent } from "@/shared/sections";
 
@@ -36,7 +37,7 @@ export const hospitalWebsiteContent: SolutionPageContent = {
     { step: "납품", detail: "완성된 홈페이지를 넘겨드립니다." },
     { step: "관리", detail: "GEO 관리형 또는 단순 유지보수를 고릅니다." },
   ],
-  faq: [],
+  faq: faqForService("hospital-website"),
   cta: { label: "제작 상담", href: routes.contactFor("hospital-website") },
   secondaryCta: { label: "기본형 결제", href: routes.order("web-basic") },
 };

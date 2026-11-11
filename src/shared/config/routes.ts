@@ -79,6 +79,8 @@ export const routes = {
     login: "/login",
     signup: "/signup",
     forgotPassword: "/forgot-password",
+    /** 계약 고객 포털 초대 수락 */
+    invite: "/invite",
     resetPassword: "/reset-password",
     /** 가입 후 next로 돌아간다 (예: 방금 본 진단 결과) */
     signupFrom: (next: string) => `/signup?next=${encodeURIComponent(next)}` as Route,

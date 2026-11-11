@@ -1,3 +1,4 @@
+import { faqForService } from "@/content/faq";
 import { routes } from "@/shared/config";
 import type { SolutionPageContent } from "@/shared/sections";
 
@@ -24,7 +25,7 @@ export const connectContent: SolutionPageContent = {
     { step: "세팅", detail: "마켓 2곳을 연결합니다. 마켓 추가는 별도입니다." },
     { step: "운영", detail: "전용 서버에서 재고와 주문을 동기화합니다." },
   ],
-  faq: [],
+  faq: faqForService("connect"),
   cta: { label: "도입 상담", href: routes.contactFor("connect") },
 };
 
@@ -46,7 +47,7 @@ export const erpContent: SolutionPageContent = {
     { step: "단계적 전환", detail: "업무 단위로 나눠 옮깁니다." },
     { step: "데이터 이관", detail: "기존 엑셀 데이터를 옮깁니다." },
   ],
-  faq: [],
+  faq: faqForService("erp"),
   cta: { label: "1단계 진단 신청", href: routes.contactFor("erp") },
 };
 
@@ -67,7 +68,7 @@ export const aiChatbotContent: SolutionPageContent = {
     { step: "PoC", detail: "작은 범위로 먼저 만들어 확인합니다." },
     { step: "확장", detail: "범위를 넓혀 도입합니다." },
   ],
-  faq: [],
+  faq: faqForService("ai-chatbot"),
   cta: { label: "PoC 신청", href: routes.contactFor("ai-chatbot") },
 };
 

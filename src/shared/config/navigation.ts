@@ -117,18 +117,37 @@ export const footerGroups: FooterGroup[] = [
   { title: "정책", items: policyNav },
 ];
 
-/** 포털 메뉴. requires 값으로 가입한 서비스에 따라 보이거나 숨깁니다. */
-export type PortalNavItem = NavItem & {
-  requires?: "client" | "subscriber" | "solution";
+/**
+ * 포털 회원 종류 (기획서 "회원 유형"을 가입한 서비스 기준으로 나눔).
+ * 한 고객사가 여러 개를 가질 수 있다 (예: 외주 + GEO 구독).
+ */
+export type MemberKind = "member" | "subscriber" | "project" | "solution";
+
+export const memberKindLabels: Record<MemberKind, string> = {
+  member: "일반 회원",
+  subscriber: "GEO 구독",
+  project: "외주 고객",
+  solution: "솔루션 고객",
 };
+
+/** 포털 메뉴. audience가 없으면 모두에게, 있으면 그중 하나라도 가진 회원에게 보인다 */
+export type PortalNavItem = NavItem & { audience?: MemberKind[] };
 
 export const portalNav: PortalNavItem[] = [
   { label: "홈", href: routes.portal.home },
-  { label: "프로젝트", href: routes.portal.projects, requires: "client" },
-  { label: "작업 보고", href: routes.portal.reports, requires: "client" },
-  { label: "요청·문의", href: routes.portal.requests, requires: "client" },
-  { label: "내 솔루션", href: routes.portal.solutions, requires: "solution" },
+  { label: "프로젝트", href: routes.portal.projects, audience: ["project"] },
+  { label: "작업 보고", href: routes.portal.reports, audience: ["project"] },
+  { label: "요청·문의", href: routes.portal.requests, audience: ["project", "solution"] },
+  { label: "내 솔루션", href: routes.portal.solutions, audience: ["solution"] },
   { label: "GEO", href: routes.portal.geo },
-  { label: "청구·결제", href: routes.portal.billing },
+  {
+    label: "청구·결제",
+    href: routes.portal.billing,
+    audience: ["subscriber", "project", "solution"],
+  },
   { label: "계정", href: routes.portal.account },
 ];
+
+export function isPortalMenuVisible(item: PortalNavItem, kinds: readonly MemberKind[]) {
+  return !item.audience || item.audience.some((kind) => kinds.includes(kind));
+}

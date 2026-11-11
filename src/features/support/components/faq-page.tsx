@@ -1,5 +1,6 @@
 import { routes } from "@/shared/config";
-import { ButtonLink, PageHeader, Section, WireBox } from "@/shared/ui";
+import { faqByCategory } from "@/content/faq";
+import { ButtonLink, DataTable, PageHeader, Section } from "@/shared/ui";
 import { faqCategories } from "../model/content";
 
 export function FaqPage() {
@@ -7,8 +8,15 @@ export function FaqPage() {
     <>
       <PageHeader title="자주 묻는 질문" />
       {faqCategories.map((category, index) => (
-        <Section key={category} label={`S${index + 2} · ${category}`} title={category}>
-          <WireBox label="질문과 답변 목록" />
+        <Section
+          key={category.key}
+          label={`S${index + 2} · ${category.label}`}
+          title={category.label}
+        >
+          <DataTable
+            columns={["질문", "답변"]}
+            rows={faqByCategory(category.key).map((f) => [f.q, f.a])}
+          />
         </Section>
       ))}
       <Section

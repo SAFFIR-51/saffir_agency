@@ -1,3 +1,4 @@
+import { faqForService } from "@/content/faq";
 import { routes } from "@/shared/config";
 import type { SolutionPageContent } from "@/shared/sections";
 
@@ -24,7 +25,7 @@ export const crmContent: SolutionPageContent = {
     { step: "서버 세팅", detail: "병원 전용 서버를 만들고 기존 데이터를 옮깁니다." },
     { step: "운영", detail: "포털에서 서버 상태와 사용량을 확인합니다." },
   ],
-  faq: [],
+  faq: faqForService("crm"),
   cta: { label: "데모 신청", href: routes.contactFor("crm-demo") },
   secondaryCta: { label: "도입 신청", href: routes.contactFor("crm-adopt") },
 };

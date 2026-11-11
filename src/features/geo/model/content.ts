@@ -1,3 +1,4 @@
+import { faqForService } from "@/content/faq";
 import type { Route } from "next";
 import { routes } from "@/shared/config";
 import type { SolutionPageContent } from "@/shared/sections";
@@ -27,7 +28,7 @@ export const geoContent: SolutionPageContent = {
     { step: "개선", detail: "직접 고치기 어려우면 홈페이지 제작을 상담합니다." },
     { step: "관리", detail: "납품 후 관리형으로 매달 관리합니다." },
   ],
-  faq: [],
+  faq: faqForService("geo"),
   cta: { label: "무료 진단하기", href: `${routes.hospital.geo}#diagnosis` },
   secondaryCta: { label: "요금 보기", href: `${routes.pricing}#geo` },
 };
@@ -64,7 +65,7 @@ export const adCheckContent: SolutionPageContent = {
     { step: "결과 확인", detail: "위험 표현을 확인합니다." },
     { step: "다시 검사", detail: "고친 문구를 다시 검사합니다." },
   ],
-  faq: [],
+  faq: faqForService("ad-check"),
   cta: { label: "무료 검사하기", href: `${routes.hospital.adCheck}#check` },
   secondaryCta: { label: "AI 검색 최적화 보기", href: routes.hospital.geo },
 };
