@@ -1,5 +1,6 @@
 import type { Route } from "next";
 import Link from "next/link";
+import { serviceGraph, JsonLd } from "@/shared/seo";
 import { BulletList, ButtonLink, DataTable, PageHeader, Section, WireBox } from "@/shared/ui";
 
 /**
@@ -19,6 +20,8 @@ export const SOLUTION_SECTION_ORDER = [
 ] as const;
 
 export type SolutionPageContent = {
+  /** 이 페이지 주소. 구조화데이터(Service, 이동 경로)에 쓴다 */
+  path: Route;
   /** 상단 작은 글씨: 병원 솔루션 / 비즈니스 솔루션 */
   eyebrow: string;
   name: string;
@@ -70,6 +73,7 @@ export function SolutionTemplate({
   const c = content;
   return (
     <>
+      <JsonLd data={serviceGraph({ path: c.path, name: c.name, description: c.message })} />
       <PageHeader eyebrow={c.eyebrow} title={c.name} lead={c.message}>
         <Buttons content={c} />
       </PageHeader>

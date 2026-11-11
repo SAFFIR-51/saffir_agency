@@ -7,6 +7,7 @@ export const solutionsOverviewContent = {
 };
 
 export const connectContent: SolutionPageContent = {
+  path: routes.solutions.connect,
   eyebrow: "비즈니스 솔루션",
   name: "사피어 커머스 연동",
   message: "여러 마켓 재고·주문을 한곳에서",
@@ -24,6 +25,7 @@ export const connectContent: SolutionPageContent = {
 };
 
 export const erpContent: SolutionPageContent = {
+  path: routes.solutions.erp,
   eyebrow: "비즈니스 솔루션",
   name: "사피어 업무 통합 ERP",
   message: "흩어진 엑셀을 하나의 시스템으로",
@@ -45,6 +47,7 @@ export const erpContent: SolutionPageContent = {
 };
 
 export const aiChatbotContent: SolutionPageContent = {
+  path: routes.solutions.aiChatbot,
   eyebrow: "비즈니스 솔루션",
   name: "사피어 AI 챗봇",
   message: "사내 문서로 답하는 AI",

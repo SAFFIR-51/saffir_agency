@@ -10,6 +10,7 @@ export const hospitalOverviewContent = {
 };
 
 export const hospitalWebsiteContent: SolutionPageContent = {
+  path: routes.hospital.website,
   eyebrow: "병원 솔루션",
   name: "사피어 병원 홈페이지",
   message: "AI 검색에 강한 병원 홈페이지",

@@ -15,6 +15,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 1. [docs/frontend-guide.md](./docs/frontend-guide.md) — 개발 지침 (구조, 공통 컴포넌트, 폼, 이벤트, 보안, 완료 기준)
 2. [docs/examples/](./docs/examples/) — 기준 예시 코드
 3. [ARCHITECTURE.md](./ARCHITECTURE.md) — 폴더 구조와 기획서 대응표
+4. [docs/TODO.md](./docs/TODO.md) — 남은 일 (작업을 끝내면 체크하고, 새로 생긴 일은 추가)
 
 - 작업 중 만드는 보고서·스크린샷·로그·임시 파일은 `.agent-output/`에만 둔다. 커밋하지 않는다 (frontend-guide.md 17번).
 - 작업 보고 마지막에는 지침 수정 제안을 붙인다 (frontend-guide.md 18번).

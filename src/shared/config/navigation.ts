@@ -1,39 +1,88 @@
 import type { Route } from "next";
 import { routes } from "./routes";
 
-export type NavItem = { label: string; href: Route; children?: NavItem[] };
+export type NavItem = {
+  label: string;
+  href: Route;
+  /** 헤더 메뉴에 마우스를 올리면 보이는 한 줄 설명 */
+  description?: string;
+  children?: NavItem[];
+};
 
 /** 상단 메뉴 5개 (기획서: 병원 솔루션, 비즈니스 솔루션, 맞춤 개발, 포트폴리오, 요금 안내) */
 export const mainNav: NavItem[] = [
   {
     label: "병원 솔루션",
     href: routes.hospital.root,
+    description: "AI 검색 진단부터 홈페이지, 환자 관리까지",
     children: [
-      { label: "사피어 AI 검색 최적화", href: routes.hospital.geo },
-      { label: "사피어 의료광고 검사기", href: routes.hospital.adCheck },
-      { label: "사피어 병원 홈페이지", href: routes.hospital.website },
-      { label: "사피어 병원 CRM", href: routes.hospital.crm },
+      {
+        label: "사피어 AI 검색 최적화",
+        href: routes.hospital.geo,
+        description: "ChatGPT·네이버 AI가 우리 병원을 추천하는지 확인",
+      },
+      {
+        label: "사피어 의료광고 검사기",
+        href: routes.hospital.adCheck,
+        description: "의료법 제56조 위험 표현을 미리 확인 (무료)",
+      },
+      {
+        label: "사피어 병원 홈페이지",
+        href: routes.hospital.website,
+        description: "AI 검색에 강한 병원 홈페이지 제작",
+      },
+      {
+        label: "사피어 병원 CRM",
+        href: routes.hospital.crm,
+        description: "한 번 온 환자가 다시 오게",
+      },
     ],
   },
   {
     label: "비즈니스 솔루션",
     href: routes.solutions.root,
+    description: "반복해 온 기능을 개발 대신 세팅으로 도입",
     children: [
-      { label: "사피어 커머스 연동", href: routes.solutions.connect },
-      { label: "사피어 업무 통합 ERP", href: routes.solutions.erp },
-      { label: "사피어 AI 챗봇", href: routes.solutions.aiChatbot },
+      {
+        label: "사피어 커머스 연동",
+        href: routes.solutions.connect,
+        description: "여러 마켓 재고·주문을 한곳에서",
+      },
+      {
+        label: "사피어 업무 통합 ERP",
+        href: routes.solutions.erp,
+        description: "흩어진 엑셀을 하나의 시스템으로",
+      },
+      {
+        label: "사피어 AI 챗봇",
+        href: routes.solutions.aiChatbot,
+        description: "사내 문서로 답하는 AI",
+      },
     ],
   },
   {
     label: "맞춤 개발",
     href: routes.development.root,
+    description: "웹·앱, 쇼핑몰, 플랫폼 연동, AI, IoT를 만들고 운영까지",
     children: [
-      { label: "개발 프로세스", href: routes.development.process },
-      { label: "견적 요청", href: routes.development.estimate },
+      {
+        label: "개발 프로세스",
+        href: routes.development.process,
+        description: "6단계 진행과 포털에서 확인하는 방법",
+      },
+      {
+        label: "견적 요청",
+        href: routes.development.estimate,
+        description: "정찰가에 없는 개발은 견적으로 안내",
+      },
     ],
   },
-  { label: "포트폴리오", href: routes.portfolio },
-  { label: "요금 안내", href: routes.pricing },
+  {
+    label: "포트폴리오",
+    href: routes.portfolio,
+    description: "분야별 프로젝트 사례와 관련 솔루션",
+  },
+  { label: "요금 안내", href: routes.pricing, description: "모든 서비스 요금 공개 (VAT 포함)" },
 ];
 
 export const utilityNav: NavItem[] = [

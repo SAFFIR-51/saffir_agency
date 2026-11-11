@@ -2,6 +2,7 @@ import { routes } from "@/shared/config";
 import type { SolutionPageContent } from "@/shared/sections";
 
 export const crmContent: SolutionPageContent = {
+  path: routes.hospital.crm,
   eyebrow: "병원 솔루션",
   name: "사피어 병원 CRM",
   message: "한 번 온 환자가 다시 오게",

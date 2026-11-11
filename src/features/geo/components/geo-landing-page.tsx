@@ -1,6 +1,6 @@
 import { geoPlans, geoPricingHeadline } from "@/content/pricing";
 import { SolutionTemplate } from "@/shared/sections";
-import { ButtonLink, PlanTable, Subheading, WireBox, WireInput } from "@/shared/ui";
+import { PlanTable, Subheading, TrackedButtonLink, WireBox, WireInput } from "@/shared/ui";
 import { geoContent, geoResultActions } from "../model/content";
 
 export function GeoLandingPage() {
@@ -16,9 +16,15 @@ export function GeoLandingPage() {
             <WireBox label="진단 결과 · 총점, 영역별 점수, 우선 개선 항목" size="lg" />
             <div className="flex flex-wrap gap-3">
               {geoResultActions.map((a) => (
-                <ButtonLink key={a.label} href={a.href} variant="secondary">
+                <TrackedButtonLink
+                  key={a.action}
+                  href={a.href}
+                  event="geo_result_cta_clicked"
+                  eventProps={{ action: a.action }}
+                  variant="secondary"
+                >
                   {a.label}
-                </ButtonLink>
+                </TrackedButtonLink>
               ))}
             </div>
           </div>

@@ -15,12 +15,13 @@ import {
 } from "@/content/pricing";
 import { routes } from "@/shared/config";
 import { formatKRW } from "@/shared/lib";
-import { ButtonLink, DataTable, PageHeader, PlanTable, Section } from "@/shared/ui";
+import { ButtonLink, DataTable, PageHeader, PlanTable, Section, TrackPageView } from "@/shared/ui";
 
 export function PricingPage() {
   const bundle = hospitalGrowthBundle;
   return (
     <>
+      <TrackPageView event="pricing_viewed" />
       <PageHeader title="요금 안내" lead="모든 서비스 요금을 공개합니다. 금액은 VAT 포함입니다." />
 
       <Section id="geo" label="S2 · AI 검색 최적화" title="AI 검색 최적화 (월 구독)">

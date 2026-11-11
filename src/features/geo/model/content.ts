@@ -3,6 +3,7 @@ import { routes } from "@/shared/config";
 import type { SolutionPageContent } from "@/shared/sections";
 
 export const geoContent: SolutionPageContent = {
+  path: routes.hospital.geo,
   eyebrow: "병원 솔루션",
   name: "사피어 AI 검색 최적화",
   message: "ChatGPT·네이버 AI가 우리 병원을 추천하는지 확인하세요.",
@@ -31,12 +32,14 @@ export const geoContent: SolutionPageContent = {
   secondaryCta: { label: "요금 보기", href: `${routes.pricing}#geo` },
 };
 
-export const geoResultActions: { label: string; href: Route }[] = [
-  { label: "사피어가 고쳐드립니다", href: routes.hospital.website },
-  { label: "매달 추적하기", href: `${routes.pricing}#geo` },
+/** 진단 결과 아래 두 갈래. action은 전환 이벤트(geo_result_cta_clicked) 속성으로 남긴다 */
+export const geoResultActions: { action: "fix" | "track"; label: string; href: Route }[] = [
+  { action: "fix", label: "사피어가 고쳐드립니다", href: routes.hospital.website },
+  { action: "track", label: "매달 추적하기", href: `${routes.pricing}#geo` },
 ];
 
 export const adCheckContent: SolutionPageContent = {
+  path: routes.hospital.adCheck,
   eyebrow: "병원 솔루션 · 무료 도구",
   name: "사피어 의료광고 검사기",
   message: "의료법 제56조 위험 표현을 미리 찾아드립니다.",
