@@ -24,18 +24,23 @@ export function FormField({
   children: React.ReactNode;
 }) {
   return (
-    <div className="space-y-1.5">
-      <label htmlFor={id} className="block text-sm font-medium">
+    <div className="space-y-2">
+      <label htmlFor={id} className="block text-sm font-semibold text-foreground">
         {label}
-        {required ? <span className="text-foreground/50"> *</span> : null}
+        {required ? (
+          <span className="ml-1 font-normal text-subtle">
+            <span aria-hidden>*</span>
+            <span className="sr-only">(필수)</span>
+          </span>
+        ) : null}
       </label>
       {children}
       {error ? (
-        <p id={`${id}-error`} role="alert" className="text-sm text-red-600">
+        <p id={`${id}-error`} role="alert" className="text-[13px] text-danger">
           {error}
         </p>
       ) : hint ? (
-        <p id={`${id}-hint`} className="text-sm text-foreground/60">
+        <p id={`${id}-hint`} className="text-[13px] text-subtle">
           {hint}
         </p>
       ) : null}
@@ -51,17 +56,17 @@ export function ConsentField({
 }: React.ComponentProps<"input"> & { error?: string; children: React.ReactNode }) {
   return (
     <div className="space-y-1.5">
-      <label className="flex items-start gap-2 text-sm">
+      <label className="flex cursor-pointer items-start gap-2.5 text-sm leading-relaxed text-muted">
         <input
           type="checkbox"
-          className="mt-0.5 size-4"
+          className="mt-0.5 size-4 shrink-0 cursor-pointer rounded-xs accent-foreground"
           aria-invalid={error ? true : undefined}
           {...rest}
         />
         <span>{children}</span>
       </label>
       {error ? (
-        <p role="alert" className="text-sm text-red-600">
+        <p role="alert" className="text-[13px] text-danger">
           {error}
         </p>
       ) : null}

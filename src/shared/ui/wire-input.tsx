@@ -16,10 +16,10 @@ export function WireInput({
 }) {
   if (kind === "checkbox") {
     return (
-      <div className="flex items-start gap-2 text-sm">
+      <div className="flex items-start gap-2.5 text-sm text-muted">
         <span
           aria-hidden
-          className="mt-0.5 size-4 shrink-0 rounded-sm border border-foreground/40"
+          className="mt-0.5 size-4 shrink-0 rounded-xs border border-line-strong bg-surface"
         />
         <span>
           {label}
@@ -29,20 +29,24 @@ export function WireInput({
     );
   }
   return (
-    <div className="space-y-1.5">
-      <p className="text-sm font-medium">
+    <div className="space-y-2">
+      <p className="text-sm font-semibold text-foreground">
         {label}
-        {required ? <span className="text-foreground/50"> *</span> : null}
+        {required ? <span className="ml-1 font-normal text-subtle">*</span> : null}
       </p>
       <div
         className={cn(
-          "flex rounded-md border border-foreground/30 px-3 text-sm text-foreground/40",
-          kind === "textarea" ? "min-h-24 items-start py-2" : "h-11 items-center",
+          "flex rounded-md border border-line-strong bg-surface px-3.5 text-[15px] text-placeholder",
+          kind === "textarea" ? "min-h-32 items-start py-3" : "h-11 items-center",
           kind === "select" ? "justify-between" : undefined,
         )}
       >
         <span>{placeholder ?? ""}</span>
-        {kind === "select" ? <span aria-hidden>▾</span> : null}
+        {kind === "select" ? (
+          <span aria-hidden className="text-subtle">
+            ▾
+          </span>
+        ) : null}
       </div>
     </div>
   );
@@ -51,7 +55,7 @@ export function WireInput({
 /** 폼 제출 버튼 자리 (동작하지 않음) */
 export function WireButton({ children }: { children: React.ReactNode }) {
   return (
-    <span className="inline-flex h-11 items-center rounded-full border border-foreground/40 px-5 text-sm font-medium text-foreground/70">
+    <span className="inline-flex h-11 items-center rounded-md bg-foreground px-5 text-[15px] font-semibold text-white">
       {children}
     </span>
   );

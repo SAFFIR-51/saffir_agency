@@ -35,7 +35,7 @@ function PlanButton({
   children: React.ReactNode;
 }) {
   return (
-    <ButtonLink href={href} variant="secondary" className="h-9 px-4 whitespace-nowrap">
+    <ButtonLink href={href} variant="secondary" size="sm">
       {children}
     </ButtonLink>
   );
@@ -57,7 +57,7 @@ function planAction(plan: PlanRow, actions: PlanActions) {
 function price(value: number | null | undefined) {
   if (value === undefined) return "-";
   if (value === null) return "별도 견적";
-  return formatKRW(value);
+  return <span className="whitespace-nowrap tabular-nums">{formatKRW(value)}</span>;
 }
 
 export function PlanTable({

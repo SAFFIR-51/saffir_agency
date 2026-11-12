@@ -65,7 +65,7 @@ export function LoginForm({
           />
         </FormField>
         {serverError ? (
-          <p role="alert" className="text-sm text-red-600">
+          <p role="alert" className="text-[13px] text-danger">
             {serverError}
           </p>
         ) : null}

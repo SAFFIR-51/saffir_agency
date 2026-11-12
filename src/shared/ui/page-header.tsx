@@ -18,14 +18,16 @@ export function PageHeader({
   return (
     <header className="pt-6 pb-3 sm:pt-8 sm:pb-4">
       <Container>
-        <div className="rounded-lg border border-foreground/20 p-5 sm:p-10">
+        <div className="rounded-lg border border-line bg-surface p-6 sm:p-12">
           <SectorLabel>{label}</SectorLabel>
-          {eyebrow ? <p className="text-sm font-medium text-foreground/60">{eyebrow}</p> : null}
-          <h1 className="mt-1 text-2xl font-bold tracking-tight text-balance sm:text-4xl">
+          {eyebrow ? <p className="text-sm font-semibold text-subtle">{eyebrow}</p> : null}
+          <h1 className="mt-2 text-[28px] leading-tight font-bold tracking-[-0.025em] text-balance text-foreground sm:text-[40px]">
             {title}
           </h1>
-          {lead ? <p className="mt-3 max-w-3xl text-foreground/70 sm:text-lg">{lead}</p> : null}
-          {children ? <div className="mt-6 space-y-5">{children}</div> : null}
+          {lead ? (
+            <p className="mt-4 max-w-3xl leading-relaxed text-muted sm:text-lg">{lead}</p>
+          ) : null}
+          {children ? <div className="mt-8 space-y-5">{children}</div> : null}
         </div>
       </Container>
     </header>

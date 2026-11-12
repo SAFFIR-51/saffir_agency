@@ -15,7 +15,7 @@ export function WireBox({
   return (
     <div
       className={cn(
-        "flex items-center justify-center rounded-md border border-dashed border-foreground/30 bg-foreground/5 p-4 text-center text-sm text-foreground/50",
+        "flex items-center justify-center rounded-md border border-dashed border-line-strong bg-gray-100 p-4 text-center text-sm text-subtle",
         heights[size],
         className,
       )}

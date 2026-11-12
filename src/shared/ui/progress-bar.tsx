@@ -9,11 +9,11 @@ export function ProgressBar({ value, label }: { value: number; label?: string })
         aria-valuemin={0}
         aria-valuemax={100}
         aria-label={label}
-        className="h-2 w-full max-w-60 overflow-hidden rounded-full bg-foreground/10"
+        className="h-1.5 w-full max-w-60 overflow-hidden rounded-xs bg-gray-200"
       >
-        <div className="h-full bg-foreground/70" style={{ width: `${clamped}%` }} />
+        <div className="h-full bg-foreground transition-[width]" style={{ width: `${clamped}%` }} />
       </div>
-      <span className="text-sm tabular-nums">{clamped}%</span>
+      <span className="text-sm font-medium text-foreground tabular-nums">{clamped}%</span>
     </div>
   );
 }

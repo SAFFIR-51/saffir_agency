@@ -1,0 +1,442 @@
+/*
+ * 메인 시안 전용 값.
+ * 글자 크기는 --lr(시안 기준 1rem)의 배수로 정한다. 화면 폭에 따라 --lr이 바뀐다.
+ *   1921px~ 16px · 1441~1920px 0.83333vw · 1025~1440px 12px · 768~1024px 10px · 375~767px 16px · ~374px 4.267vw
+ * 사이트 전체 rem은 건드리지 않는다 (다른 페이지 간격이 그대로이도록).
+ * 강조색을 흑백으로 바꾸려면 --landing-signal만 #000으로.
+ */
+.landing-root {
+  --lr: 16px;
+  --landing-signal: #ff5722;
+  --landing-display: var(--font-landing-display), var(--font-pretendard), sans-serif;
+  font-family:
+    var(--font-landing-latin), var(--font-pretendard), Helvetica, "Apple SD Gothic Neo",
+    "Malgun Gothic", sans-serif;
+  font-size: var(--lr);
+  line-height: 1.7;
+  font-weight: 400;
+}
+@media (min-width: 1441px) and (max-width: 1920px) {
+  .landing-root {
+    --lr: 0.83333vw;
+  }
+}
+@media (min-width: 1025px) and (max-width: 1440px) {
+  .landing-root {
+    --lr: 12px;
+  }
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+  .landing-root {
+    --lr: 10px;
+  }
+}
+@media (max-width: 374px) {
+  .landing-root {
+    --lr: 4.267vw;
+  }
+}
+
+/* ---------- 글자 체계 (크기 / 줄 간격 / 굵기) ---------- */
+.lt-body {
+  font-size: var(--lr);
+  line-height: 1.7;
+}
+.lt-nav {
+  font-size: calc(var(--lr) * 1.125);
+  line-height: 1.2;
+}
+.lt-nav-cta {
+  font-size: calc(var(--lr) * 1.125);
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+.lt-hero-sub {
+  font-family: var(--landing-display);
+  font-size: 4.688vw;
+  line-height: 1;
+  font-weight: 900;
+}
+.lt-hero-title {
+  font-family: var(--landing-display);
+  font-size: 12.969vw;
+  line-height: 0.8;
+  font-weight: 900;
+}
+.lt-hero-side {
+  font-size: calc(var(--lr) * 2.625);
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: calc(var(--lr) * 0.2);
+}
+.lt-hero-meta-title {
+  font-size: calc(var(--lr) * 1.875);
+  line-height: 1.2;
+  font-weight: 900;
+}
+.lt-hero-meta-text {
+  font-size: calc(var(--lr) * 1.25);
+  line-height: 1.4;
+}
+
+.lt-cate {
+  font-size: calc(var(--lr) * 2.5);
+  line-height: 1.2;
+  font-weight: 800;
+}
+.lt-title {
+  font-size: calc(var(--lr) * 6.25);
+  line-height: 1.1;
+  font-weight: 700;
+}
+.lt-lead {
+  font-size: calc(var(--lr) * 3.375);
+  line-height: 1.2;
+  font-weight: 400;
+}
+.lt-more {
+  font-size: calc(var(--lr) * 1.625);
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.lt-card-title {
+  font-size: calc(var(--lr) * 3.75);
+  line-height: 1.2;
+  font-weight: 700;
+}
+.lt-card-sub {
+  font-size: calc(var(--lr) * 1.5);
+  line-height: 1.4;
+  font-weight: 700;
+}
+.lt-chip {
+  font-size: var(--lr);
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.lt-acc-title {
+  font-size: calc(var(--lr) * 2.5);
+  line-height: 1.3;
+  font-weight: 700;
+}
+.lt-acc-text {
+  font-size: calc(var(--lr) * 1.125);
+  line-height: 1.5;
+}
+.lt-side-text {
+  font-size: calc(var(--lr) * 1.25);
+  line-height: 1.5;
+}
+
+.lt-team-title {
+  font-size: 8.819vw;
+  line-height: 1.2;
+  font-weight: 800;
+}
+.lt-team-sub {
+  font-size: calc(var(--lr) * 3.125);
+  line-height: 1.2;
+  font-weight: 800;
+}
+.lt-team-card-title {
+  font-size: calc(var(--lr) * 3);
+  line-height: 1.3;
+  font-weight: 700;
+}
+.lt-team-card-text {
+  font-size: var(--lr);
+  line-height: 1.7;
+}
+.lt-team-list {
+  font-size: calc(var(--lr) * 1.25);
+  line-height: 1.3;
+}
+
+.lt-row-title {
+  font-size: calc(var(--lr) * 2.5);
+  line-height: 1.3;
+  font-weight: 700;
+}
+.lt-row-meta {
+  font-size: calc(var(--lr) * 1.5);
+  line-height: 1.2;
+}
+
+.lt-message {
+  font-size: 9.7vw;
+  line-height: 1.2;
+  font-weight: 700;
+}
+.lt-contact {
+  font-size: calc(var(--lr) * 4.125);
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.lt-foot-info {
+  font-size: calc(var(--lr) * 1.25);
+  line-height: 1.74;
+  font-weight: 600;
+}
+.lt-foot-nav {
+  font-size: calc(var(--lr) * 1.875);
+  line-height: 1.2;
+  font-weight: 500;
+}
+.lt-copy {
+  font-size: var(--lr);
+  line-height: 1.4;
+}
+
+@media (min-width: 1025px) and (max-width: 1440px) {
+  .lt-hero-title {
+    font-size: 12.34vw;
+  }
+  .lt-card-title {
+    font-size: 3.167vw;
+  }
+  .lt-card-sub {
+    font-size: 1.25vw;
+  }
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+  .lt-hero-sub {
+    font-size: 7.467vw;
+  }
+  .lt-hero-title {
+    font-size: 14vw;
+  }
+  .lt-hero-side {
+    font-size: 5.933vw;
+  }
+  .lt-hero-meta-title {
+    font-size: calc(var(--lr) * 2.2);
+  }
+  .lt-hero-meta-text {
+    font-size: calc(var(--lr) * 1.5);
+  }
+  .lt-team-card-text {
+    font-size: calc(var(--lr) * 1.25);
+  }
+  .lt-team-list {
+    font-size: calc(var(--lr) * 1.45);
+  }
+  .lt-contact {
+    font-size: calc(var(--lr) * 4);
+  }
+}
+@media (max-width: 767px) {
+  .lt-nav-cta {
+    font-size: calc(var(--lr) * 0.8125);
+  }
+  .lt-hero-sub {
+    font-size: calc(var(--lr) * 1.75);
+  }
+  .lt-hero-title {
+    font-size: calc(var(--lr) * 3.2);
+  }
+  .lt-hero-side {
+    font-size: calc(var(--lr) * 1.5);
+  }
+  .lt-hero-meta-title {
+    font-size: calc(var(--lr) * 1.175);
+    line-height: 1.3;
+  }
+  .lt-hero-meta-text {
+    font-size: calc(var(--lr) * 0.875);
+  }
+  .lt-cate {
+    font-size: calc(var(--lr) * 1.125);
+  }
+  .lt-title {
+    font-size: calc(var(--lr) * 2.25);
+  }
+  .lt-lead {
+    font-size: calc(var(--lr) * 1.625);
+  }
+  .lt-more {
+    font-size: calc(var(--lr) * 1.25);
+  }
+  .lt-card-title {
+    font-size: calc(var(--lr) * 1.87);
+  }
+  .lt-chip {
+    font-size: calc(var(--lr) * 0.875);
+  }
+  .lt-acc-title {
+    font-size: calc(var(--lr) * 1.625);
+  }
+  .lt-side-text {
+    font-size: var(--lr);
+  }
+  .lt-team-title {
+    font-size: calc(var(--lr) * 3);
+  }
+  .lt-team-sub {
+    font-size: calc(var(--lr) * 1.875);
+  }
+  .lt-team-card-title {
+    font-size: calc(var(--lr) * 2.1);
+  }
+  .lt-row-title {
+    font-size: calc(var(--lr) * 1.625);
+  }
+  .lt-row-meta {
+    font-size: calc(var(--lr) * 1.125);
+  }
+  .lt-message {
+    font-size: calc(var(--lr) * 2.5);
+  }
+  .lt-contact {
+    font-size: calc(var(--lr) * 1.125);
+    line-height: calc(var(--lr) * 1.6);
+  }
+  .lt-foot-info {
+    font-size: var(--lr);
+  }
+  .lt-foot-nav {
+    font-size: calc(var(--lr) * 1.25);
+  }
+}
+
+/* ---------- 움직임 (움직임 줄이기 설정이면 모두 끈다) ---------- */
+
+/* 스크롤하면 회색 글자가 한 줄씩 진해진다 (줄바꿈되는 inline 요소에 쓴다) */
+.landing-reveal {
+  --reveal-on: #000000;
+  --reveal-off: #cfcfcf;
+}
+.landing-reveal[data-tone="light"] {
+  --reveal-on: #ffffff;
+  --reveal-off: rgb(255 255 255 / 0.4);
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .landing-reveal {
+      background-image: linear-gradient(90deg, var(--reveal-on) 0 50%, var(--reveal-off) 50% 100%);
+      background-size: 200% 100%;
+      background-position: 100% 0;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: landing-reveal-sweep linear both;
+      animation-timeline: view();
+      animation-range: entry 25% cover 55%;
+    }
+    /* 화면에 들어오면 아래에서 떠오른다 */
+    .landing-fade {
+      animation: landing-fade-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+    /* 첫 화면 워드마크: 스크롤하면 천천히 위로 */
+    .landing-parallax {
+      animation: landing-drift linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 100vh;
+    }
+    /* 헤더: 조금 내리면 아래 선이 생긴다 */
+    .landing-header {
+      animation: landing-header-line linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 120px;
+    }
+  }
+}
+
+@keyframes landing-reveal-sweep {
+  to {
+    background-position: 0 0;
+  }
+}
+@keyframes landing-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(48px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes landing-drift {
+  to {
+    transform: translateY(-18vh);
+  }
+}
+@keyframes landing-header-line {
+  from {
+    box-shadow: 0 1px 0 rgb(0 0 0 / 0);
+  }
+  to {
+    box-shadow: 0 1px 0 rgb(0 0 0 / 0.12);
+  }
+}
+
+/* 아래로 내려 보라는 표시 */
+.landing-scroll-line {
+  position: relative;
+  overflow: hidden;
+}
+.landing-scroll-line::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: currentColor;
+  animation: landing-scroll-cue 1.8s cubic-bezier(0.6, 0, 0.3, 1) infinite;
+}
+@keyframes landing-scroll-cue {
+  0% {
+    transform: translateY(-100%);
+  }
+  60%,
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+/* 서비스 목록: 열고 닫을 때 높이가 부드럽게 (지원 브라우저만) */
+.landing-acc {
+  interpolate-size: allow-keywords;
+}
+.landing-acc::details-content {
+  block-size: 0;
+  overflow: hidden;
+  transition:
+    block-size 0.45s cubic-bezier(0.2, 0.7, 0.2, 1),
+    content-visibility 0.45s allow-discrete;
+}
+.landing-acc[open]::details-content {
+  block-size: auto;
+}
+
+/* 화면에 들어오면 글자가 아래에서 올라온다 (RiseLetters가 data-state를 단다) */
+.landing-rise-word {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  vertical-align: bottom;
+  padding-bottom: 0.06em;
+}
+.landing-rise-char {
+  display: inline-block;
+  transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: calc(var(--i, 0) * 35ms);
+}
+.landing-rise[data-state="armed"] .landing-rise-char {
+  transform: translateY(110%);
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-rise-char,
+  .landing-acc::details-content,
+  .landing-scroll-line::after {
+    transition: none;
+    animation: none;
+  }
+}

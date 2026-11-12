@@ -13,7 +13,7 @@ export function BulletList({
   return (
     <Tag
       className={cn(
-        "space-y-2 pl-5 leading-relaxed",
+        "space-y-2 pl-5 leading-relaxed text-muted marker:text-gray-400",
         ordered ? "list-decimal" : "list-disc",
         className,
       )}
