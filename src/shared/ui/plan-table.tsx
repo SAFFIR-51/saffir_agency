@@ -1,7 +1,7 @@
 import { isContactTopic, routes, type ContactTopic } from "@/shared/config";
 import { formatKRW } from "@/shared/lib";
 import { ButtonLink } from "./button-link";
-import { DataTable } from "./data-table";
+import "./nc-ui.css";
 
 /** 요금 행. content/pricing.ts의 Plan과 같은 모양이다. 금액 단위는 원, null이면 별도 견적. */
 export type PlanRow = {
@@ -27,39 +27,40 @@ type PlanActions = {
   free?: { label: string; href: Parameters<typeof ButtonLink>[0]["href"] };
 };
 
-function PlanButton({
-  href,
-  children,
-}: {
-  href: Parameters<typeof ButtonLink>[0]["href"];
-  children: React.ReactNode;
-}) {
-  return (
-    <ButtonLink href={href} variant="secondary" className="h-9 px-4 whitespace-nowrap">
-      {children}
-    </ButtonLink>
-  );
-}
-
-function planAction(plan: PlanRow, actions: PlanActions) {
+function planLink(plan: PlanRow, actions: PlanActions) {
   if (actions.free && plan.monthly === 0) {
-    return <PlanButton href={actions.free.href}>{actions.free.label}</PlanButton>;
+    return { href: actions.free.href, label: actions.free.label, primary: true };
   }
   if (plan.checkout) {
-    return (
-      <PlanButton href={routes.order(plan.id)}>{plan.monthly ? "구독하기" : "결제하기"}</PlanButton>
-    );
+    return {
+      href: routes.order(plan.id),
+      label: plan.monthly ? "구독하기" : "결제하기",
+      primary: true,
+    };
   }
   const topic = isContactTopic(plan.consult) ? plan.consult : actions.consultFallback;
-  return <PlanButton href={routes.contactFor(topic)}>{actions.consultLabel ?? "상담"}</PlanButton>;
+  return { href: routes.contactFor(topic), label: actions.consultLabel ?? "상담", primary: false };
 }
 
-function price(value: number | null | undefined) {
-  if (value === undefined) return "-";
+function price(value: number | null | undefined, from: boolean) {
+  if (value === undefined) return null;
   if (value === null) return "별도 견적";
-  return formatKRW(value);
+  if (value === 0) return "무료";
+  return `${formatKRW(value)}${from ? "~" : ""}`;
 }
 
+/** "A, B, C" / "A + B" 형태의 포함 내용을 목록으로 나눈다 */
+function splitIncludes(text: string) {
+  return text
+    .split(/,\s*|\s\+\s/)
+    .map((t) => t.trim())
+    .filter(Boolean);
+}
+
+/**
+ * 요금 카드 (NHN Cloud 서비스 카드 모양: 흰 바탕, 회색 선, 둥근 모서리 12).
+ * 상품마다 한 장: 이름 · 금액 · 포함 목록 · 버튼. 금액은 VAT 포함.
+ */
 export function PlanTable({
   plans,
   setupLabel = "1회",
@@ -71,27 +72,57 @@ export function PlanTable({
   setupLabel?: string;
   monthlyLabel?: string;
   caption?: string;
-  /** 주면 "신청" 열에 상품별 버튼을 단다 (규칙은 planAction) */
+  /** 주면 카드마다 버튼을 단다 (규칙은 planLink) */
   actions?: PlanActions;
 }) {
-  const hasSetup = plans.some((p) => p.setup !== undefined);
-  const hasMonthly = plans.some((p) => p.monthly !== undefined);
-  const hasNote = plans.some((p) => p.note);
-  const columns = [
-    "상품",
-    "포함",
-    ...(hasSetup ? [setupLabel] : []),
-    ...(hasMonthly ? [monthlyLabel] : []),
-    ...(hasNote ? ["비고"] : []),
-    ...(actions ? ["신청"] : []),
-  ];
-  const rows = plans.map((p) => [
-    p.name,
-    p.includes,
-    ...(hasSetup ? [price(p.setup)] : []),
-    ...(hasMonthly ? [price(p.monthly)] : []),
-    ...(hasNote ? [p.note ?? ""] : []),
-    ...(actions ? [planAction(p, actions)] : []),
-  ]);
-  return <DataTable columns={columns} rows={rows} caption={caption} />;
+  return (
+    <div>
+      <ul className="nc-plans">
+        {plans.map((plan) => {
+          const from = plan.note?.includes("~") ?? false;
+          const setup = price(plan.setup, from);
+          const monthly = price(plan.monthly, from && plan.setup === undefined);
+          const link = actions ? planLink(plan, actions) : null;
+          return (
+            <li key={plan.id} className="nc-plan">
+              <div className="nc-plan-top">
+                <h3>{plan.name}</h3>
+                {plan.checkout ? <span className="nc-plan-badge">바로 결제</span> : null}
+              </div>
+              <div className="nc-plan-prices">
+                {setup ? (
+                  <p>
+                    {plan.setup ? <small>{setupLabel}</small> : null}
+                    {setup}
+                  </p>
+                ) : null}
+                {monthly ? (
+                  <p>
+                    {plan.monthly ? <small>{monthlyLabel}</small> : null}
+                    {monthly}
+                  </p>
+                ) : null}
+                {plan.note ? <span>{plan.note}</span> : null}
+              </div>
+              <ul className="nc-plan-includes">
+                {splitIncludes(plan.includes).map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+              {link ? (
+                <ButtonLink
+                  href={link.href}
+                  variant={link.primary ? "primary" : "secondary"}
+                  className="mt-6 w-full"
+                >
+                  {link.label}
+                </ButtonLink>
+              ) : null}
+            </li>
+          );
+        })}
+      </ul>
+      {caption ? <p className="nc-caption">{caption}</p> : null}
+    </div>
+  );
 }

@@ -1,8 +1,11 @@
 import { cn } from "@/shared/lib";
-import { Container } from "./container";
 import { SectorLabel } from "./sector-label";
+import "./nc-ui.css";
 
-/** 와이어프레임 섹터: 테두리 상자 + 이름표 + 제목·설명 + 내용 */
+/**
+ * 한 구역 (NHN Cloud 하위 페이지): 왼쪽 정렬 굵은 제목(30px) + 회색 설명 + 내용.
+ * 구역 바탕은 흰색·회색이 번갈아 나온다 (nc-ui.css).
+ */
 export function Section({
   id,
   label,
@@ -19,19 +22,17 @@ export function Section({
   children?: React.ReactNode;
 }) {
   return (
-    <section id={id} className={cn("py-3 sm:py-4", className)}>
-      <Container>
-        <div className="rounded-lg border border-foreground/20 p-5 sm:p-8">
-          {label ? <SectorLabel>{label}</SectorLabel> : null}
-          {title ? <h2 className="text-xl font-bold tracking-tight sm:text-2xl">{title}</h2> : null}
-          {description ? <p className="mt-2 max-w-3xl text-foreground/70">{description}</p> : null}
-          {children ? (
-            <div className={cn("space-y-5", title || description ? "mt-6" : undefined)}>
-              {children}
-            </div>
-          ) : null}
-        </div>
-      </Container>
+    <section id={id} className={cn("nc-section", className)}>
+      <div className="nc-container">
+        {label ? <SectorLabel>{label}</SectorLabel> : null}
+        {title ? <h2 className="nc-section-title">{title}</h2> : null}
+        {description ? <p className="nc-section-desc">{description}</p> : null}
+        {children ? (
+          <div className={cn("nc-section-body", title || description ? "mt-10" : undefined)}>
+            {children}
+          </div>
+        ) : null}
+      </div>
     </section>
   );
 }

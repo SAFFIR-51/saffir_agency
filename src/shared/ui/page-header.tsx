@@ -1,33 +1,37 @@
-import { Container } from "./container";
+import { GlassArt, type GlassTone } from "./glass-art";
 import { SectorLabel } from "./sector-label";
+import "./nc-ui.css";
 
-/** 페이지 첫 섹터 (히어로). 페이지마다 하나뿐인 h1. */
+/**
+ * 페이지 첫 화면 (NHN Cloud 하위 페이지의 검정 띠).
+ * 왼쪽에 제목·설명·버튼, 오른쪽에 3D 느낌 그림(직접 그린 SVG). 페이지마다 하나뿐인 h1.
+ */
 export function PageHeader({
   label = "S1 · 히어로",
   eyebrow,
   title,
   lead,
+  tone = "blue",
   children,
 }: {
   label?: string;
   eyebrow?: string;
   title: string;
   lead?: string;
+  /** 오른쪽 그림 색 */
+  tone?: GlassTone;
   children?: React.ReactNode;
 }) {
   return (
-    <header className="pt-6 pb-3 sm:pt-8 sm:pb-4">
-      <Container>
-        <div className="rounded-lg border border-foreground/20 p-5 sm:p-10">
-          <SectorLabel>{label}</SectorLabel>
-          {eyebrow ? <p className="text-sm font-medium text-foreground/60">{eyebrow}</p> : null}
-          <h1 className="mt-1 text-2xl font-bold tracking-tight text-balance sm:text-4xl">
-            {title}
-          </h1>
-          {lead ? <p className="mt-3 max-w-3xl text-foreground/70 sm:text-lg">{lead}</p> : null}
-          {children ? <div className="mt-6 space-y-5">{children}</div> : null}
-        </div>
-      </Container>
+    <header className="nc-banner">
+      <GlassArt id="banner" tone={tone} className="nc-banner-art" />
+      <div className="nc-banner-inner">
+        <SectorLabel>{label}</SectorLabel>
+        {eyebrow ? <p className="nc-banner-eyebrow">{eyebrow}</p> : null}
+        <h1 className="nc-banner-title">{title}</h1>
+        {lead ? <p className="nc-banner-lead">{lead}</p> : null}
+        {children ? <div className="nc-banner-extra">{children}</div> : null}
+      </div>
     </header>
   );
 }

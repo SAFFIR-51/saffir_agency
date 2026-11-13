@@ -30,14 +30,14 @@ export function WireInput({
   }
   return (
     <div className="space-y-1.5">
-      <p className="text-sm font-medium">
+      <p className="text-[15px] font-semibold">
         {label}
         {required ? <span className="text-foreground/50"> *</span> : null}
       </p>
       <div
         className={cn(
-          "flex rounded-md border border-foreground/30 px-3 text-sm text-foreground/40",
-          kind === "textarea" ? "min-h-24 items-start py-2" : "h-11 items-center",
+          "flex rounded-lg border border-[#d5d9e0] bg-white px-4 text-[16px] text-[#9499a2]",
+          kind === "textarea" ? "min-h-28 items-start py-3" : "h-12 items-center",
           kind === "select" ? "justify-between" : undefined,
         )}
       >
@@ -51,7 +51,7 @@ export function WireInput({
 /** 폼 제출 버튼 자리 (동작하지 않음) */
 export function WireButton({ children }: { children: React.ReactNode }) {
   return (
-    <span className="inline-flex h-11 items-center rounded-full border border-foreground/40 px-5 text-sm font-medium text-foreground/70">
+    <span className="inline-flex h-12 items-center rounded-[30px] bg-[#125de6] px-7 text-[17px] font-medium text-white">
       {children}
     </span>
   );

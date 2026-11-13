@@ -1,6 +1,7 @@
 import type { Route } from "next";
 import Link from "next/link";
 import { cn } from "@/shared/lib";
+import "./nc-ui.css";
 
 export function LinkCard({
   href,
@@ -16,11 +17,14 @@ export function LinkCard({
   return (
     <Link
       href={href}
-      className="block rounded-xl border border-foreground/15 p-5 transition hover:bg-foreground/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+      className="nc-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#125de6]"
     >
-      <p className="font-semibold">{title}</p>
-      {description ? <p className="mt-1 text-sm text-foreground/70">{description}</p> : null}
-      {children ? <div className="mt-3 text-sm text-foreground/70">{children}</div> : null}
+      <p className="nc-card-title">{title}</p>
+      {description ? <p className="nc-card-text">{description}</p> : null}
+      {children ? <div className="nc-card-extra">{children}</div> : null}
+      <svg className="nc-card-arrow" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M3 12h17M14 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2" />
+      </svg>
     </Link>
   );
 }

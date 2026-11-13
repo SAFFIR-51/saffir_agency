@@ -1,0 +1,167 @@
+/* 포트폴리오 목록 (NHN Cloud 서비스 목록 구성). 카드 모양은 shared/ui/nc-ui.css */
+.nc-browser {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: 40px;
+}
+
+.nc-browser-side {
+  position: sticky;
+  top: 160px;
+  align-self: start;
+}
+
+.nc-search {
+  display: flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 12px 0 16px;
+  border: 1px solid #d5d9e0;
+  border-radius: 8px;
+}
+
+.nc-search input {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  outline: none;
+}
+
+.nc-search svg {
+  width: 20px;
+  color: #111;
+}
+
+.nc-filter-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 28px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e2e5eb;
+}
+
+.nc-filter-head p {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.nc-filter-head button {
+  color: #9499a2;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.nc-filter li label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 0;
+  color: #51565f;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.nc-filter input {
+  width: 16px;
+  height: 16px;
+  accent-color: #125de6;
+}
+
+.nc-filter span {
+  margin-left: auto;
+  color: #9499a2;
+  font-size: 13px;
+}
+
+.nc-browser-total {
+  color: #51565f;
+  font-size: 15px;
+}
+
+.nc-browser-total b {
+  color: #125de6;
+}
+
+.nc-browser-group {
+  margin-top: 28px;
+}
+
+.nc-browser-group h2 {
+  color: #111;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 32px;
+}
+
+.nc-browser-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+/* 카드: NHN Cloud 서비스 카드처럼 작은 단색 아이콘 + 이름 + 설명 (높이 낮게) */
+.nc-browser-card {
+  min-height: 0;
+  padding: 24px 24px 44px;
+}
+
+.nc-browser-icon {
+  width: 28px;
+  height: 28px;
+  margin-bottom: 14px;
+  color: #111;
+}
+
+.nc-browser-card .nc-card-title {
+  font-size: 18px;
+  line-height: 28px;
+}
+
+.nc-browser-card .nc-card-text {
+  margin-top: 4px;
+}
+
+.nc-browser-related {
+  display: inline-block;
+  align-self: flex-start;
+  margin-top: 12px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: #eaf1ff;
+  color: #125de6;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.nc-browser-card .nc-card-arrow {
+  bottom: 20px;
+  width: 20px;
+}
+
+.nc-browser-empty {
+  margin-top: 40px;
+  color: #9499a2;
+}
+
+@media (max-width: 1279px) {
+  .nc-browser-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1023px) {
+  .nc-browser {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .nc-browser-side {
+    position: static;
+  }
+
+  .nc-browser-cards {
+    grid-template-columns: 1fr;
+  }
+}

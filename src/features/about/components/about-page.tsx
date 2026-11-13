@@ -8,9 +8,8 @@ export function AboutPage() {
   const b = site.business;
   return (
     <>
-      <PageHeader eyebrow={c.eyebrow} title={c.title} lead={c.lead}>
-        <WireBox label="이미지 · 사무실 또는 팀" size="lg" />
-      </PageHeader>
+      {/* 첫 화면 그림은 검정 띠의 3D 그림이 맡는다 (사무실·팀 사진은 정해지면 아래 구역에) */}
+      <PageHeader eyebrow={c.eyebrow} title={c.title} lead={c.lead} tone="graphite" />
 
       <Section label="S2 · 하는 일" title={c.lines.title}>
         <DataTable

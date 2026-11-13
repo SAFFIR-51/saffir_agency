@@ -1,7 +1,10 @@
 /** 로그인과 회원 유형 (기획서 "로그인과 고객 포털") */
 
+/** 로그인 목적. 화면에서는 아직 쓰지 않는다 (기획 기록용)
+ * @public */
 export const loginPurposes = ["서비스 둘러보기", "고객이 된 뒤 작업 보고·조회·결제"];
 
+/** @public 기획 기록용 */
 export const loginNote =
   "솔루션(CRM 등)은 고객사 전용 서버에서 쓰고, 포털에는 그 서버로 가는 바로가기가 있습니다.";
 
@@ -37,7 +40,8 @@ export const afterSignupRows = [
   { from: "직접 가입", to: "포털 홈" },
 ];
 
-/** 로그인 화면에 보이는 안내 (상태별) */
+/** 로그인 화면 상태별 안내 (docs/screen-states.md와 맞춤, 화면 문구는 폼에서 직접 쓴다)
+ * @public */
 export const loginStates = [
   {
     state: "로그인이 필요한 화면으로 들어옴",
