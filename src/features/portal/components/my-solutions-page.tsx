@@ -2,7 +2,15 @@ import { coreServerNotes } from "@/content/portal";
 import { requirePortal } from "@/server/portal";
 import { canSeePortalMenu, portalMenuAudienceLabel, routes } from "@/shared/config";
 import { PortalNoAccess } from "@/shared/layout";
-import { BulletList, ButtonLink, DataTable, PageHeader, Section, WireButton } from "@/shared/ui";
+import {
+  BulletList,
+  ButtonLink,
+  DataTable,
+  PageHeader,
+  Section,
+  WireButton,
+  InfoList,
+} from "@/shared/ui";
 import { PortalPage } from "./portal-page";
 
 const TITLE = "내 솔루션";
@@ -37,8 +45,7 @@ async function Body() {
       {data.solutions.map((s, index) => (
         <div key={s.name}>
           <Section label={`S${index * 3 + 2} · 솔루션`} title={s.name}>
-            <DataTable
-              columns={["항목", "내용"]}
+            <InfoList
               rows={[
                 ["요금제", s.plan],
                 ["도입일", s.since],

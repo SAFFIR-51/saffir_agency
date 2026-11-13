@@ -25,7 +25,7 @@ export function FormField({
 }) {
   return (
     <div className="space-y-1.5">
-      <label htmlFor={id} className="block text-sm font-medium">
+      <label htmlFor={id} className="block text-[15px] font-semibold text-[#111]">
         {label}
         {required ? <span className="text-foreground/50"> *</span> : null}
       </label>
@@ -54,7 +54,7 @@ export function ConsentField({
       <label className="flex items-start gap-2 text-sm">
         <input
           type="checkbox"
-          className="mt-0.5 size-4"
+          className="mt-0.5 size-4 accent-[#125de6]"
           aria-invalid={error ? true : undefined}
           {...rest}
         />

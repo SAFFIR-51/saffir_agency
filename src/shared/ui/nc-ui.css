@@ -1,0 +1,641 @@
+/*
+ * 공통 부품 모양 (시안 5, NHN Cloud 하위 페이지를 재서 맞춤)
+ * 파랑 #125de6 · 글자 #111 · 회색 글 #51565f · 연회색 글 #9499a2 · 선 #e2e5eb · 회색 바탕 #f8f9fa
+ */
+
+/* ── 버튼 ── */
+.nc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 48px;
+  padding: 0 27px;
+  border-radius: 30px;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 26px;
+  white-space: nowrap;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+/* 파랑 버튼 글자는 항상 흰색 (링크 색 규칙에 지지 않게 a·button을 함께 적는다) */
+.nc-btn-primary,
+a.nc-btn-primary,
+button.nc-btn-primary {
+  background: #125de6;
+  color: #fff;
+}
+
+.nc-btn-primary:hover {
+  background: #0f4fc4;
+}
+
+.nc-btn-secondary,
+a.nc-btn-secondary,
+button.nc-btn-secondary {
+  border: 1px solid #d5d9e0;
+  background: #fff;
+  color: #111;
+}
+
+.nc-btn-secondary:hover {
+  border-color: #111;
+}
+
+/* ── 페이지 첫 화면 (검정 띠 + 오른쪽 그림) ── */
+.nc-banner {
+  position: relative;
+  overflow: hidden;
+  background: #000;
+  color: #fff;
+}
+
+.nc-banner-art {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 70%;
+  height: 100%;
+}
+
+/* 왼쪽 글이 잘 보이게 검정에서 그림으로 */
+.nc-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(90deg, #000 28%, rgb(0 0 0 / 0.45) 50%, rgb(0 0 0 / 0) 72%);
+}
+
+.nc-banner-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 88px 60px 80px;
+}
+
+.nc-banner-eyebrow {
+  margin-bottom: 12px;
+  color: rgb(255 255 255 / 0.7);
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.nc-banner-title {
+  max-width: 760px;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 56px;
+  word-break: keep-all;
+}
+
+.nc-banner-lead {
+  max-width: 640px;
+  margin-top: 12px;
+  color: rgb(255 255 255 / 0.85);
+  font-size: 17px;
+  line-height: 26px;
+  word-break: keep-all;
+}
+
+.nc-banner-extra {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.nc-banner-extra > .flex {
+  gap: 12px;
+}
+
+/* 버튼 하나만 들어오면 늘어나지 않게 */
+.nc-banner-extra > a.nc-btn,
+.nc-section-body > a.nc-btn,
+.nc-section-body > button.nc-btn,
+.nc-section-body > span.inline-flex {
+  align-self: flex-start;
+}
+
+/* 검정 띠 안 버튼: 흰 바탕 / 흰 테두리 */
+.nc-banner .nc-btn-primary,
+.nc-banner a.nc-btn-primary {
+  height: 40px;
+  padding: 0 20px;
+  background: #fff;
+  color: #111;
+  font-size: 15px;
+}
+
+.nc-banner .nc-btn-primary:hover {
+  background: #e9edf5;
+}
+
+.nc-banner .nc-btn-secondary,
+.nc-banner a.nc-btn-secondary {
+  height: 40px;
+  padding: 0 20px;
+  border-color: rgb(255 255 255 / 0.8);
+  background: transparent;
+  color: #fff;
+  font-size: 15px;
+}
+
+.nc-banner .nc-btn-secondary:hover {
+  background: rgb(255 255 255 / 0.12);
+}
+
+/* 띠 안에 들어간 표·빈 칸 등은 밝게 보이게 */
+.nc-banner-extra .nc-table-wrap,
+.nc-banner-extra > div:not(.flex) {
+  max-width: 900px;
+}
+
+/* ── 구역 ── */
+.nc-section {
+  padding: 100px 0;
+  scroll-margin-top: 136px;
+}
+
+main > .nc-section:nth-of-type(even) {
+  background: #f8f9fa;
+}
+
+/* 위아래 여백은 쓰는 쪽에서 준다 (양옆만 정한다) */
+.nc-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-inline: 60px;
+}
+
+.nc-section-title {
+  color: #111;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 42px;
+  word-break: keep-all;
+}
+
+.nc-section-desc {
+  max-width: 880px;
+  margin-top: 8px;
+  color: #51565f;
+  font-size: 18px;
+  line-height: 28px;
+  word-break: keep-all;
+}
+
+.nc-section-body {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ── 카드 (서비스 카드) ── */
+.nc-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 180px;
+  padding: 28px 28px 56px;
+  border: 1px solid #e2e5eb;
+  border-radius: 12px;
+  background: #fff;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.nc-card:hover {
+  border-color: #125de6;
+  box-shadow: 0 10px 24px rgb(18 93 230 / 0.08);
+}
+
+.nc-card-title {
+  color: #111;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 30px;
+}
+
+.nc-card-text,
+.nc-card-extra {
+  margin-top: 8px;
+  color: #51565f;
+  font-size: 15px;
+  line-height: 22px;
+}
+
+.nc-card-arrow {
+  position: absolute;
+  right: 24px;
+  bottom: 22px;
+  width: 22px;
+  color: #9499a2;
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease;
+}
+
+.nc-card:hover .nc-card-arrow {
+  color: #125de6;
+  transform: translateX(4px);
+}
+
+/* ── 표 ── */
+.nc-table-wrap {
+  overflow-x: auto;
+}
+
+.nc-table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  border-top: 1px solid #111;
+  font-size: 15px;
+  line-height: 22px;
+}
+
+.nc-table caption {
+  padding-bottom: 12px;
+  color: #9499a2;
+  font-size: 14px;
+  text-align: right;
+  caption-side: top;
+}
+
+.nc-table th {
+  padding: 14px 16px;
+  border: 1px solid #e2e5eb;
+  border-top: 0;
+  background: #f3f4f6;
+  color: #111;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.nc-table td {
+  padding: 14px 16px;
+  border: 1px solid #e2e5eb;
+  color: #51565f;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.nc-table th:first-child,
+.nc-table td:first-child {
+  border-left: 0;
+}
+
+.nc-table th:last-child,
+.nc-table td:last-child {
+  border-right: 0;
+}
+
+.nc-table td:first-child {
+  color: #111;
+  font-weight: 600;
+}
+
+/* ── 요금 카드 ── */
+.nc-plans {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.nc-plan {
+  display: flex;
+  flex-direction: column;
+  padding: 32px 28px 28px;
+  border: 1px solid #e2e5eb;
+  border-radius: 12px;
+  background: #fff;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.nc-plan:hover {
+  border-color: #125de6;
+  box-shadow: 0 10px 24px rgb(18 93 230 / 0.08);
+}
+
+.nc-plan-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.nc-plan-top h3 {
+  color: #111;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 30px;
+}
+
+.nc-plan-badge {
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: #eaf1ff;
+  color: #125de6;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.nc-plan-prices {
+  margin-top: 16px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e2e5eb;
+}
+
+.nc-plan-prices p {
+  color: #111;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 36px;
+}
+
+.nc-plan-prices p + p {
+  font-size: 18px;
+  line-height: 28px;
+}
+
+.nc-plan-prices small {
+  display: block;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  margin-right: 6px;
+  color: #9499a2;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.nc-plan-prices span {
+  display: block;
+  margin-top: 4px;
+  color: #9499a2;
+  font-size: 13px;
+}
+
+.nc-plan-includes {
+  flex: 1;
+  margin-top: 20px;
+}
+
+.nc-plan-includes li {
+  position: relative;
+  padding-left: 14px;
+  color: #51565f;
+  font-size: 15px;
+  line-height: 22px;
+}
+
+.nc-plan-includes li + li {
+  margin-top: 8px;
+}
+
+.nc-plan-includes li::before {
+  content: "";
+  position: absolute;
+  top: 9px;
+  left: 0;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #9499a2;
+}
+
+.nc-caption {
+  margin-top: 16px;
+  color: #9499a2;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+/* ── 반응형 ── */
+@media (max-width: 1023px) {
+  .nc-banner-art {
+    width: 100%;
+    opacity: 0.6;
+  }
+
+  .nc-banner-inner {
+    padding: 48px 16px 44px;
+  }
+
+  .nc-banner-title {
+    font-size: 26px;
+    line-height: 36px;
+  }
+
+  .nc-banner-lead {
+    font-size: 15px;
+    line-height: 22px;
+  }
+
+  .nc-section {
+    padding: 60px 0;
+    scroll-margin-top: 112px;
+  }
+
+  .nc-container {
+    padding-inline: 16px;
+  }
+
+  .nc-section-title {
+    font-size: 22px;
+    line-height: 32px;
+  }
+
+  .nc-section-desc {
+    font-size: 15px;
+    line-height: 22px;
+  }
+}
+
+/* ── 항목·내용 목록 (표 대신) ── */
+.nc-info-list {
+  display: grid;
+  grid-template-columns: minmax(120px, 200px) minmax(0, 1fr);
+  border-top: 1px solid #e2e5eb;
+}
+
+.nc-info-list dt,
+.nc-info-list dd {
+  padding: 14px 0;
+  border-bottom: 1px solid #e2e5eb;
+  font-size: 15px;
+  line-height: 22px;
+}
+
+.nc-info-list dt {
+  color: #9499a2;
+  font-weight: 500;
+}
+
+.nc-info-list dd {
+  color: #111;
+}
+
+/* ── 포털 (로그인 후): NHN Cloud 콘솔처럼 회색 바탕 위 흰 카드 ── */
+.nc-portal .nc-banner {
+  background: none;
+  color: #111;
+}
+
+.nc-portal .nc-banner::before,
+.nc-portal .nc-banner-art {
+  display: none;
+}
+
+.nc-portal .nc-banner-inner {
+  max-width: none;
+  padding: 40px 40px 8px;
+}
+
+.nc-portal .nc-banner-eyebrow {
+  margin-bottom: 4px;
+  color: #9499a2;
+  font-size: 14px;
+}
+
+.nc-portal .nc-banner-title {
+  font-size: 28px;
+  line-height: 40px;
+}
+
+.nc-portal .nc-banner-lead {
+  margin-top: 4px;
+  color: #51565f;
+  font-size: 15px;
+  line-height: 22px;
+}
+
+.nc-portal .nc-banner .nc-btn-primary,
+.nc-portal .nc-banner a.nc-btn-primary {
+  background: #125de6;
+  color: #fff;
+}
+
+.nc-portal .nc-banner .nc-btn-secondary,
+.nc-portal .nc-banner a.nc-btn-secondary {
+  border-color: #d5d9e0;
+  background: #fff;
+  color: #111;
+}
+
+.nc-portal .nc-section,
+main.nc-portal-main > .nc-section:nth-of-type(even) {
+  margin: 16px 40px 0;
+  padding: 28px 32px;
+  border: 1px solid #e2e5eb;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.nc-portal .nc-section:last-child {
+  margin-bottom: 40px;
+}
+
+.nc-portal .nc-container {
+  max-width: none;
+  padding-inline: 0;
+}
+
+.nc-portal .nc-section-title {
+  font-size: 20px;
+  line-height: 30px;
+}
+
+.nc-portal .nc-section-desc {
+  font-size: 15px;
+  line-height: 22px;
+}
+
+.nc-portal .nc-section-body {
+  gap: 16px;
+}
+
+.nc-portal .nc-section-body.mt-10 {
+  margin-top: 20px;
+}
+
+/* ── 로그인·가입: 가운데 좁은 칸, 검정 띠 대신 큰 제목 ── */
+.nc-auth .nc-banner {
+  background: none;
+  color: #111;
+  text-align: center;
+}
+
+.nc-auth .nc-banner::before,
+.nc-auth .nc-banner-art {
+  display: none;
+}
+
+.nc-auth .nc-banner-inner {
+  padding: 80px 0 8px;
+}
+
+.nc-auth .nc-banner-title,
+.nc-auth .nc-banner-lead {
+  margin-inline: auto;
+}
+
+.nc-auth .nc-banner-lead {
+  color: #51565f;
+}
+
+.nc-auth .nc-banner-extra {
+  align-items: center;
+}
+
+.nc-auth .nc-section,
+.nc-auth main > .nc-section:nth-of-type(even) {
+  padding: 24px 0;
+  background: none;
+}
+
+.nc-auth .nc-container {
+  padding-inline: 0;
+}
+
+.nc-auth .nc-section-title {
+  font-size: 20px;
+  line-height: 30px;
+}
+
+@media (max-width: 1023px) {
+  .nc-portal .nc-banner-inner {
+    padding: 24px 16px 4px;
+  }
+
+  .nc-portal .nc-section,
+  main.nc-portal-main > .nc-section:nth-of-type(even) {
+    margin: 12px 16px 0;
+    padding: 20px;
+  }
+
+  .nc-auth .nc-banner-inner {
+    padding: 48px 0 8px;
+  }
+
+  .nc-info-list {
+    grid-template-columns: 110px minmax(0, 1fr);
+  }
+}
+
+/* 포털 표는 왼쪽 정렬 (콘솔에서 읽기 쉽게) */
+.nc-portal .nc-table th,
+.nc-portal .nc-table td {
+  text-align: left;
+}

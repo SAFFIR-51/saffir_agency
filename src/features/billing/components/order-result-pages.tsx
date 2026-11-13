@@ -3,13 +3,13 @@ import { routes } from "@/shared/config";
 import { formatKRW } from "@/shared/lib";
 import {
   ButtonLink,
-  DataTable,
   Note,
   PageHeader,
   Section,
   StateTable,
   WireBox,
   WireButton,
+  InfoList,
 } from "@/shared/ui";
 import { findOrderItem, orderResultContent as c } from "../model/order";
 
@@ -27,8 +27,7 @@ async function CompleteBody({ searchParams }: { searchParams: SearchParams }) {
   return (
     <>
       <Section label="S2 · 결제 내용" title="결제 내용">
-        <DataTable
-          columns={["항목", "내용"]}
+        <InfoList
           rows={c.complete.rows.map((row) => [
             row,
             row === "상품" && item

@@ -1,0 +1,307 @@
+/* 솔루션 상세 (NHN Cloud 솔루션 페이지 구성). 버튼·띠 모양은 shared/layout/nc.css */
+
+/* 구역 바로가기 탭: 검정 띠 바로 아래 한 줄, 가운데 정렬 (따라오지 않는다) */
+.nc-tabs {
+  border-bottom: 1px solid #eceef2;
+  background: #fff;
+}
+
+.nc-tabs ul {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 60px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.nc-tabs a {
+  display: flex;
+  align-items: center;
+  height: 64px;
+  color: #51565f;
+  font-size: 17px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.nc-tabs a:hover {
+  color: #125de6;
+}
+
+/* 이런 상황이라면: 그림 카드 (가운데 정렬 제목) */
+.nc-feature-cards {
+  display: grid;
+  /* 카드 수와 상관없이 한 장은 1/3 폭 (한두 장이어도 넓게 늘이지 않는다) */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.nc-feature-img {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 220px;
+  border-radius: 12px;
+}
+
+.nc-problem-art {
+  width: 200px;
+  height: 160px;
+}
+
+.nc-feature-title {
+  margin-top: 24px;
+  padding: 0 16px;
+  color: #111;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 30px;
+  text-align: center;
+  word-break: keep-all;
+}
+
+/* 주요 기능: 서비스 카드 */
+.nc-svc-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.nc-svc-cards li {
+  min-height: 180px;
+  padding: 28px;
+  border: 1px solid #e2e5eb;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.nc-svc-no {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #eaf1ff;
+  color: #125de6;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.nc-svc-cards p {
+  margin-top: 20px;
+  color: #111;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 28px;
+  word-break: keep-all;
+}
+
+/* 도입 사례: 글 + 그림 */
+.nc-quotes {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.nc-quotes > li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 400px;
+  overflow: hidden;
+  border: 1px solid #e2e5eb;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.nc-quote-text {
+  display: flex;
+  flex-direction: column;
+  padding: 32px 40px;
+}
+
+.nc-quote-mark {
+  color: #c4c9d2;
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 40px;
+}
+
+.nc-quote-text p {
+  margin-top: 8px;
+  color: #51565f;
+  font-size: 16px;
+  line-height: 26px;
+}
+
+.nc-quote-text strong {
+  margin-top: 24px;
+  color: #111;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.nc-quote-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 12px;
+  color: #9499a2;
+  font-size: 15px;
+}
+
+.nc-quote-more svg {
+  width: 16px;
+}
+
+.nc-quote-more:hover {
+  color: #125de6;
+}
+
+.nc-quote-img {
+  width: 100%;
+  height: 100%;
+  min-height: 220px;
+}
+
+/* 도입 절차: 번호 카드 */
+.nc-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.nc-steps li {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: 40px;
+  align-items: center;
+  padding: 32px 40px;
+  border-radius: 12px;
+  background: #fff;
+}
+
+main > .nc-section:nth-of-type(odd) .nc-steps li {
+  background: #f8f9fa;
+}
+
+.nc-steps li div span {
+  display: block;
+  color: #125de6;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.nc-steps li strong {
+  display: block;
+  margin-top: 4px;
+  color: #111;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 30px;
+}
+
+.nc-steps li p {
+  color: #51565f;
+  font-size: 16px;
+  line-height: 26px;
+}
+
+/* 자주 묻는 질문 */
+.nc-faq {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.nc-faq summary {
+  display: flex;
+  gap: 12px;
+  padding: 20px 24px;
+  border-radius: 8px;
+  background: #f8f9fa;
+  color: #111;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 26px;
+  list-style: none;
+  cursor: pointer;
+}
+
+main > .nc-section:nth-of-type(even) .nc-faq summary {
+  background: #fff;
+}
+
+.nc-faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.nc-faq summary::after {
+  content: "+";
+  margin-left: auto;
+  color: #9499a2;
+  font-size: 22px;
+  font-weight: 400;
+}
+
+.nc-faq details[open] summary::after {
+  content: "−";
+}
+
+.nc-faq details > div {
+  display: flex;
+  gap: 12px;
+  padding: 20px 24px 8px;
+}
+
+.nc-faq details > div b {
+  color: #125de6;
+  font-size: 17px;
+}
+
+.nc-faq details > div p {
+  color: #51565f;
+  font-size: 16px;
+  line-height: 26px;
+}
+
+@media (max-width: 1023px) {
+  .nc-tabs ul {
+    justify-content: flex-start;
+    gap: 24px;
+    padding: 0 16px;
+  }
+
+  .nc-tabs a {
+    height: 52px;
+    font-size: 15px;
+  }
+
+  .nc-feature-cards,
+  .nc-svc-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .nc-feature-img {
+    height: 160px;
+  }
+
+  .nc-quotes > li {
+    grid-template-columns: 1fr;
+  }
+
+  .nc-quote-text {
+    padding: 24px;
+  }
+
+  .nc-quote-img {
+    min-height: 160px;
+  }
+
+  .nc-steps li {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 24px;
+  }
+}

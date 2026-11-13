@@ -2,9 +2,9 @@ import { cn } from "@/shared/lib";
 
 /** input·textarea·select가 같은 모양을 쓰도록 클래스만 따로 둔다. */
 const inputClassName = cn(
-  "w-full rounded-md border border-foreground/30 bg-background px-3 py-2.5 text-sm",
-  "placeholder:text-foreground/40",
-  "focus-visible:border-foreground focus-visible:outline-none",
+  "w-full rounded-lg border border-[#d5d9e0] bg-white px-4 py-3 text-[16px]",
+  "placeholder:text-[#9499a2]",
+  "focus-visible:border-[#125de6] focus-visible:outline-none",
   "aria-invalid:border-red-600",
 );
 

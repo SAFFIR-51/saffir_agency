@@ -55,7 +55,7 @@ export function ContactForm() {
   if (done) return <DoneView content={contactContent.done} />;
 
   return (
-    <form onSubmit={onSubmit} noValidate className="max-w-xl space-y-4">
+    <form onSubmit={onSubmit} noValidate className="space-y-5">
       <FormField
         id="organization"
         label="병원명 또는 회사명"
