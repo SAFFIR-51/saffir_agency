@@ -43,7 +43,7 @@ export function LoginForm({
   return (
     <div className="space-y-6">
       {next ? (
-        <p role="status" className="rounded-md bg-foreground/5 p-3 text-sm">
+        <p role="status" className="rounded-xl bg-surface p-4 text-sm">
           로그인하면 보던 화면으로 돌아갑니다.
         </p>
       ) : null}
@@ -75,7 +75,7 @@ export function LoginForm({
       </form>
 
       {demo ? (
-        <div className="rounded-md border border-dashed border-foreground/30 p-4">
+        <div className="rounded-[18px] bg-surface p-5">
           <p className="text-sm font-semibold">데모 계정</p>
           <p className="mt-1 text-sm text-foreground/60">
             누르면 입력칸이 채워집니다. 비밀번호는 모두 <code>{demo.password}</code>
@@ -85,7 +85,7 @@ export function LoginForm({
               <li key={account.email}>
                 <button
                   type="button"
-                  className="w-full rounded-md border border-foreground/15 px-3 py-2 text-left text-sm hover:bg-foreground/5"
+                  className="w-full rounded-xl bg-background px-4 py-3 text-left text-sm hover:shadow-[0_2px_12px_rgb(0_0_0/0.08)]"
                   onClick={() => {
                     setValue("email", account.email);
                     setValue("password", demo.password);

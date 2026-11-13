@@ -27,7 +27,7 @@ export function FormField({
     <div className="space-y-1.5">
       <label htmlFor={id} className="block text-sm font-medium">
         {label}
-        {required ? <span className="text-foreground/50"> *</span> : null}
+        {required ? <span className="text-muted"> *</span> : null}
       </label>
       {children}
       {error ? (
@@ -35,7 +35,7 @@ export function FormField({
           {error}
         </p>
       ) : hint ? (
-        <p id={`${id}-hint`} className="text-sm text-foreground/60">
+        <p id={`${id}-hint`} className="text-sm text-muted">
           {hint}
         </p>
       ) : null}

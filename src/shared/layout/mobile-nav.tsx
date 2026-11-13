@@ -18,7 +18,7 @@ export function MobileNav() {
         aria-expanded={open}
         aria-controls="mobile-nav"
         onClick={() => setOpen((value) => !value)}
-        className="rounded-md border border-foreground/20 px-3 py-1.5 text-sm"
+        className="rounded-full px-3 py-1.5 text-sm hover:bg-foreground/5"
       >
         {open ? "닫기" : "메뉴"}
       </button>
@@ -26,7 +26,7 @@ export function MobileNav() {
         <nav
           id="mobile-nav"
           aria-label="주요 메뉴"
-          className="absolute inset-x-0 top-full max-h-[calc(100dvh-4rem)] overflow-y-auto border-b border-foreground/10 bg-background px-4 pb-4 text-sm"
+          className="absolute inset-x-0 top-full max-h-[calc(100dvh-4rem)] overflow-y-auto bg-[#fafafc] px-5 pb-6 text-[17px] shadow-[0_12px_24px_rgb(0_0_0/0.08)]"
           onClick={(event) => {
             if ((event.target as HTMLElement).closest("a")) setOpen(false);
           }}
@@ -34,7 +34,7 @@ export function MobileNav() {
             if (event.key === "Escape") setOpen(false);
           }}
         >
-          <ul className="divide-y divide-foreground/10">
+          <ul className="divide-y divide-divider">
             {mainNav.map((item) =>
               item.children ? (
                 <li key={item.href}>
@@ -52,11 +52,11 @@ export function MobileNav() {
                       <li>
                         <Link
                           href={item.href}
-                          className="block rounded-md px-3 py-2 hover:bg-foreground/5"
+                          className="block rounded-xl px-3 py-2 hover:bg-surface"
                         >
                           <span className="block font-medium">{item.label} 전체 보기</span>
                           {item.description ? (
-                            <span className="mt-0.5 block text-xs text-foreground/60">
+                            <span className="mt-0.5 block text-xs text-muted">
                               {item.description}
                             </span>
                           ) : null}
@@ -66,11 +66,11 @@ export function MobileNav() {
                         <li key={child.href}>
                           <Link
                             href={child.href}
-                            className="block rounded-md px-3 py-2 hover:bg-foreground/5"
+                            className="block rounded-xl px-3 py-2 hover:bg-surface"
                           >
                             <span className="block">{child.label}</span>
                             {child.description ? (
-                              <span className="mt-0.5 block text-xs text-foreground/60">
+                              <span className="mt-0.5 block text-xs text-muted">
                                 {child.description}
                               </span>
                             ) : null}

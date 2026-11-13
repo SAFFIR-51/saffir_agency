@@ -5,7 +5,7 @@ import type { DoneContent } from "../model/content";
 /** 접수 완료 화면: 회신 안내 + 다음 절차 + 둘러볼 곳 */
 export function DoneView({ content }: { content: DoneContent }) {
   return (
-    <div role="status" className="space-y-5 rounded-md border border-foreground/20 p-5">
+    <div role="status" className="space-y-5 rounded-[18px] bg-surface p-7">
       <div>
         <p className="text-lg font-semibold">{content.title}</p>
         <p className="mt-1 text-foreground/70">{content.description}</p>

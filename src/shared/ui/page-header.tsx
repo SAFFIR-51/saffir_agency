@@ -1,7 +1,8 @@
 import { Container } from "./container";
+import { Reveal } from "./reveal";
 import { SectorLabel } from "./sector-label";
 
-/** 페이지 첫 섹터 (히어로). 페이지마다 하나뿐인 h1. */
+/** 페이지 첫 화면 (히어로). 페이지마다 하나뿐인 h1. 애플처럼 가운데 정렬, 큰 제목 + 회색 설명. */
 export function PageHeader({
   label = "S1 · 히어로",
   eyebrow,
@@ -16,17 +17,25 @@ export function PageHeader({
   children?: React.ReactNode;
 }) {
   return (
-    <header className="pt-6 pb-3 sm:pt-8 sm:pb-4">
-      <Container>
-        <div className="rounded-lg border border-foreground/20 p-5 sm:p-10">
-          <SectorLabel>{label}</SectorLabel>
-          {eyebrow ? <p className="text-sm font-medium text-foreground/60">{eyebrow}</p> : null}
-          <h1 className="mt-1 text-2xl font-bold tracking-tight text-balance sm:text-4xl">
+    <header className="pt-16 pb-14 sm:pt-24 sm:pb-20">
+      <Container className="text-center">
+        <SectorLabel>{label}</SectorLabel>
+        <Reveal>
+          {eyebrow ? (
+            <p className="text-base font-semibold text-muted sm:text-lg">{eyebrow}</p>
+          ) : null}
+          <h1 className="mt-2 text-[40px] leading-[1.1] font-semibold tracking-tight text-balance sm:text-[64px] sm:leading-[1.06]">
             {title}
           </h1>
-          {lead ? <p className="mt-3 max-w-3xl text-foreground/70 sm:text-lg">{lead}</p> : null}
-          {children ? <div className="mt-6 space-y-5">{children}</div> : null}
-        </div>
+          {lead ? (
+            <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-muted sm:text-xl">
+              {lead}
+            </p>
+          ) : null}
+        </Reveal>
+        {children ? (
+          <div className="mt-10 space-y-6 text-left [&>.flex]:justify-center">{children}</div>
+        ) : null}
       </Container>
     </header>
   );

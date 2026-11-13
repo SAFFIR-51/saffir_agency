@@ -1,0 +1,51 @@
+/* 옆으로 넘기는 카드 줄 (shared/ui/rail.tsx). 애플 "더 알아보기" 줄 */
+/* ── 옆으로 넘기는 카드 줄: 왼쪽은 본문 폭에 맞추고 오른쪽은 화면 끝까지 ── */
+.rail {
+  --rail-pad: max(20px, calc((100vw - 1024px) / 2 + 24px));
+  display: flex;
+  gap: 20px;
+  padding: 8px var(--rail-pad) 24px;
+  overflow-x: auto;
+  scroll-padding-inline: var(--rail-pad);
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.rail::-webkit-scrollbar {
+  display: none;
+}
+
+.rail > li {
+  flex: none;
+  width: min(372px, 82vw);
+  scroll-snap-align: start;
+}
+
+.rail-nav {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  padding: 0 max(20px, calc((100vw - 1024px) / 2 + 24px));
+}
+
+.rail-nav button {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+  background: rgb(210 210 215 / 0.64);
+  color: rgb(0 0 0 / 0.56);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.rail-nav button:hover {
+  background: rgb(223 223 227 / 0.9);
+  color: rgb(0 0 0 / 0.64);
+}
+
+.rail-nav svg {
+  width: 8px;
+  height: 14px;
+}

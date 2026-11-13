@@ -1,30 +1,79 @@
 @import "tailwindcss";
 
-/* 브랜드 색은 디자인 확정 후 여기 토큰으로만 바꿉니다. */
+/*
+ * 애플 스타일 (docs/design-apple.md, apple.com 기준) · 화이트 모드 고정.
+ * - 흰 바탕 + 회색 구역(#f5f5f7)을 번갈아 쓰고, 강조색은 파랑(#0071e3) 하나만 쓴다.
+ * - 버튼은 알약 모양, 카드는 둥근 모서리 18px, 그림자는 거의 없다.
+ * - 글꼴: 맥·아이폰은 시스템 글꼴(SF), 그 밖에는 Pretendard.
+ */
 :root {
+  color-scheme: light;
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #1d1d1f;
+  --surface: #f5f5f7;
+  --muted: #6e6e73;
+  --divider: #d2d2d7;
+  --brand: #0071e3;
+  --brand-hover: #0077ed;
+  --link: #0066cc;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --color-surface: var(--surface);
+  --color-muted: var(--muted);
+  --color-divider: var(--divider);
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-link: var(--link);
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", var(--font-pretendard), "Apple SD Gothic Neo",
+    "Malgun Gothic", sans-serif;
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-family: var(--font-sans);
+  letter-spacing: -0.01em;
   /* 한글은 단어 단위로 줄바꿈, 긴 URL만 중간에서 끊기 (frontend-guide 11번) */
   word-break: keep-all;
   overflow-wrap: anywhere;
+}
+
+/* 섹션을 흰색·회색으로 번갈아 칠해 애플처럼 구역을 나눈다 */
+main > section:nth-of-type(even) {
+  background: var(--surface);
+}
+
+/* 화면에 들어올 때 떠오르며 나타나기 (shared/ui/reveal.tsx). JS가 켜 둔 것만 숨긴다 */
+.rv[data-armed] {
+  opacity: 0;
+  transform: translateY(40px);
+  transition:
+    opacity 0.9s cubic-bezier(0.25, 0.1, 0.25, 1),
+    transform 0.9s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.rv[data-armed][data-shown] {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rv[data-armed] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* 그라데이션 글자 (애플 기능 강조처럼) */
+.text-gradient {
+  background: linear-gradient(90deg, #0071e3 0%, #7d4dff 50%, #e0428a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }

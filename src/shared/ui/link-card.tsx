@@ -16,11 +16,14 @@ export function LinkCard({
   return (
     <Link
       href={href}
-      className="block rounded-xl border border-foreground/15 p-5 transition hover:bg-foreground/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+      className="group block rounded-[18px] bg-surface p-7 transition hover:shadow-[0_4px_20px_rgb(0_0_0/0.08)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand [section:nth-of-type(even)_&]:bg-background"
     >
-      <p className="font-semibold">{title}</p>
-      {description ? <p className="mt-1 text-sm text-foreground/70">{description}</p> : null}
-      {children ? <div className="mt-3 text-sm text-foreground/70">{children}</div> : null}
+      <p className="text-xl font-semibold tracking-tight">{title}</p>
+      {description ? <p className="mt-2 leading-relaxed text-muted">{description}</p> : null}
+      {children ? <div className="mt-4 text-sm leading-relaxed text-muted">{children}</div> : null}
+      <p aria-hidden className="mt-5 text-link group-hover:underline">
+        자세히 보기 ›
+      </p>
     </Link>
   );
 }
@@ -35,7 +38,7 @@ export function CardGrid({
   return (
     <div
       className={cn(
-        "grid gap-4",
+        "grid gap-5",
         columns === 2 ? "sm:grid-cols-2" : "sm:grid-cols-2 lg:grid-cols-3",
       )}
     >
