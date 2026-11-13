@@ -4,7 +4,7 @@ import { routes } from "./routes";
 export type NavItem = {
   label: string;
   href: Route;
-  /** 헤더 메뉴에 마우스를 올리면 보이는 한 줄 설명 */
+  /** 메뉴 항목의 한 줄 설명 */
   description?: string;
   children?: NavItem[];
 };
@@ -83,11 +83,6 @@ export const mainNav: NavItem[] = [
     description: "분야별 프로젝트 사례와 관련 솔루션",
   },
   { label: "요금 안내", href: routes.pricing, description: "모든 서비스 요금 공개 (VAT 포함)" },
-];
-
-export const utilityNav: NavItem[] = [
-  { label: "문의", href: routes.contact },
-  { label: "로그인", href: routes.auth.login },
 ];
 
 /** 하단 사이트맵. 서비스 묶음은 상단 메뉴(mainNav)를 그대로 쓰고, 회사·정책 묶음을 더한다. */

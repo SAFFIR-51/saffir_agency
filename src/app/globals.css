@@ -2,22 +2,25 @@
 
 /* 브랜드 색은 디자인 확정 후 여기 토큰으로만 바꿉니다. */
 :root {
+  color-scheme: light;
+  scrollbar-width: none;
+  --site-header-height: 4rem;
   --background: #ffffff;
   --foreground: #171717;
+}
+
+:root:has(.site-menu[open]) {
+  overflow: hidden;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-home-hero-title: #111111;
+  --color-home-hero-copy: #333333;
+  --color-menu-muted: #a3a3a3;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
@@ -27,4 +30,189 @@ body {
   /* 한글은 단어 단위로 줄바꿈, 긴 URL만 중간에서 끊기 (frontend-guide 11번) */
   word-break: keep-all;
   overflow-wrap: anywhere;
+}
+
+@media (width >= 48rem) {
+  :root {
+    --site-header-height: 5rem;
+  }
+}
+
+/* Full-screen site menu */
+.site-menu {
+  --site-menu-panel: #121212;
+  --site-menu-rail: #1b1b1b;
+  background: transparent;
+  scrollbar-width: none;
+  color: #ededed;
+}
+
+.site-menu-surface {
+  background: var(--site-menu-rail);
+}
+
+.site-menu-current[aria-current="page"] {
+  color: #a3a3a3;
+}
+
+.site-menu::backdrop {
+  background: transparent;
+}
+
+.site-menu-panel {
+  position: absolute;
+  inset-block: 0;
+}
+
+.site-menu-panel-left {
+  inset-inline: 0 auto;
+  width: 24%;
+  background: var(--site-menu-rail);
+}
+
+.site-menu-panel-right {
+  inset-inline: 24% 0;
+  background: var(--site-menu-panel);
+}
+
+.site-menu[open] .site-menu-icon > :first-child {
+  transform: translateY(12px) rotate(45deg);
+}
+
+.site-menu[open] .site-menu-icon > :nth-child(2) {
+  opacity: 0;
+}
+
+.site-menu[open] .site-menu-icon > :last-child {
+  transform: translateY(-12px) rotate(-45deg);
+}
+
+.site-menu-logo {
+  filter: brightness(0) invert(1);
+}
+
+.site-menu-trigger-bar:has(+ .site-menu[open]) {
+  opacity: 0;
+}
+
+@media (width < 48rem) {
+  .site-menu-panel-left {
+    display: none;
+  }
+
+  .site-menu-panel-right {
+    inset-inline-start: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :root {
+    --site-menu-sweep: 600ms;
+    --site-menu-exit-delay: 400ms;
+    --site-menu-exit: calc(var(--site-menu-sweep) + var(--site-menu-exit-delay));
+    --site-menu-icon-duration: 300ms;
+  }
+
+  .site-menu {
+    transition:
+      display var(--site-menu-exit) allow-discrete,
+      overlay var(--site-menu-exit) allow-discrete;
+  }
+
+  .site-menu[open] {
+    transition-duration: var(--site-menu-sweep);
+  }
+
+  .site-menu:not([open]) {
+    pointer-events: none;
+  }
+
+  .site-menu-panel {
+    transform: scaleY(0);
+    transition: transform var(--site-menu-sweep) ease-in var(--site-menu-exit-delay);
+  }
+
+  .site-menu-panel-left {
+    transform-origin: top;
+  }
+
+  .site-menu-panel-right {
+    transform-origin: bottom;
+  }
+
+  .site-menu[open] .site-menu-panel {
+    transform: scaleY(1);
+    transition-delay: 0s;
+  }
+
+  .site-menu-copy {
+    opacity: 0;
+    transition: opacity var(--site-menu-sweep) ease-in;
+  }
+
+  .site-menu[open] .site-menu-copy {
+    opacity: 1;
+  }
+
+  .site-menu[open] .site-menu-copy:focus-within {
+    transition: none;
+  }
+
+  .site-menu-trigger-bar {
+    transition: opacity 0s var(--site-menu-exit);
+  }
+
+  .site-menu-trigger-bar:has(+ .site-menu[open]) {
+    transition-delay: 0s;
+  }
+
+  .site-menu .site-menu-icon {
+    color: var(--foreground);
+    transition: color 180ms ease 440ms;
+  }
+
+  .site-menu[open] .site-menu-icon {
+    color: inherit;
+  }
+
+  .site-menu .site-menu-icon > span {
+    transition:
+      transform var(--site-menu-icon-duration) ease,
+      opacity var(--site-menu-icon-duration) ease;
+    transform: none;
+    opacity: 1;
+  }
+
+  .site-menu .site-menu-logo {
+    filter: none;
+    transition: filter 180ms ease var(--site-menu-exit-delay);
+  }
+
+  .site-menu[open] .site-menu-logo {
+    filter: brightness(0) invert(1);
+    transition-delay: 70ms;
+  }
+
+  @starting-style {
+    .site-menu[open] .site-menu-panel {
+      transform: scaleY(0);
+    }
+
+    .site-menu[open] .site-menu-copy {
+      opacity: 0;
+    }
+
+    .site-menu[open] .site-menu-icon {
+      color: var(--foreground);
+    }
+
+    .site-menu[open] .site-menu-icon > :nth-child(n) {
+      transform: none;
+      opacity: 1;
+    }
+
+    .site-menu[open] .site-menu-logo {
+      filter: none;
+    }
+  }
 }
