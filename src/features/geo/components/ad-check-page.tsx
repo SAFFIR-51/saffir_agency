@@ -1,51 +1,35 @@
-import { SolutionTemplate } from "@/shared/sections";
-import { routes } from "@/shared/config";
-import {
-  ButtonLink,
-  DataTable,
-  Note,
-  StateTable,
-  Subheading,
-  WireBox,
-  WireInput,
-} from "@/shared/ui";
-import { adCheckContent, adCheckDisclaimer, adCheckLimits, adCheckStates } from "../model/content";
+import { SalesPage } from "@/shared/sections";
+import { TryBox } from "@/shared/ui";
+import { adCheckDisclaimer, adCheckLimits } from "../model/content";
+import { adCheckSales } from "../model/sales-content";
 
+/** 의료광고 검사기: 첫 화면에서 바로 문구를 붙여 넣어 보게 한다. 법률 자문이 아니라는 고지는 상자 안에 */
 export function AdCheckPage() {
   return (
-    <SolutionTemplate
-      content={adCheckContent}
+    <SalesPage
+      content={adCheckSales}
       slots={{
-        afterFeatures: (
-          <Note title="고지">
-            <p>{adCheckDisclaimer}</p>
-          </Note>
-        ),
-        screens: (
-          <div id="check" className="space-y-5">
-            <WireInput
-              label="광고 문구"
-              kind="textarea"
-              placeholder="검사할 문구를 붙여 넣으세요"
-            />
-            <WireBox label="검사 결과 · 위험 표현 표시" size="lg" />
-            <div className="flex flex-wrap gap-3">
-              <ButtonLink href={routes.auth.signupFrom(`${routes.hospital.adCheck}#check`)}>
-                가입하고 검사 기록 저장
-              </ButtonLink>
-              <ButtonLink href={routes.contactFor("hospital-website")} variant="secondary">
-                홈페이지 문구 점검·제작 상담
-              </ButtonLink>
-            </div>
-            <Subheading>검사 상태</Subheading>
-            <StateTable states={adCheckStates} />
-          </div>
+        hero: (
+          <TryBox
+            id="check"
+            title="무료 검사"
+            label="광고 문구"
+            placeholder="검사할 문구를 붙여 넣으세요"
+            kind="textarea"
+            button="무료 검사하기"
+            notes={[adCheckDisclaimer, "회원은 월 5회 무료입니다."]}
+            pending="검사 기능은 준비 중입니다."
+          />
         ),
         pricing: (
-          <DataTable
-            columns={["등급", "검사 횟수"]}
-            rows={adCheckLimits.map((l) => [l.plan, l.limit])}
-          />
+          <ul className="sp-limits">
+            {adCheckLimits.map((l) => (
+              <li key={l.plan}>
+                <span>{l.plan}</span>
+                <strong>{l.limit}</strong>
+              </li>
+            ))}
+          </ul>
         ),
       }}
     />

@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { applyFieldErrors, track } from "@/shared/lib";
+import { applyFieldErrors, formatPhone, track } from "@/shared/lib";
 import { Button, ConsentField, FormField, Input, Select, Textarea, fieldA11y } from "@/shared/ui";
 import { submitEstimate } from "../api/submit-estimate";
 import {
@@ -33,6 +33,7 @@ export function EstimateForm() {
     register,
     handleSubmit,
     setError,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<EstimateInput>({ resolver: zodResolver(estimateSchema), defaultValues });
 
@@ -78,7 +79,12 @@ export function EstimateForm() {
           inputMode="tel"
           autoComplete="tel"
           {...fieldA11y("phone", errors.phone?.message)}
-          {...register("phone")}
+          maxLength={13}
+          {...register("phone", {
+            // 숫자를 치는 대로 하이픈을 붙인다 (010-1234-5678)
+            onChange: (event: React.ChangeEvent<HTMLInputElement>) =>
+              setValue("phone", formatPhone(event.target.value)),
+          })}
         />
       </FormField>
       <FormField id="area" label="개발 분야" error={errors.area?.message}>

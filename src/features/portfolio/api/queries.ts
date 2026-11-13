@@ -1,6 +1,5 @@
 import {
   getPortfolioItem,
-  industryFilters,
   portfolioGroups,
   portfolioItems,
   techLabels,
@@ -25,10 +24,6 @@ export function listPortfolioByGroup() {
         relatedName: relatedServiceName(item.relatedSolution),
       })),
   }));
-}
-
-export function getPortfolioMeta() {
-  return { total: portfolioItems.length, industryFilters, techLabels };
 }
 
 export function getPortfolioSlugs() {

@@ -1,0 +1,240 @@
+/* 회사 소개. 공통 섹션 모양은 shared/ui/landing/landing.css */
+
+.ab {
+  padding-top: 80px;
+  background: #f8f8f8;
+}
+
+.ab-hero {
+  padding: 80px 0 0;
+}
+
+.ab-hero-title {
+  letter-spacing: -1.5px;
+}
+
+.ab-hero-media {
+  width: 100%;
+  margin-top: 80px;
+  aspect-ratio: 1936 / 584;
+}
+
+/* 핵심 가치: 세 칸, 그림은 칸 아래쪽 */
+.ab-values {
+  display: flex;
+  justify-content: space-between;
+  gap: 96px;
+}
+
+.ab-values > li {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  max-width: 440px;
+}
+
+.ab-value-mark {
+  width: 100%;
+  margin-top: auto;
+  padding-top: 56px;
+}
+
+.ab-value-mark svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 10%;
+  overflow: hidden;
+}
+
+/* 비전: 두 칸 */
+.ab-vision {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 120px;
+}
+
+.ab-vision-list {
+  display: flex;
+  flex-direction: column;
+  row-gap: 120px;
+}
+
+.ab-vision-media {
+  min-height: 480px;
+  background: #000;
+}
+
+/* 하는 일: 정사각형 카드 3열 */
+.ab-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.ab-cards li {
+  position: relative;
+  aspect-ratio: 1 / 1;
+}
+
+.ab-cards a {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  color: #000;
+}
+
+.ab-cards .ls-slot {
+  padding-top: 96px;
+  padding-left: 32px;
+}
+
+.ab-card-info {
+  position: absolute;
+  inset: 0;
+  padding: 32px;
+}
+
+.ab-card-info strong {
+  display: block;
+  font-size: 32px;
+  font-weight: 900;
+  line-height: 120%;
+  letter-spacing: -0.5px;
+  text-transform: uppercase;
+}
+
+.ab-card-desc {
+  position: absolute;
+  right: 32px;
+  bottom: 32px;
+  left: 32px;
+}
+
+.ab-card-desc p {
+  font-size: 16px;
+  line-height: 130%;
+  text-transform: uppercase;
+}
+
+.ab-card-desc .ls-ko {
+  margin-top: 12px;
+  text-transform: none;
+}
+
+.ab-cards a:hover strong,
+.ab-cards a:focus-visible strong {
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+
+/* 정체성 */
+.ab-identity {
+  padding-top: 320px;
+}
+
+.ab-identity-desc {
+  margin-top: 0;
+  padding: 56px 0;
+}
+
+.ab-banners {
+  display: flex;
+}
+
+.ab-banner {
+  flex: 1;
+  aspect-ratio: 1 / 1;
+}
+
+@media (max-width: 1280px) {
+  .ab-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 1023px) {
+  .ab {
+    padding-top: 64px;
+  }
+
+  .ab-hero {
+    padding-top: 40px;
+  }
+
+  .ab-hero-media {
+    height: 560px;
+    margin-top: 40px;
+    aspect-ratio: auto;
+  }
+
+  .ab-values {
+    flex-direction: column;
+    gap: 64px;
+  }
+
+  .ab-value-mark {
+    max-width: 380px;
+    padding-top: 40px;
+  }
+
+  .ab-vision {
+    display: block;
+  }
+
+  .ab-vision-list {
+    row-gap: 64px;
+  }
+
+  .ab-vision-media {
+    min-height: 0;
+    margin-top: 64px;
+    aspect-ratio: 1 / 1;
+  }
+
+  .ab-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .ab-card-info {
+    padding: 16px;
+  }
+
+  .ab-card-info strong {
+    font-size: 24px;
+  }
+
+  .ab-card-desc {
+    right: 16px;
+    bottom: 16px;
+    left: 16px;
+  }
+
+  .ab-card-desc p {
+    font-size: 14px;
+  }
+
+  .ab-cards .ls-slot {
+    padding-top: 64px;
+    padding-left: 16px;
+  }
+
+  .ab-identity {
+    padding-top: 120px;
+    padding-bottom: 80px;
+  }
+
+  .ab-identity .ls-title {
+    margin-bottom: 40px;
+  }
+
+  .ab-identity-desc {
+    padding: 0;
+  }
+
+  .ab-banners {
+    flex-direction: column;
+    margin-top: 40px;
+  }
+}

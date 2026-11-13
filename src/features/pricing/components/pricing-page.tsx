@@ -1,3 +1,5 @@
+import Link from "next/link";
+import type { ReactNode } from "react";
 import {
   geoPlans,
   geoPricingHeadline,
@@ -15,87 +17,204 @@ import {
 } from "@/content/pricing";
 import { routes } from "@/shared/config";
 import { formatKRW } from "@/shared/lib";
-import { ButtonLink, DataTable, PageHeader, PlanTable, Section, TrackPageView } from "@/shared/ui";
+import { ArrowIcon, LandingSection, PageHead, TrackPageView } from "@/shared/ui";
+import { PriceRows } from "./price-rows";
+import { pricingContent as c } from "../model/content";
+import "./pricing.css";
 
+/** 한 갈래 안의 묶음: 작은 제목 + 카드·표 + 안내 */
+function Group({
+  id,
+  title,
+  notes = [],
+  children,
+}: {
+  id?: string;
+  title: string;
+  notes?: string[];
+  children: ReactNode;
+}) {
+  return (
+    <div id={id} className="pr-group">
+      <h3 className="pr-group-title">{title}</h3>
+      {children}
+      {notes.length > 0 ? (
+        <ul className="pr-notes">
+          {notes.map((n) => (
+            <li key={n}>{n}</li>
+          ))}
+        </ul>
+      ) : null}
+    </div>
+  );
+}
+
+/** 요금 페이지: 머리 → 바로 가기 → 병원 → 비즈니스 → 맞춤 개발 → 결제 방식 */
 export function PricingPage() {
+  const crm = solutionPlans.filter((p) => p.id.startsWith("crm-"));
+  const business = solutionPlans.filter((p) => !p.id.startsWith("crm-"));
   const bundle = hospitalGrowthBundle;
+  const h = c.hospital;
+
   return (
     <>
       <TrackPageView event="pricing_viewed" />
-      <PageHeader title="요금 안내" lead="모든 서비스 요금을 공개합니다. 금액은 VAT 포함입니다." />
+      <div className="lc pr">
+        <PageHead eyebrow={c.eyebrow} lead={c.lead}>
+          <nav className="pr-jump" aria-label="요금 바로 가기">
+            {c.jump.map((j) => (
+              <a key={j.id} href={`#${j.id}`}>
+                {j.label}
+              </a>
+            ))}
+          </nav>
+        </PageHead>
 
-      <Section id="geo" label="S2 · AI 검색 최적화" title="AI 검색 최적화 (월 구독)">
-        <PlanTable
-          plans={geoPlans}
-          caption={geoPricingHeadline}
-          actions={{
-            consultFallback: "geo-fix",
-            free: { label: "무료 진단", href: `${routes.hospital.geo}#diagnosis` },
-          }}
-        />
-      </Section>
+        <div id="pr-hospital" className="pr-anchor">
+          <LandingSection
+            size="compact"
+            id="pr-hospital-title"
+            title={h.title}
+            subtitle={h.subtitle}
+          >
+            <Group id="geo" title={h.groups.geo} notes={[geoPricingHeadline]}>
+              <PriceRows
+                plans={geoPlans}
+                actions={{
+                  consultFallback: "geo-fix",
+                  free: { label: "무료 진단", href: `${routes.hospital.geo}#diagnosis` },
+                }}
+              />
+            </Group>
+            <Group id="hospital-website" title={h.groups.website} notes={hospitalWebsiteNotes}>
+              <PriceRows
+                plans={hospitalWebsitePlans}
+                setupLabel="제작비"
+                actions={{ consultFallback: "hospital-website", consultLabel: "제작 상담" }}
+              />
+            </Group>
+            <Group id="solutions" title={h.groups.crm}>
+              <PriceRows
+                plans={crm}
+                setupLabel="세팅"
+                actions={{ consultFallback: "crm-adopt", consultLabel: "도입 상담" }}
+              />
+            </Group>
+            <Group id="message" title={h.groups.message} notes={[messagePriceNote]}>
+              <PriceRows
+                plans={messagePriceRows.map((m) => ({
+                  id: m.name,
+                  name: m.name,
+                  includes: "",
+                  monthly: m.unit,
+                }))}
+                monthlyLabel="건당"
+              />
+            </Group>
+            <Group id="bundle" title={h.groups.bundle}>
+              <div className="pr-bundle">
+                <div>
+                  <p className="pr-bundle-name">{bundle.name}</p>
+                  <p className="pr-bundle-includes">{bundle.includesLabel}</p>
+                  <p className="pr-bundle-benefit">{bundle.benefit}</p>
+                </div>
+                <div className="pr-bundle-side">
+                  <p className="pr-bundle-price">
+                    <small>월</small>
+                    {formatKRW(bundle.monthly)}
+                  </p>
+                  <Link href={routes.contactFor("hospital-bundle")} className="ls-btn">
+                    {h.bundleCta}
+                    <ArrowIcon />
+                  </Link>
+                </div>
+              </div>
+            </Group>
+          </LandingSection>
+        </div>
 
-      <Section id="solutions" label="S3 · 구축형 솔루션" title="구축형 솔루션">
-        <PlanTable
-          plans={solutionPlans}
-          setupLabel="도입 세팅비"
-          monthlyLabel="월 이용료"
-          actions={{ consultFallback: "crm-adopt", consultLabel: "도입 상담" }}
-        />
-      </Section>
+        <div id="pr-business" className="pr-anchor">
+          <LandingSection
+            size="compact"
+            id="pr-business-title"
+            title={c.business.title}
+            subtitle={c.business.subtitle}
+          >
+            <Group title={c.business.groups.solutions}>
+              <PriceRows
+                plans={business}
+                setupLabel="세팅"
+                actions={{ consultFallback: "connect", consultLabel: "도입 상담" }}
+              />
+            </Group>
+            <Group id="server" title={c.business.groups.server} notes={serverTierNotes}>
+              <PriceRows plans={serverTiers} />
+            </Group>
+          </LandingSection>
+        </div>
 
-      <Section id="message" label="S4 · 메시지" title="메시지 발송 (병원 CRM)">
-        <DataTable
-          columns={["메시지", "건당"]}
-          rows={messagePriceRows.map((m) => [m.name, formatKRW(m.unit)])}
-          caption={messagePriceNote}
-        />
-      </Section>
+        <div id="pr-development" className="pr-anchor">
+          <LandingSection
+            size="compact"
+            id="pr-development-title"
+            title={c.development.title}
+            subtitle={c.development.subtitle}
+            action={
+              <Link href={routes.development.estimate} className="ls-btn">
+                {c.development.estimate}
+                <ArrowIcon />
+              </Link>
+            }
+          >
+            <Group id="development" title={c.development.groups.packages} notes={outsourcingNotes}>
+              <PriceRows
+                plans={outsourcingDeposits}
+                setupLabel="계약금"
+                actions={{ consultFallback: "hospital-website" }}
+              />
+            </Group>
+          </LandingSection>
+        </div>
 
-      <Section id="server" label="S5 · 서버 운영비" title="서버 운영비">
-        <PlanTable plans={serverTiers} caption={serverTierNotes.join(" ")} />
-      </Section>
-
-      <Section id="hospital-website" label="S6 · 병원 홈페이지" title="병원 홈페이지 제작">
-        <PlanTable
-          plans={hospitalWebsitePlans}
-          setupLabel="제작비"
-          caption={hospitalWebsiteNotes.join(" ")}
-          actions={{ consultFallback: "hospital-website", consultLabel: "제작 상담" }}
-        />
-      </Section>
-
-      <Section id="bundle" label="S7 · 패키지" title={bundle.name}>
-        <DataTable
-          columns={["구성", "월 요금", "혜택"]}
-          rows={[[bundle.includesLabel, formatKRW(bundle.monthly), bundle.benefit]]}
-        />
-        <ButtonLink href={routes.contactFor("hospital-bundle")} variant="secondary">
-          패키지 상담
-        </ButtonLink>
-      </Section>
-
-      <Section id="development" label="S8 · 맞춤 개발" title="맞춤 개발 정찰가">
-        <PlanTable
-          plans={outsourcingDeposits}
-          setupLabel="계약금"
-          caption={outsourcingNotes.join(" ")}
-          actions={{ consultFallback: "hospital-website" }}
-        />
-        <ButtonLink href={routes.development.estimate} variant="secondary">
-          맞춤 개발 견적 요청
-        </ButtonLink>
-      </Section>
-
-      <Section id="payment" label="S9 · 결제" title="결제 방식">
-        <DataTable
-          columns={["결제 유형", "대상 상품", "결제 위치", "결제 수단"]}
-          rows={paymentTypes.map((p) => [p.type, p.products, p.where, p.toss])}
-        />
-        <ButtonLink href={routes.legal.refund} variant="secondary">
-          취소 및 환불 규정
-        </ButtonLink>
-      </Section>
+        <div id="pr-payment" className="pr-anchor">
+          <LandingSection
+            size="compact"
+            id="pr-payment-title"
+            title={c.payment.title}
+            subtitle={c.payment.subtitle}
+            action={
+              <Link href={routes.legal.refund} className="ls-btn" data-variant="line">
+                {c.payment.refund}
+                <ArrowIcon />
+              </Link>
+            }
+          >
+            <div className="pr-table-wrap">
+              <table className="pr-table">
+                <thead>
+                  <tr>
+                    {c.payment.columns.map((col) => (
+                      <th key={col} scope="col">
+                        {col}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {paymentTypes.map((p) => (
+                    <tr key={p.type}>
+                      <th scope="row">{p.type}</th>
+                      <td>{p.products}</td>
+                      <td>{p.where}</td>
+                      <td>{p.toss}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </LandingSection>
+        </div>
+      </div>
     </>
   );
 }

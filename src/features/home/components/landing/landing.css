@@ -1,0 +1,978 @@
+/*
+ * 메인 첫 화면 (헤더 + 히어로).
+ * 수치는 시안 기준 화면(데스크톱 1024px 이상 / 모바일 1023px 이하)의 값을 그대로 옮긴 것.
+ * 배경 #f8f8f8, 글자 #000.
+ */
+
+/* 시안처럼 스크롤바를 숨긴다 (메인 페이지에서만) */
+:root:has(.lp-hero) {
+  scrollbar-width: none;
+}
+
+:root:has(.lp-hero)::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── 헤더 ───────────────────────────────────────── */
+.lp-header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 80px;
+  padding: 20px 32px;
+  color: #000;
+  font-family: var(--font-big-shoulders), "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+/* 스크롤하면 배경을 깔아 아래 글자가 메뉴와 겹쳐 보이지 않게 (불투명) */
+.lp-header[data-scrolled="true"] {
+  background: #f8f8f8;
+  box-shadow: 0 1px 0 rgb(0 0 0 / 0.08);
+}
+
+.lp-logo {
+  display: block;
+  width: 238px;
+  height: 100%;
+}
+
+.lp-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.lp-nav ul {
+  display: flex;
+  gap: 0 41px;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: normal;
+  text-transform: uppercase;
+  transition: gap 0.3s ease-in-out;
+}
+
+.lp-nav a {
+  position: relative;
+  overflow: hidden;
+  padding: 10px 15px;
+  transition: padding 0.3s ease-in-out;
+}
+
+.lp-nav li:last-of-type a {
+  padding-right: 0;
+}
+
+.lp-menu-toggle {
+  display: none;
+}
+
+/* ── 하위 메뉴 (마우스를 올리거나 키보드로 들어가면 열림) ── */
+.lp-has-sub {
+  position: relative;
+}
+
+.lp-sub {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 5;
+  visibility: hidden;
+  min-width: 300px;
+  padding-top: 18px;
+  opacity: 0;
+  transition:
+    opacity 0.15s ease,
+    visibility 0.15s ease;
+}
+
+.lp-has-sub:hover .lp-sub,
+.lp-has-sub:focus-within .lp-sub {
+  visibility: visible;
+  opacity: 1;
+}
+
+.lp-sub ul {
+  display: block !important;
+  padding: 8px 0;
+  border: 1px solid #000;
+  background: #f8f8f8;
+  font-family: var(--font-pretendard), "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  text-transform: none;
+}
+
+.lp-nav .lp-sub li a {
+  display: block;
+  padding: 12px 20px;
+}
+
+.lp-nav .lp-sub a:hover,
+.lp-nav .lp-sub a:focus-visible {
+  background: #fff;
+}
+
+.lp-sub-all {
+  border-bottom: 1px solid rgb(0 0 0 / 0.12);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.lp-sub-name {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.lp-sub-desc {
+  display: block;
+  margin-top: 2px;
+  font-size: 13px;
+  font-weight: 400;
+  opacity: 0.6;
+}
+
+/* ── 회사소개서 카드 (메뉴 왼쪽) ──
+ * 첫 화면 정사각형과 같은 남색. 맨 위에서는 두 줄, 스크롤하면 얇은 띠(오른쪽 위 화살표만).
+ */
+/* 펼쳤을 때는 화면 위 끝에서 12px, 스크롤해서 접히면 창 위 끝에 딱 붙는다.
+ * (헤더 위 여백 20px을 음수 여백으로 상쇄) */
+.lp-brochure {
+  position: relative;
+  align-self: flex-start;
+  margin: -8px 41px 0 auto;
+  transition: margin-top 0.3s ease;
+}
+
+.lp-brochure[data-compact="true"] {
+  margin-top: -20px;
+}
+
+.lp-brochure-card {
+  position: relative;
+  display: block;
+  width: 300px;
+  /* 글이 두 줄로 넘어가도 잘리지 않게 높이는 내용만큼 (최대 120px) */
+  max-height: 120px;
+  padding: 10px 36px 10px 16px;
+  overflow: hidden;
+  background: #121221;
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    max-height 0.3s ease,
+    padding 0.3s ease;
+}
+
+.lp-brochure[data-compact="true"] .lp-brochure-card {
+  max-height: 22px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.lp-brochure-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: var(--font-pretendard), "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  transition: opacity 0.2s ease;
+}
+
+.lp-brochure[data-compact="true"] .lp-brochure-body {
+  opacity: 0;
+}
+
+/* 접혀 있어도 마우스를 올리거나 키보드로 고르면 펼친다 */
+.lp-brochure[data-compact="true"]:hover .lp-brochure-card,
+.lp-brochure[data-compact="true"]:focus-within .lp-brochure-card {
+  max-height: 120px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.lp-brochure[data-compact="true"]:hover .lp-brochure-body,
+.lp-brochure[data-compact="true"]:focus-within .lp-brochure-body {
+  opacity: 1;
+}
+
+.lp-brochure-line {
+  font-size: 12px;
+  line-height: 140%;
+  opacity: 0.7;
+}
+
+.lp-brochure-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 140%;
+}
+
+.lp-brochure-cta svg {
+  width: 11px;
+  height: 13px;
+}
+
+.lp-brochure-arrow {
+  position: absolute;
+  top: 5px;
+  right: 8px;
+  width: 11px;
+  height: 11px;
+}
+
+.lp-brochure-card:hover .lp-brochure-cta,
+.lp-brochure-card:focus-visible .lp-brochure-cta {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.lp-brochure-notice {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  white-space: nowrap;
+  font-family: var(--font-pretendard), "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-size: 12px;
+}
+
+/* 메뉴와 겹치지 않을 만큼 넓은 화면에서만 보인다 */
+@media (max-width: 1599px) {
+  .lp-brochure {
+    display: none;
+  }
+}
+
+.lp-brochure-notice:not(:empty) {
+  padding: 6px 10px;
+  background: #000;
+  color: #fff;
+}
+
+@media (max-width: 1100px) {
+  .lp-nav ul {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .lp-brochure {
+    display: none;
+  }
+
+  .lp-header {
+    height: 64px;
+    padding: 14px 16px;
+    overflow: visible;
+  }
+
+  .lp-logo {
+    position: relative;
+    z-index: 101;
+    width: 220px;
+  }
+
+  .lp-menu-toggle {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    z-index: 101;
+    display: block;
+    width: 36px;
+    height: 36px;
+    overflow: hidden;
+  }
+
+  .lp-menu-toggle::before,
+  .lp-menu-toggle::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    width: 33px;
+    height: 1px;
+    background: #000;
+    transform: translateX(-50%);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .lp-menu-toggle::before {
+    top: 14px;
+  }
+
+  .lp-menu-toggle::after {
+    top: 20px;
+  }
+
+  .lp-menu-toggle[aria-expanded="true"]::before {
+    top: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  .lp-menu-toggle[aria-expanded="true"]::after {
+    top: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+
+  .lp-nav {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  .lp-nav-panel {
+    display: flex;
+    align-items: flex-start;
+    padding: 96px 0 40px;
+    overflow-y: auto;
+    width: 100%;
+    height: 100%;
+    background: #f8f8f8;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .lp-nav[data-open="true"] {
+    pointer-events: auto;
+  }
+
+  .lp-nav[data-open="true"] .lp-nav-panel {
+    transform: translateX(0);
+  }
+
+  .lp-nav ul {
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    padding: 0 16px;
+  }
+
+  .lp-sub {
+    position: static;
+    visibility: visible;
+    min-width: 0;
+    padding-top: 4px;
+    opacity: 1;
+  }
+
+  .lp-sub ul {
+    padding: 0;
+    border: 0;
+    background: none;
+  }
+
+  .lp-nav .lp-sub li a {
+    padding: 6px 0;
+    font-size: 16px;
+    letter-spacing: 0;
+  }
+
+  .lp-sub-all {
+    display: none !important;
+  }
+
+  .lp-sub-desc {
+    display: none;
+  }
+
+  .lp-nav > .lp-nav-panel > ul > li > a {
+    display: block;
+    padding: 0;
+    font-size: 48px;
+    font-weight: 900;
+    line-height: normal;
+    letter-spacing: -0.96px;
+    outline-offset: 2px;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+@media (max-width: 900px) {
+  .lp-nav ul {
+    gap: 15px;
+  }
+}
+
+/* ── 히어로 ─────────────────────────────────────── */
+.lp-hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #f8f8f8;
+  color: #000;
+  font-family: var(--font-big-shoulders), "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+/* 양옆 오브젝트가 놓이는 무대 (화면 세로 가운데) */
+.lp-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.lp-stage-inner {
+  position: relative;
+  flex: none;
+  width: 100%;
+  max-width: 2400px;
+  height: 932px;
+  margin: auto;
+}
+
+.lp-ice {
+  --ice-w: 240px;
+  position: absolute;
+  top: 270px;
+  left: 65px;
+  width: var(--ice-w);
+  height: var(--ice-w);
+}
+
+.lp-ring {
+  position: absolute;
+  top: 327px;
+  right: 110px;
+  width: 416px;
+  animation: lp-rotate 40s linear infinite;
+}
+
+.lp-ring svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.lp-ring .lp-ring-mo {
+  display: none;
+}
+
+@keyframes lp-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 가운데 제목 + 정사각형 */
+.lp-center {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+}
+
+.lp-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(1080px, calc(100vw - 64px));
+  text-align: center;
+  transform: translate(-50%, calc(-50% - 218px));
+}
+
+/*
+ * 제목·설명은 한글이라 Pretendard. 크기 위계: 첫 화면 한글 제목 64 ≥ 섹션 영문 제목 64
+ * > 섹션 한글 부제 32 > 설명 20 (모바일 32 > 24 > 16)
+ */
+.lp-title h1,
+.lp-title p {
+  font-family: var(--font-pretendard), "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  word-break: keep-all;
+}
+
+.lp-title h1 {
+  display: block;
+  margin-bottom: 24px;
+  font-size: 64px;
+  font-weight: 800;
+  line-height: 120%;
+  letter-spacing: -0.03em;
+}
+
+.lp-title p {
+  width: 640px;
+  margin: 0 auto;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 150%;
+  opacity: 0.8;
+}
+
+/* 정사각형 한 변 400px, 중심은 화면 가운데에서 209px 아래 */
+.lp-face {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  width: 400px;
+  height: 400px;
+  transform: translate(-50%, calc(-50% + 209px));
+}
+
+.lp-face canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ── 유리 큐브 (CSS 3D) ── */
+.lp-cube-scene {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  perspective: calc(var(--ice-w) * 3.4);
+}
+
+.lp-cube {
+  --edge: calc(var(--ice-w) * 0.625);
+  position: relative;
+  width: var(--edge);
+  height: var(--edge);
+  transform-style: preserve-3d;
+  animation: lp-cube-spin 21s linear infinite;
+}
+
+.lp-cube span {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgb(255 255 255 / 0.18);
+  background: linear-gradient(
+    150deg,
+    rgb(150 150 150 / 0.85),
+    rgb(38 38 38 / 0.9) 48%,
+    rgb(12 12 12 / 0.92)
+  );
+  backface-visibility: visible;
+}
+
+.lp-cube span:nth-child(1) {
+  transform: translateZ(calc(var(--edge) / 2));
+}
+
+.lp-cube span:nth-child(2) {
+  transform: rotateY(180deg) translateZ(calc(var(--edge) / 2));
+}
+
+.lp-cube span:nth-child(3) {
+  transform: rotateY(90deg) translateZ(calc(var(--edge) / 2));
+  background: linear-gradient(200deg, rgb(110 110 110 / 0.85), rgb(28 28 28 / 0.92) 55%);
+}
+
+.lp-cube span:nth-child(4) {
+  transform: rotateY(-90deg) translateZ(calc(var(--edge) / 2));
+  background: linear-gradient(
+    160deg,
+    rgb(205 205 205 / 0.88),
+    rgb(70 70 70 / 0.9) 50%,
+    rgb(20 20 20 / 0.92)
+  );
+}
+
+.lp-cube span:nth-child(5) {
+  transform: rotateX(90deg) translateZ(calc(var(--edge) / 2));
+  background: linear-gradient(135deg, rgb(60 60 60 / 0.9), rgb(18 18 18 / 0.94));
+}
+
+.lp-cube span:nth-child(6) {
+  transform: rotateX(-90deg) translateZ(calc(var(--edge) / 2));
+}
+
+@keyframes lp-cube-spin {
+  from {
+    transform: rotateX(-24deg) rotateY(0deg);
+  }
+
+  to {
+    transform: rotateX(-24deg) rotateY(360deg);
+  }
+}
+
+/* ── 반응형 (시안과 같은 구간) ── */
+@media (max-height: 1000px) {
+  .lp-stage-inner {
+    height: 750px;
+  }
+}
+
+@media (max-width: 1279px) {
+  .lp-stage-inner {
+    height: 800px;
+  }
+
+  .lp-ring {
+    right: 50px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .lp-stage-inner {
+    height: 700px;
+  }
+
+  .lp-ice {
+    --ice-w: 90px;
+    top: 210px;
+    left: 33px;
+  }
+
+  .lp-ring {
+    top: 44.8%;
+    right: 122px;
+    width: 193px;
+  }
+
+  .lp-ring .lp-ring-pc {
+    display: none;
+  }
+
+  .lp-ring .lp-ring-mo {
+    display: block;
+  }
+
+  .lp-title {
+    width: 358px;
+    /* 한글 제목이 길어 4줄이 되므로 조금 위로 */
+    transform: translate(-50%, calc(-50% - 166px));
+  }
+
+  .lp-title h1 {
+    margin-bottom: 16px;
+    font-size: 32px;
+    letter-spacing: -0.03em;
+  }
+
+  .lp-title p {
+    width: 100%;
+    font-size: 16px;
+  }
+
+  /* 정사각형 한 변 240px, 중심은 화면 가운데에서 145px 아래 */
+  .lp-face {
+    width: 240px;
+    height: 240px;
+    transform: translate(-50%, calc(-50% + 145.4px));
+  }
+}
+
+@media (max-width: 480px) {
+  .lp-stage-inner {
+    height: 610px;
+  }
+
+  .lp-ice {
+    --ice-w: 80px;
+    top: 130px;
+    left: 30px;
+  }
+
+  .lp-ring {
+    top: 330px;
+    right: -60px;
+    width: 145px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lp-ring {
+    animation: none;
+  }
+
+  .lp-cube {
+    animation: none;
+    transform: rotateX(-24deg) rotateY(45deg);
+  }
+
+  .lp-header *,
+  .lp-nav-panel,
+  .lp-brochure-card {
+    transition: none;
+  }
+}
+
+/* ── 대표 포트폴리오 카드 (4열 × 2줄) ── */
+.lp-works {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  width: 100%;
+}
+
+.lp-works li {
+  position: relative;
+  aspect-ratio: 646 / 540;
+}
+
+.lp-works a {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+/* 마우스를 올리거나 키보드로 고르면 조금 떠오른다 */
+.lp-works a:hover,
+.lp-works a:focus-visible {
+  z-index: 2;
+  box-shadow: 0 16px 32px rgb(0 0 0 / 0.16);
+  transform: translateY(-8px);
+}
+
+.lp-works .ls-slot {
+  padding: 26px;
+}
+
+.lp-works-info {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 3;
+  padding: 0 26px 32px;
+}
+
+.lp-works-info strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 120%;
+  text-transform: uppercase;
+}
+
+.lp-works-info p {
+  width: 100%;
+  overflow: hidden;
+  font-family: var(--font-pretendard), "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-size: 14px;
+  line-height: 130%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lp-works a {
+    transition: box-shadow 0.3s ease;
+  }
+
+  .lp-works a:hover,
+  .lp-works a:focus-visible {
+    transform: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .lp-works {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── 푸터 ──
+ * 위 큰 여백 → 굵은 선 + 네 칸(칸 사이 얇은 세로선) → 저작권·정책 한 줄
+ */
+.lp-footer {
+  position: relative;
+  z-index: 10;
+  padding: 200px 32px 24px;
+  background: #f8f8f8;
+  color: #000;
+  font-family: var(--font-big-shoulders), "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+}
+
+.lp-footer-cols {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr 1fr 1fr;
+  border-top: 2px solid #000;
+}
+
+.lp-footer-cols > * {
+  padding: 32px 32px 48px;
+}
+
+.lp-footer-cols > *:first-child {
+  padding-left: 0;
+}
+
+.lp-footer-cols > * + * {
+  border-left: 1px solid rgb(0 0 0 / 0.2);
+}
+
+.lp-footer-brand img {
+  width: 180px;
+  height: auto;
+}
+
+.lp-footer-brand p {
+  margin-top: 16px;
+  font-family: var(--font-pretendard), "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-size: 14px;
+  line-height: 150%;
+  opacity: 0.7;
+}
+
+.lp-footer-label {
+  margin-bottom: 20px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.5;
+}
+
+.lp-footer-menu {
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
+  gap: 8px 32px;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 120%;
+  text-transform: uppercase;
+}
+
+.lp-footer a:hover,
+.lp-footer a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.lp-footer-dl {
+  font-family: var(--font-pretendard), "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-size: 14px;
+  line-height: 150%;
+}
+
+.lp-footer-dl > div {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px dashed rgb(0 0 0 / 0.25);
+}
+
+.lp-footer-dl > div:first-child {
+  padding-top: 0;
+}
+
+.lp-footer-dl dt {
+  opacity: 0.5;
+}
+
+.lp-footer-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  padding: 6px 10px;
+  background: #000;
+  color: #fff;
+  font-family: var(--font-pretendard), "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.lp-footer-cta svg {
+  width: 10px;
+  height: 10px;
+}
+
+.lp-footer-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px 32px;
+  padding-top: 16px;
+  border-top: 1px solid #000;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.lp-footer-policy {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 24px;
+  font-family: var(--font-pretendard), "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  text-transform: none;
+}
+
+@media (max-width: 1280px) {
+  .lp-footer-cols {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .lp-footer-cols > *:nth-child(3) {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .lp-footer-cols > *:nth-child(n + 3) {
+    border-top: 1px solid rgb(0 0 0 / 0.2);
+  }
+}
+
+@media (max-width: 1023px) {
+  .lp-works {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .lp-works .ls-slot {
+    padding: 16px;
+  }
+
+  .lp-works-info {
+    padding: 0 16px 20px;
+  }
+
+  .lp-works-info strong {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .lp-footer {
+    padding: 120px 16px 20px;
+  }
+
+  .lp-footer-cols {
+    grid-template-columns: 1fr;
+  }
+
+  .lp-footer-cols > *,
+  .lp-footer-cols > *:first-child,
+  .lp-footer-cols > *:nth-child(3) {
+    padding: 24px 0;
+    border-left: 0;
+  }
+
+  .lp-footer-cols > * + * {
+    border-top: 1px solid rgb(0 0 0 / 0.2);
+  }
+
+  .lp-footer-menu {
+    font-size: 18px;
+  }
+
+  .lp-footer-bottom {
+    flex-direction: column;
+    font-size: 13px;
+  }
+}

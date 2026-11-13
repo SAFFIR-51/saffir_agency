@@ -20,7 +20,7 @@ export type PlanRow = {
  * - checkout 상품: 주문서로 (월 요금이 있으면 "구독하기", 없으면 "결제하기")
  * - 나머지: 상담으로. 상품의 consult 유형, 없으면 표의 기본 유형을 미리 골라 보낸다
  */
-type PlanActions = {
+export type PlanActions = {
   consultFallback: ContactTopic;
   consultLabel?: string;
   /** 0원 상품의 버튼 (예: GEO 무료 → 무료 진단) */
@@ -41,17 +41,19 @@ function PlanButton({
   );
 }
 
-function planAction(plan: PlanRow, actions: PlanActions) {
-  if (actions.free && plan.monthly === 0) {
-    return <PlanButton href={actions.free.href}>{actions.free.label}</PlanButton>;
-  }
+/** 상품별 버튼의 주소와 이름 (요금표·요금 카드 공통 규칙) */
+export function planLink(plan: PlanRow, actions: PlanActions) {
+  if (actions.free && plan.monthly === 0) return actions.free;
   if (plan.checkout) {
-    return (
-      <PlanButton href={routes.order(plan.id)}>{plan.monthly ? "구독하기" : "결제하기"}</PlanButton>
-    );
+    return { href: routes.order(plan.id), label: plan.monthly ? "구독하기" : "결제하기" };
   }
   const topic = isContactTopic(plan.consult) ? plan.consult : actions.consultFallback;
-  return <PlanButton href={routes.contactFor(topic)}>{actions.consultLabel ?? "상담"}</PlanButton>;
+  return { href: routes.contactFor(topic), label: actions.consultLabel ?? "상담" };
+}
+
+function planAction(plan: PlanRow, actions: PlanActions) {
+  const link = planLink(plan, actions);
+  return <PlanButton href={link.href}>{link.label}</PlanButton>;
 }
 
 function price(value: number | null | undefined) {

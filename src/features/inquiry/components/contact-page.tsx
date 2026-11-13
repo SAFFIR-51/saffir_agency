@@ -1,30 +1,18 @@
-import Link from "next/link";
 import { Suspense } from "react";
-import { DataTable, PageHeader, Section, WireBox } from "@/shared/ui";
-import { contactContent as c, contactTypes } from "../model/content";
-import { ContactForm } from "./contact-form";
+import { PageHead } from "@/shared/ui";
+import { contactContent as c } from "../model/content";
+import { ContactInquiry } from "./contact-inquiry";
+import { QuickInquiry } from "./quick-inquiry";
 
+/** 문의 페이지: 머리 → 문의 폼 */
 export function ContactPage() {
   return (
-    <>
-      <PageHeader title={c.title} lead={c.lead} />
-      <Section label="S2 · 문의 유형" title="어떤 상담이 필요하세요?">
-        <DataTable
-          columns={["문의 유형", "자세히 보기"]}
-          rows={contactTypes.map((t) => [
-            t.label,
-            <Link key={t.label} href={t.href} className="underline underline-offset-4">
-              보기
-            </Link>,
-          ])}
-        />
-      </Section>
-      <Section label="S3 · 문의서" title="문의 남기기">
-        {/* 주소의 ?type= 값을 읽으므로 Suspense 안에서 그린다 */}
-        <Suspense fallback={<WireBox label="문의서" size="lg" />}>
-          <ContactForm />
-        </Suspense>
-      </Section>
-    </>
+    <div className="lc">
+      <PageHead eyebrow={c.eyebrow} lead={c.lead} />
+      {/* 주소의 ?type= 값을 읽으므로 Suspense 안에서 그린다. 그 전에는 빈 폼 */}
+      <Suspense fallback={<QuickInquiry source="contact" heading={c.form} plain />}>
+        <ContactInquiry />
+      </Suspense>
+    </div>
   );
 }

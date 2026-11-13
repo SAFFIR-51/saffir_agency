@@ -1,0 +1,575 @@
+/*
+ * 메인·회사 소개 공통 섹션 (큰 영문 제목 + 한글 부제 + 영/한 설명).
+ * 글꼴 변수(--font-big-shoulders, --font-pretendard)는 레이아웃에서 건다.
+ * 영문 글꼴에 한글이 없어서 한글은 자동으로 Pretendard로 보인다.
+ */
+.ls-sec {
+  padding: 160px 0;
+  background: #f8f8f8;
+  color: #000;
+  font-family:
+    var(--font-big-shoulders), var(--font-pretendard), "Apple SD Gothic Neo", "Malgun Gothic",
+    sans-serif;
+}
+
+.ls-sec[data-tone="dark"] {
+  background: #000;
+  color: #fff;
+}
+
+.ls-inner {
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+.ls-head {
+  margin-bottom: 64px;
+}
+
+/* 크기 위계: 첫 화면 한글 제목 64 ≥ 섹션 영문 제목 64(좁은 글꼴) > 한글 부제 32 > 설명 20 */
+.ls-title {
+  font-size: 64px;
+  font-weight: 900;
+  line-height: 110%;
+  letter-spacing: -1.5px;
+  text-transform: uppercase;
+}
+
+.ls-head .ls-title:not(:last-child) {
+  margin-bottom: 20px;
+}
+
+.ls-sub {
+  margin-bottom: 8px;
+  font-size: 32px;
+  font-weight: 900;
+  line-height: 125%;
+  letter-spacing: -0.5px;
+  text-transform: uppercase;
+}
+
+/* compact 머리: 작은 영문 라벨 + 큰 한글 제목 (세부 페이지) */
+.ls-sec[data-size="compact"] {
+  padding: 120px 0;
+}
+
+.ls-sec[data-size="compact"] .ls-head {
+  margin-bottom: 48px;
+}
+
+.ls-label {
+  margin-bottom: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.5;
+}
+
+.ls-h2 {
+  font-family: var(--font-pretendard), "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 135%;
+  letter-spacing: -0.02em;
+  word-break: keep-all;
+}
+
+.ls-sec[data-size="compact"] .ls-desc .ls-ko {
+  font-size: 16px;
+  opacity: 0.6;
+}
+
+/* 부제 + 오른쪽 버튼 한 줄 */
+.ls-sub-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 24px;
+}
+
+.ls-sub-row .ls-sub {
+  margin-bottom: 0;
+}
+
+.ls-desc {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  row-gap: 12px;
+  max-width: 960px;
+  margin-top: 20px;
+}
+
+.ls-desc p,
+.ls-en {
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 130%;
+}
+
+.ls-desc .ls-ko,
+.ls-ko {
+  font-family: var(--font-pretendard), "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-size: 14px;
+  line-height: 130%;
+}
+
+/* 검정 글자 버튼 (CONTACT 버튼과 같은 모양, 크기만 작게) */
+.ls-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 14px 8px 12px;
+  background: #000;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 100%;
+  text-transform: uppercase;
+  transition: background 0.3s ease-in-out;
+}
+
+.ls-btn:hover,
+.ls-btn:focus-visible {
+  background: #333;
+}
+
+.ls-sec[data-tone="dark"] .ls-btn {
+  background: #fff;
+  color: #000;
+}
+
+.ls-sec[data-tone="dark"] .ls-btn:hover,
+.ls-sec[data-tone="dark"] .ls-btn:focus-visible {
+  background: #ddd;
+}
+
+.ls-btn svg {
+  width: 9px;
+  height: 16px;
+}
+
+.ls-btn[data-variant="line"] {
+  outline: 1px solid currentColor;
+  outline-offset: -1px;
+  background: transparent;
+  color: inherit;
+}
+
+.ls-sec[data-tone="dark"] .ls-btn[data-variant="line"] {
+  background: transparent;
+  color: #fff;
+}
+
+/* ── 이미지 빈 칸 ── */
+.ls-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  width: 100%;
+  height: 100%;
+  padding: 16px;
+  outline: 1px solid rgb(0 0 0 / 0.25);
+  outline-offset: -1px;
+  background: hsl(0 0% var(--slot-tone, 86%));
+  color: #555;
+}
+
+.ls-slot-tag {
+  font-family: var(--font-big-shoulders), sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.ls-slot-label {
+  font-family: var(--font-pretendard), "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-size: 14px;
+  line-height: 130%;
+}
+
+@media (max-width: 1023px) {
+  .ls-sec {
+    padding: 60px 0;
+  }
+
+  .ls-inner {
+    padding: 0 16px;
+  }
+
+  .ls-head {
+    margin-bottom: 40px;
+  }
+
+  .ls-sec[data-size="compact"] {
+    padding: 64px 0;
+  }
+
+  .ls-sec[data-size="compact"] .ls-head {
+    margin-bottom: 28px;
+  }
+
+  .ls-h2 {
+    font-size: 26px;
+  }
+
+  .ls-title {
+    font-size: 32px;
+    letter-spacing: -1px;
+  }
+
+  .ls-sub {
+    font-size: 24px;
+    letter-spacing: -0.5px;
+  }
+
+  .ls-desc p,
+  .ls-en {
+    font-size: 16px;
+  }
+
+  .ls-desc .ls-ko,
+  .ls-ko {
+    font-size: 12px;
+  }
+
+  .ls-btn {
+    font-size: 18px;
+  }
+
+  .ls-slot {
+    padding: 10px;
+  }
+
+  .ls-slot-tag,
+  .ls-slot-label {
+    font-size: 11px;
+  }
+}
+
+/* ── 요금 카드 (상품마다 한 장) ── */
+.pc-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+.pc {
+  display: flex;
+  flex-direction: column;
+  padding: 28px 24px 24px;
+  border: 1px solid #000;
+  background: #fff;
+}
+
+.pc-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.pc-name {
+  margin-right: auto;
+  font-family: var(--font-pretendard), "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 135%;
+  word-break: keep-all;
+}
+
+.pc-badge {
+  padding: 3px 8px;
+  background: #121221;
+  color: #fff;
+  font-family: var(--font-pretendard), "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.pc-prices {
+  margin-top: 20px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #000;
+}
+
+.pc-price {
+  font-size: 40px;
+  font-weight: 900;
+  line-height: 120%;
+  letter-spacing: -0.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.pc-price small {
+  margin-right: 8px;
+  font-family: var(--font-pretendard), "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0;
+  opacity: 0.6;
+}
+
+.pc-includes {
+  margin: 16px 0 24px;
+  font-family: var(--font-pretendard), "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-size: 15px;
+  line-height: 150%;
+}
+
+.pc-includes li {
+  position: relative;
+  padding: 6px 0 6px 18px;
+}
+
+.pc-includes li::before {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: 2px;
+  width: 8px;
+  height: 2px;
+  background: #000;
+}
+
+.pc-btn {
+  justify-content: space-between;
+  margin-top: auto;
+  font-family: var(--font-pretendard), "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+@media (max-width: 1023px) {
+  .pc-price {
+    font-size: 32px;
+  }
+}
+
+/* ── 바로 써 보는 상자 (진단·검사) ── */
+.tb {
+  scroll-margin-top: 100px;
+  padding: 32px;
+  background: #121221;
+  color: #fff;
+  font-family: var(--font-pretendard), "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+}
+
+.tb-title {
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 140%;
+}
+
+.tb-label {
+  display: block;
+  margin-top: 20px;
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+.tb-input {
+  display: block;
+  width: 100%;
+  min-height: 60px;
+  margin-top: 8px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 0;
+  background: #fff;
+  color: #000;
+  font-size: 18px;
+}
+
+.tb-textarea {
+  min-height: 160px;
+  padding: 16px 18px;
+  line-height: 160%;
+  resize: vertical;
+}
+
+.tb-input:focus-visible {
+  outline: 3px solid #8b8bff;
+  outline-offset: 0;
+}
+
+.tb-btn {
+  width: 100%;
+  margin-top: 12px;
+  padding: 18px;
+  background: #fff;
+  color: #000;
+  font-size: 18px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.tb-btn:hover,
+.tb-btn:focus-visible {
+  background: #ddd;
+}
+
+.tb-status:not(:empty) {
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: rgb(255 255 255 / 0.12);
+  font-size: 14px;
+}
+
+.tb-notes {
+  margin-top: 16px;
+  font-size: 13px;
+  line-height: 160%;
+  opacity: 0.7;
+}
+
+.tb-notes li::before {
+  content: "· ";
+}
+
+@media (max-width: 1023px) {
+  .tb {
+    padding: 24px 20px;
+  }
+
+  .tb-title {
+    font-size: 20px;
+  }
+}
+
+/* ── 페이지 첫 화면 머리 (PageHead) ── */
+.ph {
+  padding: 160px 0 0;
+}
+
+.ph-eyebrow {
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ph-title,
+.ph-lead {
+  font-family: var(--font-pretendard), "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  word-break: keep-all;
+}
+
+.ph-title {
+  margin-top: 16px;
+  font-size: 64px;
+  font-weight: 800;
+  line-height: 125%;
+  letter-spacing: -0.02em;
+}
+
+.ph-lead {
+  max-width: 720px;
+  margin-top: 24px;
+  font-size: 20px;
+  line-height: 160%;
+  opacity: 0.75;
+}
+
+@media (max-width: 1023px) {
+  .ph {
+    padding: 120px 0 0;
+  }
+
+  .ph-eyebrow {
+    font-size: 18px;
+  }
+
+  .ph-title {
+    font-size: 36px;
+  }
+
+  .ph-lead {
+    font-size: 17px;
+  }
+}
+
+/*
+ * ── 깔끔한 페이지 (요금·문의·포트폴리오): <div className="lc"> 안에서 ──
+ * 영문 큰 글꼴 대신 Pretendard, 제목·버튼 크기를 줄이고 섹션 사이를 좁힌다.
+ */
+.lc .ls-sec,
+.lc .ls-btn,
+.lc .ls-label,
+.lc .ph-eyebrow {
+  font-family: var(--font-pretendard), "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+}
+
+.lc .ph-eyebrow {
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  opacity: 0.6;
+}
+
+.lc .ph-title {
+  margin-top: 12px;
+  font-size: 40px;
+}
+
+.lc .ph-lead {
+  font-size: 17px;
+}
+
+.lc .ls-sec[data-size="compact"] {
+  padding: 96px 0 0;
+}
+
+.lc > .ls-sec[data-size="compact"]:last-child,
+.lc > :last-child .ls-sec[data-size="compact"] {
+  padding-bottom: 160px;
+}
+
+.lc .ls-sec[data-size="compact"] .ls-head {
+  margin-bottom: 40px;
+}
+
+.lc .ls-label {
+  font-size: 14px;
+  letter-spacing: 0.04em;
+}
+
+.lc .ls-h2 {
+  font-size: 32px;
+}
+
+.lc .ls-btn {
+  padding: 10px 16px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.lc .ls-btn svg {
+  width: 6px;
+  height: 11px;
+}
+
+@media (max-width: 1023px) {
+  .lc .ph-title {
+    font-size: 28px;
+  }
+
+  .lc .ls-sec[data-size="compact"] {
+    padding-top: 64px;
+  }
+
+  .lc .ls-h2 {
+    font-size: 24px;
+  }
+}
+
+/* 큰 한글 제목이 없는 페이지: 영문 라벨이 h1 */
+.lc h1.ph-eyebrow {
+  font-size: 20px;
+  font-weight: 700;
+  opacity: 1;
+}

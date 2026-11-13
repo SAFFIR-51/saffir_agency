@@ -104,6 +104,3 @@ export const techLabels: Record<Tech, string> = {
   iot: "IoT",
   erp: "ERP",
 };
-
-/** 업종 필터 (기획서: 의료, 커머스, 라이프스타일 등) */
-export const industryFilters = ["의료", "커머스", "라이프스타일"];

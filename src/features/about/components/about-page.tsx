@@ -1,68 +1,161 @@
-import { businessModels, workflow } from "@/content/company";
-import { portfolioItems } from "@/content/portfolio";
-import { routes, site } from "@/shared/config";
-import { ButtonLink, DataTable, PageHeader, Section, WireBox } from "@/shared/ui";
+import Link from "next/link";
+import { ImageSlot, LandingSection } from "@/shared/ui";
 import { aboutContent as c } from "../model/content";
+import "./about.css";
+
+/** 핵심 가치 아래에 붙는 선 그림 3종 (장식) */
+function ValueMark({ index }: { index: number }) {
+  const rays = Array.from({ length: 18 }, (_, i) => {
+    const a = (i / 18) * Math.PI;
+    const dx = Math.cos(a) * 270;
+    const dy = Math.sin(a) * 270;
+    return `M${270 - dx} ${270 - dy}L${270 + dx} ${270 + dy}`;
+  }).join("");
+  return (
+    <svg viewBox="0 0 540 540" fill="none" stroke="currentColor" aria-hidden="true">
+      {index === 0 ? (
+        <>
+          <path d={rays} />
+          <circle cx={270} cy={270} r={56} fill="#f8f8f8" />
+        </>
+      ) : null}
+      {index === 1
+        ? [250, 200, 150, 100, 50].map((r, i) => (
+            <circle key={r} cx={270 - i * 30} cy={270} r={r} />
+          ))
+        : null}
+      {index === 2
+        ? Array.from({ length: 7 }, (_, i) => (
+            <rect
+              key={i}
+              x={20 + i * 25}
+              y={20 + i * 25}
+              width={500 - i * 50}
+              height={500 - i * 50}
+            />
+          ))
+        : null}
+    </svg>
+  );
+}
 
 export function AboutPage() {
-  const b = site.business;
   return (
-    <>
-      <PageHeader eyebrow={c.eyebrow} title={c.title} lead={c.lead}>
-        <WireBox label="이미지 · 사무실 또는 팀" size="lg" />
-      </PageHeader>
+    <div className="ab">
+      {/* 첫 화면: 큰 제목 + 넓은 이미지 칸 */}
+      <section className="ab-hero ls-sec" aria-labelledby="about-title">
+        <div className="ls-inner">
+          <h1 id="about-title" className="ls-title ab-hero-title" lang="en">
+            {c.hero.title[0]}
+            <br />
+            {c.hero.title[1]}
+          </h1>
+          <div className="ab-hero-media">
+            <ImageSlot label={c.hero.slot} />
+          </div>
+        </div>
+      </section>
 
-      <Section label="S2 · 하는 일" title={c.lines.title}>
-        <DataTable
-          columns={["방식", "무엇을", "어떻게"]}
-          rows={businessModels.map((m) => [m.type, m.products, m.delivery])}
-        />
-      </Section>
+      {/* 우리는 누구인가 */}
+      <LandingSection
+        id="about-who"
+        title={c.who.title}
+        subtitle={c.who.subtitle}
+        en={c.who.en}
+        ko={c.who.ko}
+      />
 
-      <Section label="S3 · 숫자" title={c.numbers.title}>
-        <DataTable
-          columns={["항목", "값"]}
-          rows={[
-            ["포트폴리오", `${portfolioItems.length}건`],
-            ["운영 중인 고객사", "[ 숫자 ]"],
-            ["설립", "[ 연도 ]"],
-          ]}
-        />
-      </Section>
+      {/* 핵심 가치 3가지 */}
+      <LandingSection id="about-values" title={c.values.title}>
+        <ul className="ab-values">
+          {c.values.items.map((item, i) => (
+            <li key={item.title}>
+              <h3 className="ls-sub" lang="en">
+                {item.title}
+              </h3>
+              <div className="ls-desc">
+                <p lang="en">{item.en}</p>
+                <p className="ls-ko">{item.ko}</p>
+              </div>
+              <div className="ab-value-mark">
+                <ValueMark index={i} />
+              </div>
+            </li>
+          ))}
+        </ul>
+      </LandingSection>
 
-      <Section label="S4 · 일하는 방식" title={c.workflow.title}>
-        <DataTable
-          columns={["단계", "내용"]}
-          rows={workflow.map((w, index) => [`${index + 1}. ${w.step}`, w.detail])}
-        />
-      </Section>
+      {/* 비전: 왼쪽 두 항목, 오른쪽 이미지 칸 */}
+      <LandingSection id="about-vision" title={c.vision.title}>
+        <div className="ab-vision">
+          <ul className="ab-vision-list">
+            {c.vision.items.map((item) => (
+              <li key={item.title[0]}>
+                <h3 className="ls-sub" lang="en">
+                  {item.title[0]}
+                  <br />
+                  {item.title[1]}
+                </h3>
+                <div className="ls-desc">
+                  <p lang="en">{item.en}</p>
+                  <p className="ls-ko">{item.ko}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+          <div className="ab-vision-media">
+            <ImageSlot label={c.vision.slot} tone={6} />
+          </div>
+        </div>
+      </LandingSection>
 
-      <Section label="S5 · 연혁" title={c.history.title}>
-        <DataTable columns={["연도", "내용"]} rows={[["[ 연도 ]", "[ 내용 ]"]]} />
-      </Section>
+      {/* 하는 일: 검은 배경, 정사각형 카드 6장 */}
+      <LandingSection
+        id="about-what"
+        title={c.what.title}
+        subtitle={c.what.subtitle}
+        ko={c.what.ko}
+      >
+        <ul className="ab-cards">
+          {c.what.cards.map((card, i) => (
+            <li key={card.title}>
+              <Link href={card.href}>
+                <ImageSlot label={card.slot} tone={i % 3} />
+                <div className="ab-card-info">
+                  <strong lang="en">{card.title}</strong>
+                  <div className="ab-card-desc">
+                    <p lang="en">{card.en}</p>
+                    <p className="ls-ko">{card.ko}</p>
+                  </div>
+                </div>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </LandingSection>
 
-      <Section label="S6 · 회사 정보" title={c.info.title}>
-        <DataTable
-          columns={["항목", "내용"]}
-          rows={[
-            ["상호", site.legalName],
-            ["대표", b.ceo],
-            ["사업자등록번호", b.registrationNumber],
-            ["통신판매업 신고번호", b.mailOrderNumber],
-            ["주소", b.address],
-            ["이메일", b.email],
-            ["전화", b.phone],
-          ]}
-        />
-      </Section>
-
-      <Section label="S7 · 위치" title={c.location.title}>
-        <WireBox label="지도" size="lg" />
-      </Section>
-
-      <Section label="S8 · 상담" title={c.closing.title} description={c.closing.description}>
-        <ButtonLink href={routes.contact}>{c.closing.cta}</ButtonLink>
-      </Section>
-    </>
+      {/* 정체성: 설명 + 이미지 칸 두 개 */}
+      <section className="ab-identity ls-sec" aria-labelledby="about-identity">
+        <div className="ls-inner">
+          <h2 id="about-identity" className="ls-title" lang="en">
+            {c.identity.title}
+          </h2>
+          <div className="ls-desc ab-identity-desc">
+            <h3 className="ls-sub" lang="en">
+              {c.identity.subtitle}
+            </h3>
+            <p lang="en">{c.identity.en}</p>
+            <p className="ls-ko">{c.identity.ko}</p>
+          </div>
+          <div className="ab-banners">
+            {c.identity.slots.map((slot, i) => (
+              <div key={slot} className="ab-banner">
+                <ImageSlot label={slot} tone={i * 3} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }

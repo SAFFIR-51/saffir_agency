@@ -1,0 +1,183 @@
+/*
+ * 포트폴리오 목록·상세. 공통 섹션 모양은 shared/ui/landing/landing.css.
+ * 카드는 메인 "Our work"와 같은 비율·떠오름.
+ */
+.pf-list {
+  padding: 64px 0 0;
+}
+
+.pf-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 48px;
+}
+
+.pf-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  outline: 1px solid rgb(0 0 0 / 0.2);
+  outline-offset: -1px;
+  background: transparent;
+  font-family: var(--font-pretendard), "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pf-filter span {
+  opacity: 0.5;
+}
+
+.pf-filter[aria-pressed="true"] {
+  background: #000;
+  color: #fff;
+}
+
+.pf-filter[aria-pressed="true"] {
+  outline-color: #000;
+}
+
+.pf-filter:hover:not([aria-pressed="true"]) {
+  outline-color: #000;
+}
+
+.pf-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 48px 16px;
+}
+
+.pf-card {
+  display: block;
+}
+
+.pf-card-media {
+  aspect-ratio: 646 / 540;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.pf-card-media .ls-slot {
+  height: 100%;
+}
+
+.pf-card:hover .pf-card-media,
+.pf-card:focus-visible .pf-card-media {
+  box-shadow: 0 8px 20px rgb(0 0 0 / 0.08);
+  transform: translateY(-4px);
+}
+
+.pf-card-group {
+  margin-top: 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.pf-card-group,
+.pf-card-title,
+.pf-card-tech,
+.pf-dl {
+  font-family: var(--font-pretendard), "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+}
+
+.pf-card-title {
+  margin-top: 4px;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 140%;
+}
+
+.pf-card-tech {
+  margin-top: 2px;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.pf-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.pf-head-actions {
+  margin-top: 40px;
+}
+
+/* ── 상세 ── */
+.pf-detail {
+  padding: 56px 0 0;
+}
+
+/* 같은 분야 목록이 없을 때 페이지 아래 여백 */
+.pf > .pf-detail:last-child {
+  padding-bottom: 160px;
+}
+
+.pf-cover {
+  aspect-ratio: 16 / 7;
+}
+
+.pf-cover .ls-slot {
+  height: 100%;
+}
+
+.pf-dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 64px;
+}
+
+.pf-dl > div {
+  padding-top: 16px;
+  border-top: 1px solid #000;
+}
+
+.pf-dl dt {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.pf-dl dd {
+  margin-top: 12px;
+  font-size: 16px;
+  line-height: 170%;
+  opacity: 0.5;
+}
+
+@media (max-width: 1023px) {
+  .pf-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px 12px;
+  }
+
+  .pf-list {
+    padding-top: 48px;
+  }
+
+  .pf-cover {
+    aspect-ratio: 4 / 3;
+  }
+
+  .pf-dl {
+    grid-template-columns: 1fr;
+    margin-top: 40px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-card-media {
+    transition: box-shadow 0.3s ease;
+  }
+
+  .pf-card:hover .pf-card-media,
+  .pf-card:focus-visible .pf-card-media {
+    transform: none;
+  }
+}

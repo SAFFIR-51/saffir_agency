@@ -1,0 +1,382 @@
+/*
+ * 병원 솔루션 허브. 공통 섹션 모양은 shared/ui/landing/landing.css.
+ * 읽기 쉬움 우선: 한글은 Pretendard, 본문 16~20px, 줄 간격 1.6, 한 줄 길이 제한.
+ */
+.hp {
+  padding-top: 80px;
+  background: #f8f8f8;
+}
+
+.hp-ko,
+.hp-title,
+.hp-lead,
+.hp-service-name,
+.hp-service-msg,
+.hp-service-points,
+.hp-journey-step,
+.hp-journey-detail,
+.hp-journey-service,
+.hp-statement,
+.hp-bundle {
+  font-family: var(--font-pretendard), "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+}
+
+/* ── 첫 화면 ── */
+.hp-hero {
+  padding: 80px 0 0;
+}
+
+.hp-eyebrow {
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.hp-title {
+  margin-top: 16px;
+  font-size: 64px;
+  font-weight: 800;
+  line-height: 125%;
+  letter-spacing: -0.02em;
+  word-break: keep-all;
+}
+
+.hp-lead {
+  max-width: 720px;
+  margin-top: 24px;
+  font-size: 20px;
+  line-height: 160%;
+  opacity: 0.75;
+}
+
+.hp-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 40px;
+}
+
+.hp-hero-media {
+  margin-top: 64px;
+  aspect-ratio: 16 / 5;
+}
+
+/* ── 서비스 4가지 ── */
+.hp-services {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.hp-service {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding-top: 24px;
+  border-top: 1px solid #000;
+}
+
+.hp-service-no {
+  font-size: 20px;
+  font-weight: 600;
+  opacity: 0.5;
+}
+
+.hp-service-name {
+  margin-top: 16px;
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 135%;
+  word-break: keep-all;
+}
+
+.hp-service-msg {
+  margin-top: 8px;
+  font-size: 16px;
+  line-height: 160%;
+  opacity: 0.75;
+  word-break: keep-all;
+}
+
+.hp-service-price {
+  margin-top: 20px;
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.hp-service-points {
+  margin-top: 16px;
+  border-top: 1px solid rgb(0 0 0 / 0.15);
+  font-size: 15px;
+  line-height: 150%;
+}
+
+.hp-service-points li {
+  padding: 10px 0;
+  border-bottom: 1px solid rgb(0 0 0 / 0.15);
+}
+
+.hp-service-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 24px;
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.hp-service-more svg {
+  width: 8px;
+  height: 14px;
+}
+
+.hp-service:hover .hp-service-name,
+.hp-service:focus-visible .hp-service-name {
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+
+/* 서비스 아래 요금 원칙 한 줄 */
+.hp-principle {
+  margin-top: 56px;
+  padding: 4px 0 4px 20px;
+  border-left: 3px solid #000;
+  font-family: var(--font-pretendard), "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 150%;
+  word-break: keep-all;
+}
+
+/* ── 고객 흐름: 표처럼 한 줄씩 ── */
+.hp-journey {
+  border-top: 1px solid #000;
+}
+
+.hp-journey li {
+  display: grid;
+  grid-template-columns: 96px 220px minmax(0, 1fr) 260px;
+  align-items: baseline;
+  gap: 24px;
+  padding: 28px 0;
+  border-bottom: 1px solid rgb(0 0 0 / 0.15);
+}
+
+.hp-journey-no {
+  font-size: 40px;
+  font-weight: 900;
+  line-height: 100%;
+}
+
+.hp-journey-step {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.hp-journey-detail {
+  font-size: 17px;
+  line-height: 160%;
+  word-break: keep-all;
+}
+
+.hp-journey-service {
+  justify-self: end;
+  font-size: 14px;
+  text-align: right;
+  opacity: 0.6;
+}
+
+/* ── 차별점 ── */
+.hp-statement {
+  max-width: 960px;
+  font-size: 26px;
+  font-weight: 500;
+  line-height: 165%;
+  word-break: keep-all;
+}
+
+/* ── 패키지 ── */
+.hp-bundle {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 48px;
+  padding: 40px;
+  border: 2px solid #000;
+  background: #fff;
+}
+
+.hp-bundle-info > div {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px dashed rgb(0 0 0 / 0.3);
+  font-size: 18px;
+  line-height: 160%;
+}
+
+.hp-bundle-info > div:first-child {
+  padding-top: 0;
+}
+
+.hp-bundle-info dt {
+  opacity: 0.5;
+}
+
+/* 패키지 혜택: 가장 강한 판매 포인트라 눈에 띄게 */
+.hp-bundle-benefit {
+  margin-top: 24px;
+  padding: 16px 20px;
+  background: #121221;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 150%;
+  word-break: keep-all;
+}
+
+.hp-bundle-price {
+  text-align: right;
+}
+
+.hp-bundle-separate {
+  font-size: 16px;
+  opacity: 0.6;
+}
+
+.hp-bundle-now {
+  margin-top: 4px;
+  font-family: var(--font-big-shoulders), var(--font-pretendard), sans-serif;
+  font-size: 64px;
+  font-weight: 900;
+  line-height: 110%;
+  letter-spacing: -1px;
+}
+
+.hp-bundle-now small {
+  margin-right: 8px;
+  font-family: var(--font-pretendard), sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.hp-bundle-vat {
+  margin-top: 8px;
+  font-size: 13px;
+  opacity: 0.6;
+}
+
+@media (max-width: 1400px) {
+  .hp-services {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 48px 32px;
+  }
+
+  .hp-journey li {
+    grid-template-columns: 72px 180px minmax(0, 1fr);
+  }
+
+  .hp-journey-service {
+    grid-column: 3;
+    justify-self: start;
+    text-align: left;
+  }
+}
+
+@media (max-width: 1023px) {
+  .hp {
+    padding-top: 64px;
+  }
+
+  .hp-hero {
+    padding-top: 40px;
+  }
+
+  .hp-eyebrow {
+    font-size: 18px;
+  }
+
+  .hp-title {
+    font-size: 34px;
+  }
+
+  .hp-lead {
+    font-size: 16px;
+  }
+
+  .hp-hero-media {
+    margin-top: 40px;
+    aspect-ratio: 4 / 3;
+  }
+
+  .hp-services {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .hp-service-name {
+    font-size: 22px;
+  }
+
+  .hp-journey li {
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 4px 16px;
+    padding: 20px 0;
+  }
+
+  .hp-journey-no {
+    grid-row: span 3;
+    font-size: 28px;
+  }
+
+  .hp-journey-step,
+  .hp-journey-detail,
+  .hp-journey-service {
+    grid-column: 2;
+  }
+
+  .hp-journey-step {
+    font-size: 18px;
+  }
+
+  .hp-journey-detail {
+    font-size: 15px;
+  }
+
+  .hp-statement {
+    font-size: 19px;
+  }
+
+  .hp-principle {
+    font-size: 18px;
+  }
+
+  .hp-bundle-benefit {
+    padding: 16px;
+    font-size: 17px;
+  }
+
+  .hp-bundle {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 24px 20px;
+  }
+
+  .hp-bundle-info > div {
+    grid-template-columns: 1fr;
+    gap: 2px;
+    font-size: 15px;
+  }
+
+  .hp-bundle-price {
+    text-align: left;
+  }
+
+  .hp-bundle-now {
+    font-size: 44px;
+  }
+}

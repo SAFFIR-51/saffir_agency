@@ -47,8 +47,12 @@ export type DoneContent = {
 };
 
 export const contactContent = {
-  title: "문의",
-  lead: "필요한 상담을 고르고 내용을 남겨 주세요.",
+  eyebrow: "Contact",
+  lead: `필요한 상담을 고르고 내용을 남겨 주시면 ${replyTime}에 연락드립니다.`,
+  form: {
+    subtitle: "문의 남기기",
+    lead: "아직 정해진 게 없어도 괜찮습니다. 지금 상황만 들려주세요.",
+  },
   done: {
     title: "문의가 접수됐습니다",
     description: `${replyTime}에 남겨 주신 연락처로 연락드립니다.`,
@@ -74,4 +78,34 @@ export const estimateContent = {
       { step: "포털 계정", detail: "주간 보고와 진행 현황을 포털에서 봅니다." },
     ],
   } satisfies DoneContent,
+};
+
+/** 메인 맨 아래 바로 쓰는 문의 폼 문구. 질문마다 영문 + 한글 */
+export const quickInquiryContent = {
+  title: "Start your project",
+  subtitle: "어디서부터 시작할지 모르겠다면",
+  lead: "지금 상황을 들려주시면 맞는 방법을 안내해 드립니다.",
+  questions: {
+    who: {
+      en: "Please let us know your name and organization.",
+      ko: "성함과 병원명 또는 회사명을 알려 주세요.",
+    },
+    phone: { en: "How can we reach you?", ko: "연락받으실 번호를 알려 주세요." },
+    type: { en: "What do you need?", ko: "어떤 상담이 필요하세요?" },
+    message: {
+      en: "Please briefly describe your project.",
+      ko: "프로젝트에 관해 간단히 설명해 주세요. (요구사항, 필요한 기능, 참고 사이트 등)",
+    },
+  },
+  placeholders: {
+    contactName: "담당자 이름*",
+    organization: "병원명 또는 회사명*",
+    phone: "연락처* 예) 010-1234-5678",
+    type: "문의 유형을 골라 주세요*",
+    message: "문의 내용*",
+  },
+  submit: "Send",
+  sending: "Sending…",
+  plainSubmit: "문의 보내기",
+  plainSending: "보내는 중…",
 };
