@@ -7,10 +7,53 @@
 }
 
 @theme inline {
+  --ease-menu: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-pretendard), "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
   --font-mono: var(--font-geist-mono);
+
+  /* Delight.ai 한국어판 기준. 제목은 화면 크기에 맞는 토큰을 사용한다. */
+  --text-copy: 1rem;
+  --text-copy--line-height: 1.5;
+  --text-copy--letter-spacing: -0.0125em;
+  --text-copy--font-weight: 400;
+  --text-nav: 1rem;
+  --text-nav--line-height: 1.375;
+  --text-nav--letter-spacing: -0.0125em;
+  --text-nav--font-weight: 500;
+  --text-nav-action: 1rem;
+  --text-nav-action--line-height: 1.4;
+  --text-nav-action--letter-spacing: -0.02em;
+  --text-nav-action--font-weight: 500;
+  --text-menu-caption: 0.875rem;
+  --text-menu-caption--line-height: 1.4;
+  --text-menu-caption--letter-spacing: -0.02em;
+
+  --text-display: 4.125rem;
+  --text-display--line-height: 1.26;
+  --text-display--letter-spacing: -0.02em;
+  --text-display--font-weight: 700;
+  --text-display-compact: 2.25rem;
+  --text-display-compact--line-height: 1.32;
+  --text-display-compact--letter-spacing: -0.02em;
+  --text-display-compact--font-weight: 600;
+  --text-section-title: 2.125rem;
+  --text-section-title--line-height: 1.32;
+  --text-section-title--letter-spacing: -0.02em;
+  --text-section-title--font-weight: 600;
+  --text-section-title-compact: 1.875rem;
+  --text-section-title-compact--line-height: 1.38;
+  --text-section-title-compact--letter-spacing: -0.02em;
+  --text-section-title-compact--font-weight: 600;
+  --text-lead: 1.25rem;
+  --text-lead--line-height: 1.36;
+  --text-lead--letter-spacing: -0.02em;
+  --text-lead--font-weight: 400;
+  --text-lead-compact: 1rem;
+  --text-lead-compact--line-height: 1.52;
+  --text-lead-compact--letter-spacing: -0.02em;
+  --text-lead-compact--font-weight: 400;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,7 +66,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-family: var(--font-sans);
   /* 한글은 단어 단위로 줄바꿈, 긴 URL만 중간에서 끊기 (frontend-guide 11번) */
   word-break: keep-all;
   overflow-wrap: anywhere;

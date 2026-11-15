@@ -4,12 +4,12 @@ import { routes } from "./routes";
 export type NavItem = {
   label: string;
   href: Route;
-  /** 헤더 메뉴에 마우스를 올리면 보이는 한 줄 설명 */
+  /** 메뉴에 덧붙이는 한 줄 설명 */
   description?: string;
   children?: NavItem[];
 };
 
-/** 상단 메뉴 5개 (기획서: 병원 솔루션, 비즈니스 솔루션, 맞춤 개발, 포트폴리오, 요금 안내) */
+/** 기획서의 서비스 갈래와 공개 페이지 */
 export const mainNav: NavItem[] = [
   {
     label: "병원 솔루션",
@@ -85,12 +85,60 @@ export const mainNav: NavItem[] = [
   { label: "요금 안내", href: routes.pricing, description: "모든 서비스 요금 공개 (VAT 포함)" },
 ];
 
-export const utilityNav: NavItem[] = [
-  { label: "문의", href: routes.contact },
-  { label: "로그인", href: routes.auth.login },
-];
+type HeaderQuickLink = { label: string; href: Route; description: string };
 
-/** 하단 사이트맵. 서비스 묶음은 상단 메뉴(mainNav)를 그대로 쓰고, 회사·정책 묶음을 더한다. */
+const headerQuickLinks: Partial<Record<Route, readonly HeaderQuickLink[]>> = {
+  [routes.hospital.root]: [
+    {
+      label: "병원 솔루션 데모",
+      href: routes.contactFor("crm-demo"),
+      description: "환자 관리와 재방문 관리에 쓰이는 CRM 데모를 신청하세요.",
+    },
+    {
+      label: "병원 홈페이지 요금제",
+      href: `${routes.pricing}#hospital-website`,
+      description: "병원 홈페이지 제작 패키지와 비용을 확인하세요.",
+    },
+  ],
+  [routes.solutions.root]: [
+    {
+      label: "비즈니스 데모",
+      href: routes.contactFor("business-demo"),
+      description: "커머스 연동, ERP, AI 챗봇 중 필요한 솔루션의 데모를 신청하세요.",
+    },
+    {
+      label: "비즈니스 솔루션 요금제",
+      href: `${routes.pricing}#solutions`,
+      description: "솔루션별 초기 세팅비와 월 이용료를 확인하세요.",
+    },
+  ],
+  [routes.development.root]: [
+    {
+      label: "맞춤 개발 상담",
+      href: routes.development.estimate,
+      description: "필요한 기능과 개발 범위를 알려주세요.",
+    },
+    {
+      label: "맞춤 개발 요금제",
+      href: `${routes.pricing}#development`,
+      description: "홈페이지 제작과 웹앱 개발의 계약금 기준을 확인하세요.",
+    },
+  ],
+};
+
+/** 기획서의 메뉴를 데스크톱과 모바일 헤더에서 함께 쓴다. */
+export const headerNav = mainNav.map((item) => ({
+  ...item,
+  children: item.children
+    ? [
+        { label: `${item.label} 소개`, href: item.href },
+        ...item.children.map((child) => ({ ...child, label: child.label.replace(/^사피어 /, "") })),
+      ]
+    : undefined,
+  quickLinks: headerQuickLinks[item.href] ?? [],
+}));
+
+/** 하단 사이트맵에 서비스 갈래와 회사·정책 링크를 표시한다. */
 export type FooterGroup = { title: string; href?: Route; items: NavItem[] };
 
 const policyNav: NavItem[] = [

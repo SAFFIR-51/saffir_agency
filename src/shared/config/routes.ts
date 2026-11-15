@@ -7,6 +7,7 @@ export type ContactTopic =
   | "crm-demo"
   | "crm-adopt"
   | "hospital-bundle"
+  | "business-demo"
   | "connect"
   | "erp"
   | "ai-chatbot";
@@ -17,6 +18,7 @@ const contactTopicValues: readonly string[] = [
   "crm-demo",
   "crm-adopt",
   "hospital-bundle",
+  "business-demo",
   "connect",
   "erp",
   "ai-chatbot",

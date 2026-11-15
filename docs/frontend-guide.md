@@ -179,7 +179,7 @@
 - 색·폰트는 `globals.css` 토큰만 쓴다. 새 색이 필요하면 토큰을 추가한다 (디자인 토큰 확정 전까지는 `foreground/<투명도>`로 단계를 만든다).
 - 모바일 우선: 375px에서 시작해 `sm`, `md`, `lg`로 넓힌다. 가로 스크롤이 생기면 안 된다.
 - 조건부 클래스는 `cn()`으로 합친다. 클래스 순서는 Prettier가 정리하므로 손으로 맞추지 않는다.
-- **한글 줄바꿈**: 본문은 단어 단위로 끊는다 (`word-break: keep-all`, 긴 URL은 `overflow-wrap: anywhere`). 제목은 `text-balance`를 쓴다. 한글 폰트는 확정 전까지 시스템 폰트를 쓴다.
+- **한글 줄바꿈**: 본문은 단어 단위로 끊는다 (`word-break: keep-all`, 긴 URL은 `overflow-wrap: anywhere`). 제목은 `text-balance`를 쓴다. 기본 글꼴은 Pretendard를 쓴다. 본문은 `text-copy`, 메뉴는 `text-nav`, 헤더 CTA는 `text-nav-action`을 사용한다. 큰 제목은 `text-display-compact lg:text-display`, 섹션 제목은 `text-section-title-compact lg:text-section-title`로 화면 크기에 맞춘다.
 
 ## 12. 콘텐츠와 문구
 
