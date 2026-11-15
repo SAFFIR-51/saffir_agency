@@ -1,1 +1,1 @@
-export { NcHome } from "./components/nc/nc-home";
+export { HomePage } from "./components/home-page";

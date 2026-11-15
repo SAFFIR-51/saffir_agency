@@ -1,6 +1,5 @@
 import { cn } from "@/shared/lib";
 
-/** 목록 (NHN Cloud: 작은 점 + 회색 글) */
 export function BulletList({
   items,
   ordered = false,
@@ -14,7 +13,7 @@ export function BulletList({
   return (
     <Tag
       className={cn(
-        "space-y-2 pl-5 text-[16px] leading-[26px] text-[#51565f] marker:text-[#9499a2]",
+        "space-y-2 pl-5 leading-relaxed",
         ordered ? "list-decimal" : "list-disc",
         className,
       )}

@@ -3,6 +3,4 @@ export { SiteFooter } from "./site-footer";
 export { PortalSidebar } from "./portal-sidebar";
 export { ErrorScreen } from "./error-screen";
 export { PortalNoAccess } from "./portal-no-access";
-export { NcHeader } from "./nc-header";
-export { NcFooter } from "./nc-footer";
-export { Floating } from "./floating";
+export { BrochureTab } from "./brochure-tab";

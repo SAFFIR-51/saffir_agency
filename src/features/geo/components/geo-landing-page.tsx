@@ -1,3 +1,5 @@
+import { withCaseImages } from "@/content/portfolio";
+import { formatKRW } from "@/shared/lib";
 import { geoPlans, geoPricingHeadline } from "@/content/pricing";
 import { routes } from "@/shared/config";
 import { SolutionTemplate } from "@/shared/sections";
@@ -19,7 +21,14 @@ import {
 export function GeoLandingPage() {
   return (
     <SolutionTemplate
-      content={geoContent}
+      content={{ ...geoContent, cases: withCaseImages(geoContent.cases) }}
+      summary={[
+        {
+          label: "시작 요금",
+          value: `월 ${formatKRW(Math.min(...geoPlans.flatMap((p) => (p.monthly ? [p.monthly] : []))))}부터`,
+        },
+        { label: "결제 방식", value: "월 구독 · 무료 진단" },
+      ]}
       slots={{
         afterFeatures: <WireBox label="8개 분야 · 50여 항목 목록" />,
         screens: (

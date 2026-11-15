@@ -59,8 +59,6 @@ export const workflow = [
 /** 맞춤 개발 보유 모듈 (기획서 "맞춤 개발과 포트폴리오") */
 export const modules = ["결제·구독", "예약", "지도·GPS", "BLE 연동", "AI 코칭", "커머스 어드민"];
 
-export const developmentAreas = ["웹·앱", "쇼핑몰", "플랫폼 연동", "AI", "IoT"];
-
 /** 프로젝트 진행 단계 (포털 프로젝트 화면과 같은 단계) */
 export const projectStages = [
   { stage: "착수", detail: "범위와 일정을 정하고 계약합니다." },

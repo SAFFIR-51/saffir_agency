@@ -77,3 +77,35 @@ export const pricingCaptions = {
   erp: "구축은 1단계 진단 후 견적을 드리고, 단계별로 계약합니다.",
   aiChatbot: "AI API 사용량은 별도로 정산합니다.",
 };
+
+/** 비즈니스 솔루션 소개(/solutions) 세부 페이지 문구 (/hospital과 같은 구성). 사실은 위 각 솔루션 내용을 그대로 쓴다 */
+export const solutionsLandingContent = {
+  hero: {
+    tagline: ["COMMERCE, ERP AND AI CHATBOT", "READY TO SET UP"],
+    title: "Business Solution",
+    secondary: "요금 보기",
+    primary: "도입 상담",
+  },
+  problems: {
+    title: "Business Problems",
+    sub: ["지금 겪는 문제에서 시작하세요.", "문제마다 맞는 솔루션과 시작 방법이 정해져 있습니다."],
+    columns: ["지금 이런 문제", "맞는 솔루션", "시작 방법"],
+  },
+  solutions: {
+    title: "Three Solutions",
+    sub: [
+      "커머스 연동 · 업무 통합 ERP · AI 챗봇.",
+      "반복해서 만들어 온 기능이라 개발 대신 세팅으로 도입합니다.",
+    ],
+  },
+  delivery: {
+    title: "How We Deliver",
+    sub: ["고객사 전용 서버에 세팅하고, 데이터는 고객사 소유입니다."],
+    columns: ["항목", "내용"],
+  },
+  cases: {
+    title: "Related Work",
+    sub: ["솔루션의 바탕이 된 실제 프로젝트입니다."],
+  },
+  faq: { title: "Questions & Answers", sub: ["자주 묻는 질문"], more: "전체 질문 보기" },
+};

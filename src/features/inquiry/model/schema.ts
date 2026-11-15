@@ -1,5 +1,11 @@
 import { z } from "zod";
-import { budgetOptions, contactTypeLabels, developmentAreaOptions } from "./content";
+import {
+  budgetOptions,
+  contactTypeLabels,
+  developmentAreaOptions,
+  platformOptions,
+  readinessOptions,
+} from "./content";
 
 /** 클라이언트(resolver)와 서버(action)가 같은 스키마로 검증한다 (frontend-guide 8번) */
 const phone = z
@@ -29,9 +35,22 @@ export const estimateSchema = z.object({
   company: z.string().trim().min(1, "회사명을 입력해 주세요.").max(50),
   contactName: z.string().trim().min(1, "담당자 이름을 입력해 주세요.").max(30),
   phone,
+  email: z
+    .string()
+    .trim()
+    .max(100)
+    .refine(
+      (v) => v === "" || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),
+      "이메일 형식을 확인해 주세요.",
+    ),
   area: optionalOneOf(developmentAreaOptions),
+  platforms: z.array(
+    z.string().refine((v) => platformOptions.includes(v), "목록에서 골라 주세요."),
+  ),
+  readiness: optionalOneOf(readinessOptions),
   budget: optionalOneOf(budgetOptions),
   schedule: z.string().trim().max(100, "100자 이내로 입력해 주세요."),
+  reference: z.string().trim().max(500, "500자 이내로 입력해 주세요."),
   requirements: z
     .string()
     .trim()

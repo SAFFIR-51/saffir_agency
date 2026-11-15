@@ -105,6 +105,7 @@ const base = {
   invoices: [],
   subscription: null,
   members: [],
+  requestTargets: [],
 } satisfies Partial<PortalData>;
 
 const demoData: Record<string, PortalData> = {
@@ -310,8 +311,10 @@ demoData.all = {
     { name: "데모 담당자", email: "review@demo.saffir.co.kr", role: "관리자" },
     { name: "데모 원무팀", email: "office@hospital.demo.saffir.co.kr", role: "담당자" },
   ],
+  requestTargets: [],
 };
 
 export function getDemoPortalData(accountId: string): PortalData | null {
-  return demoData[accountId] ?? null;
+  const data = demoData[accountId];
+  return data ? structuredClone(data) : null;
 }

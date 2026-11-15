@@ -1,0 +1,111 @@
+"use client";
+
+import type { Route } from "next";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+import { cn } from "@/shared/lib";
+
+type Item = {
+  slug: string;
+  href: Route;
+  title: string;
+  groupName: string;
+  group: string;
+  techNames: string[];
+  summary?: string;
+  image?: string;
+  related?: { href: Route; name: string };
+};
+
+/** 분야 글자 단추: 18/600, 고른 것은 아래 검은 선 위에 굵은 막대 */
+const tab =
+  "relative py-1 text-lg font-semibold tracking-[-0.02em] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black motion-safe:transition-colors";
+
+/**
+ * 사례 목록: 위 분야 단추(건수)로 거르고, 아래 카드 3열.
+ * 카드: 대표 이미지(정사각) · 분야 · 이름 · 한 줄 소개 · 기술 · 관련 솔루션 밑줄 링크.
+ */
+export function PortfolioGallery({
+  items,
+  groups,
+}: {
+  items: Item[];
+  groups: { key: string; name: string; count: number }[];
+}) {
+  const [group, setGroup] = useState<string | null>(null);
+  const shown = items.filter((item) => !group || item.group === group);
+
+  return (
+    <div>
+      {/* 분야: 검은 선 위에 글자로. 고른 것은 검정 + 밑줄, 나머지는 회색 */}
+      <div role="group" aria-label="분야" className="flex flex-wrap gap-x-7 gap-y-2 pb-2">
+        {[{ key: null, name: "전체", count: items.length }, ...groups].map((g) => {
+          const on = group === g.key;
+          return (
+            <button
+              key={g.name}
+              type="button"
+              aria-pressed={on}
+              onClick={() => setGroup(g.key)}
+              className={cn(
+                tab,
+                on
+                  ? "text-black after:absolute after:inset-x-0 after:-bottom-[10px] after:h-[3px] after:bg-black"
+                  : "text-neutral-400 hover:text-black",
+              )}
+            >
+              {g.name}
+              <span className="ml-1.5 tabular-nums">{g.count}</span>
+            </button>
+          );
+        })}
+      </div>
+      <div className="border-t border-black" />
+
+      <p aria-live="polite" className="mt-8 text-sm text-neutral-500">
+        {shown.length}건
+      </p>
+      <ul className="mt-4 grid gap-x-4 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+        {shown.map((item) => (
+          <li key={item.slug} className="group relative">
+            <div className="relative aspect-square overflow-hidden bg-[#f3f3f3]">
+              {item.image && (
+                <Image
+                  src={item.image}
+                  alt=""
+                  fill
+                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  className="object-cover group-hover:scale-[1.02] motion-safe:transition-transform motion-safe:duration-500"
+                />
+              )}
+            </div>
+            <p className="mt-4 text-sm font-medium text-neutral-500">{item.groupName}</p>
+            <h3 className="mt-1 text-xl leading-[1.3] font-bold tracking-[-0.03em]">
+              <Link
+                href={item.href}
+                className="group-hover:underline group-hover:underline-offset-4 after:absolute after:inset-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black"
+              >
+                {item.title}
+              </Link>
+            </h3>
+            {item.summary && (
+              <p className="mt-2 text-[0.9375rem] leading-[1.55] text-neutral-700">
+                {item.summary}
+              </p>
+            )}
+            <p className="mt-2 text-sm text-neutral-500">{item.techNames.join(" · ")}</p>
+            {item.related && (
+              <Link
+                href={item.related.href}
+                className="relative z-10 mt-3 inline-block text-sm font-medium underline decoration-1 underline-offset-4 hover:no-underline"
+              >
+                {item.related.name}
+              </Link>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}

@@ -1,6 +1,7 @@
 import "server-only";
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
+import { connection } from "next/server";
 import { isProduction } from "../env";
 import { DEMO_PASSWORD, demoAccounts, findDemoAccount, type DemoAccount } from "./demo-accounts";
 
@@ -8,6 +9,11 @@ const SESSION_COOKIE = "saffir_session";
 const SESSION_DAYS = 7;
 
 export type Session = DemoAccount;
+
+/** 쿠키에 담는 내용. 간편 로그인 회원은 회원 DB가 생기기 전까지 이름·이메일을 쿠키에 함께 담는다 */
+type Payload = { sub: string; exp: number; name?: string; email?: string };
+
+const providerLabel: Record<string, string> = { kakao: "카카오", naver: "네이버" };
 
 /** 데모 로그인 허용: 개발 환경이거나 DEMO_LOGIN=1 (토스 심사 기간 등) */
 export const demoLoginEnabled = !isProduction || process.env.DEMO_LOGIN === "1";
@@ -24,41 +30,58 @@ function sign(payload: string) {
 }
 
 /** 쿠키 값: base64url(JSON) + "." + 서명. 서명이 맞고 만료 전이어야 세션으로 인정한다 */
-function encode(accountId: string) {
-  const payload = Buffer.from(
-    JSON.stringify({ sub: accountId, exp: Date.now() + SESSION_DAYS * 86_400_000 }),
-  ).toString("base64url");
+function encode(accountId: string, extra: { name?: string; email?: string } = {}) {
+  const data: Payload = { sub: accountId, exp: Date.now() + SESSION_DAYS * 86_400_000, ...extra };
+  const payload = Buffer.from(JSON.stringify(data)).toString("base64url");
   return `${payload}.${sign(payload)}`;
 }
 
-function decode(token: string): string | null {
+function decode(token: string): Payload | null {
   const [payload, signature] = token.split(".");
   if (!payload || !signature) return null;
   const expected = Buffer.from(sign(payload));
   const actual = Buffer.from(signature);
   if (expected.length !== actual.length || !timingSafeEqual(expected, actual)) return null;
   try {
-    const data = JSON.parse(Buffer.from(payload, "base64url").toString()) as {
-      sub?: string;
-      exp?: number;
-    };
+    const data = JSON.parse(Buffer.from(payload, "base64url").toString()) as Partial<Payload>;
     if (!data.sub || !data.exp || data.exp < Date.now()) return null;
-    return data.sub;
+    return data as Payload;
   } catch {
     return null;
   }
 }
 
-/** 로그인한 회원. 없으면 null. 개발 중 PORTAL_AUTH_BYPASS=1이면 모든 서비스 계정으로 본다 */
+/** 로그인한 회원. 없으면 null. 개발 중 PORTAL_AUTH_BYPASS=1이면 로그인 전에도 모든 서비스 계정으로 본다 */
 export async function getSession(): Promise<Session | null> {
-  if (!isProduction && process.env.PORTAL_AUTH_BYPASS === "1") return findDemoAccount("all");
   const token = (await cookies()).get(SESSION_COOKIE)?.value;
-  const accountId = token ? decode(token) : null;
-  return accountId ? findDemoAccount(accountId) : null;
+  // 만료 확인(Date.now)은 요청 시점에만: 쿠키를 미리 읽는 프리패치에서는 여기서 멈춘다
+  await connection();
+  const data = token ? decode(token) : null;
+  if (!data) {
+    // 로그인 쿠키가 있으면 그 계정을 우선한다 (어드민 계정 확인용)
+    if (!isProduction && process.env.PORTAL_AUTH_BYPASS === "1") return findDemoAccount("all");
+    return null;
+  }
+  // 간편 로그인 회원 (sub = "kakao:123" / "naver:abc"): 일반 회원으로 본다
+  const [provider] = data.sub.split(":");
+  if (provider && providerLabel[provider]) {
+    return {
+      id: data.sub,
+      email: data.email ?? "",
+      name: data.name ?? `${providerLabel[provider]} 회원`,
+      organization: "",
+      kinds: ["member"],
+      label: `${providerLabel[provider]} 로그인 회원`,
+    };
+  }
+  return findDemoAccount(data.sub);
 }
 
-export async function startSession(accountId: string) {
-  (await cookies()).set(SESSION_COOKIE, encode(accountId), {
+export async function startSession(
+  accountId: string,
+  extra: { name?: string; email?: string } = {},
+) {
+  (await cookies()).set(SESSION_COOKIE, encode(accountId, extra), {
     httpOnly: true,
     sameSite: "lax",
     secure: isProduction,

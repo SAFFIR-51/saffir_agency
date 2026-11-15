@@ -1,1 +1,1 @@
-export { PricingPage } from "./components/pricing-page";
+export { PricingSheet as PricingPage } from "./components/pricing-sheet";
