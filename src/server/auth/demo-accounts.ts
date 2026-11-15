@@ -13,6 +13,8 @@ export type DemoAccount = {
   organization: string;
   kinds: MemberKind[];
   label: string;
+  /** 사피어 내부 계정 (어드민 /admin 접근) */
+  staff?: boolean;
 };
 
 export const DEMO_PASSWORD = "saffir-demo-2026";
@@ -57,6 +59,15 @@ export const demoAccounts: DemoAccount[] = [
     organization: "데모 종합병원",
     kinds: ["member", "subscriber", "project", "solution"],
     label: "모든 서비스 이용 고객 (심사용)",
+  },
+  {
+    id: "staff",
+    email: "staff@demo.saffir.co.kr",
+    name: "데모 PM",
+    organization: "사피어 테크놀로지",
+    kinds: [],
+    label: "사피어 내부 (어드민)",
+    staff: true,
   },
 ];
 

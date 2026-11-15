@@ -1,5 +1,6 @@
 import { isContactTopic, routes, type ContactTopic } from "@/shared/config";
-import { formatKRW } from "@/shared/lib";
+import Link from "next/link";
+import { cn, formatKRW } from "@/shared/lib";
 import { ButtonLink } from "./button-link";
 import { DataTable } from "./data-table";
 
@@ -27,17 +28,28 @@ type PlanActions = {
   free?: { label: string; href: Parameters<typeof ButtonLink>[0]["href"] };
 };
 
+/** 요금표 버튼: 바로 결제는 토스 파랑, 상담·무료는 토스 회색 (요금 안내 페이지와 같은 규칙) */
 function PlanButton({
   href,
+  pay = false,
   children,
 }: {
   href: Parameters<typeof ButtonLink>[0]["href"];
+  pay?: boolean;
   children: React.ReactNode;
 }) {
   return (
-    <ButtonLink href={href} variant="secondary" className="h-9 px-4 whitespace-nowrap">
+    <Link
+      href={href}
+      className={cn(
+        "inline-flex h-9 items-center justify-center rounded-lg px-4 text-sm font-semibold tracking-[-0.02em] whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3182f6] motion-safe:transition-colors",
+        pay
+          ? "bg-[#3182f6] text-white hover:bg-[#1b64da]"
+          : "bg-[#f2f4f6] text-[#4e5968] hover:bg-[#e5e8eb]",
+      )}
+    >
       {children}
-    </ButtonLink>
+    </Link>
   );
 }
 
@@ -47,7 +59,9 @@ function planAction(plan: PlanRow, actions: PlanActions) {
   }
   if (plan.checkout) {
     return (
-      <PlanButton href={routes.order(plan.id)}>{plan.monthly ? "구독하기" : "결제하기"}</PlanButton>
+      <PlanButton href={routes.order(plan.id)} pay>
+        {plan.monthly ? "구독하기" : "결제하기"}
+      </PlanButton>
     );
   }
   const topic = isContactTopic(plan.consult) ? plan.consult : actions.consultFallback;

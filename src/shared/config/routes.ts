@@ -10,7 +10,8 @@ export type ContactTopic =
   | "business-demo"
   | "connect"
   | "erp"
-  | "ai-chatbot";
+  | "ai-chatbot"
+  | "development-estimate";
 
 const contactTopicValues: readonly string[] = [
   "geo-fix",
@@ -22,6 +23,7 @@ const contactTopicValues: readonly string[] = [
   "connect",
   "erp",
   "ai-chatbot",
+  "development-estimate",
 ] satisfies ContactTopic[];
 
 export function isContactTopic(value: string | undefined): value is ContactTopic {
@@ -84,6 +86,9 @@ export const routes = {
     /** 계약 고객 포털 초대 수락 */
     invite: "/invite",
     resetPassword: "/reset-password",
+    /** 간편 로그인 시작 (카카오·네이버). next가 있으면 로그인 후 그곳으로 */
+    oauth: (provider: "kakao" | "naver", next?: string) =>
+      `/auth/${provider}${next ? `?next=${encodeURIComponent(next)}` : ""}` as Route,
     /** 가입 후 next로 돌아간다 (예: 방금 본 진단 결과) */
     signupFrom: (next: string) => `/signup?next=${encodeURIComponent(next)}` as Route,
     /** 로그인 후 next로 돌아간다 */
@@ -99,6 +104,22 @@ export const routes = {
     geo: "/dashboard/geo",
     billing: "/dashboard/billing",
     account: "/dashboard/account",
+  },
+  /** 사피어 내부 어드민 (프로젝트 관리) */
+  admin: {
+    home: "/admin",
+    projects: "/admin/projects",
+    newProject: "/admin/projects/new",
+    project: (id: string) => `/admin/projects/${id}` as Route,
+    projectDeliverables: (id: string) => `/admin/projects/${id}/deliverables` as Route,
+    projectActivity: (id: string) => `/admin/projects/${id}/activity` as Route,
+    projectSettings: (id: string) => `/admin/projects/${id}/settings` as Route,
+    projectReports: (id: string) => `/admin/projects/${id}/reports` as Route,
+    projectRequests: (id: string) => `/admin/projects/${id}/requests` as Route,
+    projectPreview: (id: string) => `/admin/projects/${id}/preview` as Route,
+    requests: "/admin/requests",
+    clients: "/admin/clients",
+    team: "/admin/team",
   },
 } as const;
 

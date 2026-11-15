@@ -1,3 +1,5 @@
+import { withCaseImages } from "@/content/portfolio";
+import { formatKRW } from "@/shared/lib";
 import { installedSolutionRows } from "@/content/company";
 import { solutionPlans } from "@/content/pricing";
 import { SolutionTemplate } from "@/shared/sections";
@@ -7,7 +9,18 @@ import { aiChatbotContent, pricingCaptions } from "../model/content";
 export function AiChatbotPage() {
   return (
     <SolutionTemplate
-      content={aiChatbotContent}
+      content={{ ...aiChatbotContent, cases: withCaseImages(aiChatbotContent.cases) }}
+      summary={(() => {
+        const plan = solutionPlans.find((p) => p.id === "ai-chatbot");
+        const parts = [
+          plan?.setup ? `PoC ${formatKRW(plan.setup)}` : null,
+          plan?.monthly ? `월 ${formatKRW(plan.monthly)}` : null,
+        ].filter(Boolean);
+        return [
+          { label: "시작 요금", value: parts.join(" + ") || "별도 견적" },
+          { label: "결제 방식", value: "상담 후 결제" },
+        ];
+      })()}
       slots={{
         pricing: (
           <PlanTable

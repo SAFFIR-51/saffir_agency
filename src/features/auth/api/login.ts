@@ -27,5 +27,8 @@ export async function login(input: unknown): Promise<ActionResult<never>> {
   if (!account) return { ok: false, error: "이메일 또는 비밀번호가 맞지 않습니다." };
 
   await startSession(account.id);
-  redirect(toInternalRoute(parsed.data.next, routes.portal.home));
+  // 사피어 내부 계정은 어드민으로
+  redirect(
+    toInternalRoute(parsed.data.next, account.staff ? routes.admin.home : routes.portal.home),
+  );
 }

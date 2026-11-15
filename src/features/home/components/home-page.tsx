@@ -1,172 +1,72 @@
-import { businessModels, developmentAreas, modules, workflow } from "@/content/company";
-import { portfolioGroups, portfolioItems } from "@/content/portfolio";
-import { geoPlans, outsourcingDeposits, solutionPlans } from "@/content/pricing";
-import { listServices, serviceLines } from "@/content/services";
-import { routes, site } from "@/shared/config";
-import { formatKRW } from "@/shared/lib";
-import {
-  BulletList,
-  ButtonLink,
-  CardGrid,
-  DataTable,
-  IconTile,
-  LinkCard,
-  PageHeader,
-  Section,
-  WireBox,
-} from "@/shared/ui";
-import { homeContent as c } from "../model/content";
+import { serviceLines } from "@/content/services";
+import { routes } from "@/shared/config";
+import { homeContent } from "../model/content";
 import { EntryCard } from "./entry-card";
+import { TypeHero } from "./home-typography";
+import { Manifesto } from "./home-story";
 
-function minPrice(values: Array<number | null | undefined>) {
-  const prices = values.filter((v): v is number => typeof v === "number" && v > 0);
-  return prices.length > 0 ? Math.min(...prices) : null;
+const { entry } = homeContent;
+
+/** 12칸 그리드 (kolonworkwear.com: 최대 너비 없이 꽉 차게, 좌우 40 · 모바일 20, 칸 사이 16 · 모바일 12) */
+const grid = "grid grid-cols-4 gap-x-3 px-5 md:grid-cols-12 md:gap-x-4 lg:px-10";
+/**
+ * 카드 높이 360px: 첫 화면에는 카드 윗부분(약 152px)만 보이고, 아래쪽 글자(약 170px)는 화면 밖에서 시작한다.
+ * 카드 안 글자 위계를 페이지에 맞춘다: 섹션 제목 48 > 카드 제목 28 > 본문 15 > 버튼 15.
+ * EntryCard는 그대로 두고, 메인에서 쓸 때만 덮어쓴다.
+ */
+const cardType =
+  "rounded-none! [&_h2]:text-[1.75rem]! [&_h2]:leading-[1.2]! [&_h2]:font-medium! " +
+  /* 카드 안 예시 화면 없이, 제목·설명과 + 버튼을 카드 아래쪽에 (+는 설명 마지막 줄과 같은 선) */
+  "min-h-80! pb-7! lg:min-h-0! lg:h-[22.5rem]! lg:pb-10! [&>div:first-of-type]:mt-auto! [&>div:first-of-type]:flex-row! [&>div:first-of-type]:items-end! [&>div:first-of-type]:justify-between! " +
+  /* 버튼은 배경 없이 + 하나만, 제목과 같은 색·같은 줄 높이. 글자·화살표는 숨김(화면 낭독기에는 "○○ 더보기") */
+  "[&_a]:h-[2.1rem]! [&_a]:w-auto! [&_a]:bg-transparent! [&_a]:text-inherit! [&_a]:rounded-none! [&_a>span:last-of-type]:sr-only [&_a_svg]:hidden [&_a]:after:inline-block [&_a]:after:text-[2rem] [&_a]:after:leading-none [&_a]:after:font-light [&_a]:after:content-['+'] [&_a]:after:motion-safe:transition-transform [&:hover_a]:after:rotate-90 " +
+  /* 카드 전체를 누를 수 있게: 링크의 before를 카드 전체로 펼친다 */
+  "[&>div:first-of-type]:static! [&_a]:static! [&_a]:before:absolute [&_a]:before:inset-0 [&_a]:before:z-10 [&_a]:before:content-['']";
+const cardText = "mt-3! text-[0.9375rem]! leading-[1.5]! lg:mt-4!";
+function Cards() {
+  return (
+    <section aria-label="사피어 서비스 세 갈래" className="pt-10 lg:pt-14">
+      <div className={`${grid} gap-2!`}>
+        {/* 세 갈래 카드: 병원 · 비즈니스 · 맞춤 개발 (EntryCard) */}
+        <EntryCard
+          title={serviceLines.hospital.name}
+          href={routes.hospital.root}
+          moreLabel="더보기"
+          description={entry.hospital.description}
+          preview={<></>}
+          className={`col-span-4 ${cardType} bg-home-card-hospital bg-[url(/home/hospital-card.webp)] text-white`}
+          descriptionClassName={cardText}
+        />
+        <EntryCard
+          title={serviceLines.business.name}
+          href={routes.solutions.root}
+          moreLabel="더보기"
+          description={entry.business.description}
+          descriptionClassName={`${cardText} text-white/85`}
+          preview={<></>}
+          className={`col-span-4 ${cardType} bg-home-card-business bg-[linear-gradient(180deg,rgb(20_20_30/0)_45%,rgb(20_20_30/0.45)_100%),url(/home/business-card.webp)] text-white`}
+        />
+        <EntryCard
+          title="맞춤 개발"
+          href={routes.development.root}
+          moreLabel="더보기"
+          description={entry.development.description}
+          descriptionClassName={`${cardText} text-white/85`}
+          preview={<></>}
+          className={`col-span-4 ${cardType} bg-[#bcdde6] bg-[linear-gradient(180deg,rgb(20_20_30/0)_45%,rgb(20_20_30/0.45)_100%),url(/home/development-card.webp)] text-white`}
+        />
+      </div>
+    </section>
+  );
 }
 
+/** 메인 화면: 헤더·폰트·첫 화면·세 카드는 그대로, 카드 아래는 v-w.co.kr · ANCORS 구성 */
 export function HomePage() {
-  /** 한 업종에 치우치지 않게 업종별 건수를 모두 보여준다 */
-  const groupCounts = Object.entries(portfolioGroups)
-    .map(([group, label]) => ({
-      label,
-      count: portfolioItems.filter((item) => item.group === group).length,
-    }))
-    .filter((g) => g.count > 0);
-  const featured = c.featured.flatMap((f) => {
-    const item = portfolioItems.find((p) => p.slug === f.slug);
-    return item ? [{ ...item, tag: f.tag }] : [];
-  });
-  /** 시작 가격은 세 갈래에 한 줄씩 */
-  const businessIds = listServices("business").map((s) => s.id as string);
-  const startingPrices = [
-    {
-      name: serviceLines.hospital.name,
-      value: minPrice(geoPlans.map((p) => p.monthly)),
-      basis: "월 구독 (AI 검색 최적화)",
-    },
-    {
-      name: serviceLines.business.name,
-      value: minPrice(solutionPlans.filter((p) => businessIds.includes(p.id)).map((p) => p.setup)),
-      basis: "도입 세팅비",
-    },
-    {
-      name: "맞춤 개발",
-      value: minPrice(outsourcingDeposits.map((p) => p.setup)),
-      basis: "정찰가 계약금",
-    },
-  ];
-  const lines = c.entry.lines;
-
   return (
-    <>
-      <PageHeader eyebrow={site.legalName} title={site.tagline} lead={site.description}>
-        <div className="flex flex-wrap gap-3">
-          <ButtonLink href={routes.contact}>{c.hero.primaryCta}</ButtonLink>
-          <ButtonLink href={routes.portfolio} variant="secondary">
-            {c.hero.secondaryCta}
-          </ButtonLink>
-        </div>
-        <ul className="flex flex-wrap gap-x-8 gap-y-2 text-sm">
-          <li>포트폴리오 {portfolioItems.length}건</li>
-          <li>{groupCounts.map((g) => `${g.label} ${g.count}`).join(" · ")}</li>
-          <li>운영 중인 고객사 [ 숫자 ]</li>
-        </ul>
-        <WireBox label="이미지 · 대표 화면" size="lg" />
-      </PageHeader>
-
-      <Section label="S2 · 세 갈래" title={c.entry.title}>
-        <CardGrid>
-          <EntryCard
-            title={serviceLines.hospital.name}
-            href={routes.hospital.root}
-            description={lines.hospital.description}
-            start={lines.hospital.start}
-            moreLabel={c.entry.more}
-          >
-            <BulletList items={listServices("hospital").map((s) => s.name)} />
-          </EntryCard>
-          <EntryCard
-            title={serviceLines.business.name}
-            href={routes.solutions.root}
-            description={lines.business.description}
-            start={lines.business.start}
-            moreLabel={c.entry.more}
-          >
-            <BulletList items={listServices("business").map((s) => s.name)} />
-          </EntryCard>
-          <EntryCard
-            title="맞춤 개발"
-            href={routes.development.root}
-            description={lines.development.description}
-            start={lines.development.start}
-            moreLabel={c.entry.more}
-          >
-            <BulletList items={developmentAreas} />
-          </EntryCard>
-        </CardGrid>
-      </Section>
-
-      <Section label="S3 · 대표 사례" title={c.cases.title}>
-        <CardGrid>
-          {featured.map((item) => (
-            <LinkCard
-              key={item.slug}
-              href={routes.portfolioDetail(item.slug)}
-              title={item.title}
-              description={item.tag}
-            >
-              <WireBox label="이미지" size="sm" />
-            </LinkCard>
-          ))}
-        </CardGrid>
-        <ButtonLink href={routes.portfolio} variant="secondary">
-          포트폴리오 전체 보기
-        </ButtonLink>
-      </Section>
-
-      <Section label="S4 · 제공 방식" title={c.models.title} description={c.models.note}>
-        <DataTable
-          columns={["방식", "대표 상품", "제공 방식", "요금 방식"]}
-          rows={businessModels.map((m) => [m.type, m.products, m.delivery, m.revenue])}
-        />
-      </Section>
-
-      <Section label="S5 · 진행 순서" title={c.workflow.title}>
-        <DataTable
-          columns={["단계", "내용"]}
-          rows={workflow.map((w, index) => [`${index + 1}. ${w.step}`, w.detail])}
-        />
-      </Section>
-
-      <Section label="S6 · 보유 모듈" title={c.modules.title} description={c.modules.description}>
-        <CardGrid>
-          {modules.map((m) => (
-            <IconTile key={m} label={m} />
-          ))}
-        </CardGrid>
-      </Section>
-
-      <Section label="S7 · 요금" title={c.pricing.title} description="금액은 VAT 포함입니다.">
-        <DataTable
-          columns={["갈래", "시작 가격", "기준"]}
-          rows={startingPrices.map((p) => [
-            p.name,
-            p.value === null ? "별도 견적" : `${formatKRW(p.value)}부터`,
-            p.basis,
-          ])}
-        />
-        <ButtonLink href={routes.pricing} variant="secondary">
-          요금 안내 보기
-        </ButtonLink>
-      </Section>
-
-      <Section label="S8 · 상담" title={c.closing.title} description={c.closing.description}>
-        <div className="flex flex-wrap gap-3">
-          <ButtonLink href={routes.contact}>{c.hero.primaryCta}</ButtonLink>
-          <ButtonLink href={routes.development.estimate} variant="secondary">
-            맞춤 개발 견적
-          </ButtonLink>
-        </div>
-      </Section>
-    </>
+    <div className="bg-white pb-28 text-black lg:pb-40">
+      <TypeHero />
+      <Cards />
+      <Manifesto />
+    </div>
   );
 }

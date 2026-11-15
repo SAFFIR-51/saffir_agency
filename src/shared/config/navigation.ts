@@ -165,6 +165,15 @@ export const footerGroups: FooterGroup[] = [
   { title: "정책", items: policyNav },
 ];
 
+/** 하단(간단형): 주요 메뉴 한 줄 + 정책 링크 */
+export const footerNav: NavItem[] = [
+  ...mainNav.map(({ label, href }) => ({ label, href })),
+  { label: "FAQ", href: routes.faq },
+  { label: "문의", href: routes.contact },
+];
+
+export const footerPolicyNav: NavItem[] = policyNav;
+
 /**
  * 포털 회원 종류 (기획서 "회원 유형"을 가입한 서비스 기준으로 나눔).
  * 한 고객사가 여러 개를 가질 수 있다 (예: 외주 + GEO 구독).

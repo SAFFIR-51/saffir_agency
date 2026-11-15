@@ -1,45 +1,41 @@
-import type { Route } from "next";
-import { routes } from "@/shared/config";
-
 /** 메인 화면 문구 */
 export const homeContent = {
-  /** 히어로 버튼은 업종 구분 없이. 업종별 입구는 바로 아래 세 갈래에서 고른다 */
-  hero: { primaryCta: "도입 상담 신청", secondaryCta: "만든 것 보기" },
+  /** 메인 화면 구성 (kolonworkwear.com 메인 배치 참고: 12칸 그리드, 영문 큰 제목 + 짧은 한글 설명) */
+  layout: {
+    /** 글자로 만드는 화면 (ANCORS·Goodai·IT 에이전시 레퍼런스: 큰 워드마크, 짧은 영문 태그, 흐르는 문장) */
+    type: {
+      wordmark: "SAFFIR",
+      tagline: ["BUILT FOR YOUR WORK,", "A PARTNER THAT", "BUILDS AND RUNS WITH YOU"],
+      intro: ["일하는 방식에 알맞게 만들고,", "운영까지 함께하는 사피어 테크놀로지입니다."],
+    },
+    /** 카드 아래 이야기 (v-w.co.kr 소개·서비스 A/B/C, ANCORS BEYOND·어두운 아카이브 참고) */
+    manifesto: {
+      lead: ["A build & care partner", "shaping how hospitals", "and businesses work."],
+      sub: "병원과 기업의 일하는 방식을 설계하고, 오래 운영되게 만드는 파트너.",
+      en: [
+        "Every project begins with listening — how you work, what slows you down, and what you need next. We don’t start from a blank page. We assemble from modules we have already built and run.",
+        "Launch is not the finish line. Dedicated servers and maintenance keep what we build working, long after delivery.",
+      ],
+      ko: [
+        "모든 프로젝트는 듣는 것에서 시작합니다. 지금 어떻게 일하는지, 무엇이 막히는지, 다음에 무엇이 필요한지.",
+        "빈 화면부터 짜지 않습니다. 이미 만들고 운영해 온 모듈을 조합해 빠르게 만듭니다.",
+        "출시는 끝이 아닙니다. 전용 서버와 유지보수로 납품 이후에도 계속 돌아가게 합니다.",
+      ],
+    },
+  },
+  /** 카드 3장 설명 */
   entry: {
-    title: "어떤 일이 필요하세요?",
-    /** 세 갈래를 같은 크기·같은 모양 버튼으로 둔다 (특정 업종이 앞서 보이지 않게) */
-    lines: {
-      hospital: {
-        description: "병원 홈페이지 진단부터 환자 관리까지",
-        start: { label: "무료 진단", href: `${routes.hospital.geo}#diagnosis` },
-      },
-      business: {
-        description: "재고·주문·업무 시스템을 세팅으로",
-        start: { label: "도입 상담", href: routes.contact },
-      },
-      development: {
-        description: "필요한 서비스를 만들고 운영까지",
-        start: { label: "견적 요청", href: routes.development.estimate },
-      },
-    } satisfies Record<string, { description: string; start: { label: string; href: Route } }>,
-    more: "자세히 보기",
-  },
-  models: {
-    title: "이렇게 제공합니다",
-    note: "구축형 솔루션의 데이터는 고객사 소유입니다.",
-  },
-  workflow: { title: "만들고, 운영하고, 보여드립니다" },
-  modules: { title: "이미 갖춘 모듈", description: "처음부터 짜지 않아서 빠릅니다." },
-  cases: { title: "이런 것을 만들었습니다" },
-  /** 분야가 겹치지 않게 고른 대표 사례. tag는 카드에 보이는 분야 표시 */
-  featured: [
-    { slug: "hospital-erp-1", tag: "업무 시스템 (ERP)" },
-    { slug: "cafe24-admin", tag: "커머스 연동" },
-    { slug: "smart-planter-ble", tag: "IoT" },
-  ],
-  pricing: { title: "요금을 모두 공개합니다" },
-  closing: {
-    title: "어디서부터 시작할지 모르겠다면",
-    description: "지금 상황을 들려주시면 맞는 방법을 안내해 드립니다.",
+    hospital: {
+      description:
+        "병원 웹사이트를 개발해 진료 안내와 예약을 연결합니다.\n환자 관리와 재방문 안내까지 지원합니다.",
+    },
+    business: {
+      description:
+        "여러 판매 채널의 주문과 재고를 한곳에서 관리합니다.\n재고를 연동해 채널별 수량 수정 업무를 줄이세요.",
+    },
+    development: {
+      description:
+        "지금 쓰는 도구와 업무 흐름에 맞춰 필요한 기능을 만듭니다.\n진행 상황을 공유하고 출시 후 유지보수까지 이어갑니다.",
+    },
   },
 };

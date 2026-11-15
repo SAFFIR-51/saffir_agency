@@ -1,3 +1,5 @@
+import { withCaseImages } from "@/content/portfolio";
+import { formatKRW } from "@/shared/lib";
 import { installedSolutionRows } from "@/content/company";
 import { solutionPlans } from "@/content/pricing";
 import { SolutionTemplate } from "@/shared/sections";
@@ -7,7 +9,18 @@ import { erpContent, pricingCaptions } from "../model/content";
 export function ErpPage() {
   return (
     <SolutionTemplate
-      content={erpContent}
+      content={{ ...erpContent, cases: withCaseImages(erpContent.cases) }}
+      summary={(() => {
+        const plan = solutionPlans.find((p) => p.id === "erp");
+        const parts = [
+          plan?.setup ? `1단계 진단·설계 ${formatKRW(plan.setup)}` : null,
+          plan?.monthly ? `월 ${formatKRW(plan.monthly)}` : null,
+        ].filter(Boolean);
+        return [
+          { label: "시작 요금", value: parts.join(" + ") || "별도 견적" },
+          { label: "결제 방식", value: "상담 후 결제" },
+        ];
+      })()}
       slots={{
         pricing: (
           <PlanTable

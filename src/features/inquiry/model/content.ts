@@ -12,7 +12,11 @@ export const contactTypes: { topic?: ContactTopic; label: string; href: Route }[
   { topic: "connect", label: "커머스 연동 도입 상담", href: routes.solutions.connect },
   { topic: "erp", label: "업무 통합 ERP 1단계 진단 신청", href: routes.solutions.erp },
   { topic: "ai-chatbot", label: "AI 챗봇 PoC 신청", href: routes.solutions.aiChatbot },
-  { label: "맞춤 개발 견적 요청", href: routes.development.estimate },
+  {
+    topic: "development-estimate",
+    label: "맞춤 개발 견적 요청",
+    href: routes.development.estimate,
+  },
   { label: "기타 문의", href: routes.contact },
 ];
 
@@ -24,9 +28,27 @@ export function contactTypeLabelFor(topic: string | null) {
 }
 
 /** 접수 후 회신 예상 시간 (안) */
-const replyTime = "영업일 1일 이내";
+const replyTime = "영업일 기준 1~2일 안";
 
 export const developmentAreaOptions = ["웹·앱", "쇼핑몰", "플랫폼 연동", "AI", "IoT", "기타"];
+
+/** 만들 화면 (여러 개 고름) */
+export const platformOptions = [
+  "웹사이트",
+  "웹 서비스",
+  "iOS 앱",
+  "Android 앱",
+  "관리자 페이지",
+  "기기·센서 연동",
+];
+
+/** 지금 준비된 정도 */
+export const readinessOptions = [
+  "아이디어만 있음",
+  "기획서·화면 정의서 있음",
+  "디자인 있음",
+  "운영 중인 서비스 개선",
+];
 
 /** 예산 범위 선택지 (안) */
 export const budgetOptions = [
@@ -65,6 +87,20 @@ export const contactContent = {
 export const estimateContent = {
   title: "견적 요청",
   lead: "정찰가 패키지에 없는 개발은 견적으로 안내해 드립니다.",
+  sub: [
+    "정찰가 패키지에 없는 개발은 견적으로 안내해 드립니다.",
+    `요구사항을 남기시면 ${replyTime}에 범위와 견적을 보내 드립니다.`,
+  ],
+  steps: [
+    { step: "요청서 검토", detail: "요구사항을 보고 필요하면 통화로 더 여쭙습니다." },
+    { step: "견적서", detail: "기능 범위, 일정, 금액을 정리해 보내 드립니다." },
+    { step: "계약·계약금", detail: "계약 후 계약금을 결제하면 착수합니다." },
+    { step: "착수", detail: "포털에서 주간 보고와 진행 현황을 봅니다." },
+  ],
+  fixed: {
+    caption: "정찰가로 바로 시작",
+    note: "범위가 정해진 패키지는 견적 없이 계약금 결제로 시작합니다.",
+  },
   done: {
     title: "견적 요청이 접수됐습니다",
     description: `내용을 검토한 뒤 ${replyTime}에 연락드립니다.`,

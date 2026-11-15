@@ -1,40 +1,66 @@
 import type { Route } from "next";
 import Link from "next/link";
-import { ButtonLink } from "@/shared/ui";
+import { cn } from "@/shared/lib";
 
-/** 세 갈래 카드: 제목·설명·목록 + 같은 모양의 버튼 두 개 (링크 안에 링크를 넣지 않도록 카드 자체는 링크가 아니다) */
 export function EntryCard({
   title,
   href,
-  description,
-  start,
   moreLabel,
-  children,
+  className,
+  description,
+  descriptionClassName,
+  preview,
 }: {
   title: string;
   href: Route;
-  description: string;
-  start: { label: string; href: Route };
   moreLabel: string;
-  children: React.ReactNode;
+  className: string;
+  description: string;
+  descriptionClassName?: string;
+  preview: React.ReactElement;
 }) {
   return (
-    <div className="flex flex-col rounded-xl border border-foreground/15 p-5">
-      <p className="font-semibold">
-        <Link href={href} className="hover:underline hover:underline-offset-4">
-          {title}
+    <article
+      className={cn(
+        "group/card relative isolate flex min-h-120 flex-col overflow-hidden rounded-3xl bg-cover bg-center px-6 pt-7 lg:min-h-170 lg:px-10 lg:pt-10",
+        className,
+      )}
+    >
+      <div className="relative z-10 flex flex-col items-start gap-6 md:gap-5 lg:flex-row lg:justify-between">
+        <div>
+          <h2 className="text-[2rem] leading-none font-medium tracking-[-0.02em] lg:text-4xl lg:leading-none">
+            {title}
+          </h2>
+          <p
+            className={cn(
+              "mt-4 text-base leading-[1.4] font-normal tracking-[-0.02em] lg:mt-6 lg:text-lg lg:leading-[1.4] lg:whitespace-pre-line",
+              descriptionClassName,
+            )}
+          >
+            {description}
+          </p>
+        </div>
+        <Link
+          href={href}
+          className="relative inline-flex h-13 w-32.5 shrink-0 items-center justify-center rounded-lg bg-white text-lg leading-[22px] font-bold text-black focus-visible:outline-2 focus-visible:outline-offset-4"
+        >
+          <span className="sr-only">{title} </span>
+          <span className="group-focus-within/card:-translate-x-3 motion-safe:transition-transform motion-safe:duration-300 motion-safe:ease-menu lg:group-hover/card:-translate-x-3">
+            {moreLabel}
+          </span>
+          <svg
+            aria-hidden="true"
+            className="absolute right-4 size-5 translate-x-1.5 opacity-0 group-focus-within/card:translate-x-0 group-focus-within/card:opacity-100 motion-safe:transition-[translate,opacity] motion-safe:duration-300 motion-safe:ease-menu lg:group-hover/card:translate-x-0 lg:group-hover/card:opacity-100"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+          >
+            <path d="M3 12h17m-7-7 7 7-7 7" />
+          </svg>
         </Link>
-      </p>
-      <p className="mt-1 text-sm text-foreground/70">{description}</p>
-      <div className="mt-3 flex-1 text-sm text-foreground/70">{children}</div>
-      <div className="mt-5 flex flex-wrap gap-2">
-        <ButtonLink href={start.href} className="h-9 px-4">
-          {start.label}
-        </ButtonLink>
-        <ButtonLink href={href} variant="secondary" className="h-9 px-4">
-          {moreLabel}
-        </ButtonLink>
       </div>
-    </div>
+      {preview}
+    </article>
   );
 }

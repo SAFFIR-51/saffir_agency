@@ -3,10 +3,14 @@ export const PROJECT_STAGES = ["착수", "기획", "디자인", "개발", "검�
 type ProjectStage = (typeof PROJECT_STAGES)[number];
 
 type Deliverable = {
+  id?: string;
   stage: ProjectStage;
   name: string;
-  status: "작성 중" | "승인 대기" | "승인 완료";
+  status: "작성 중" | "승인 대기" | "수정 요청" | "승인 완료";
   date: string;
+  link?: string;
+  note?: string;
+  feedback?: string;
 };
 
 export type Project = {
@@ -16,16 +20,18 @@ export type Project = {
   progress: number;
   period: string;
   nextMilestone: string;
-  schedule: { stage: ProjectStage; planned: string; done?: string }[];
+  schedule: { stage: ProjectStage; title?: string; planned: string; done?: string }[];
   deliverables: Deliverable[];
+  /** 고객 공개 작업 중 아직 안 끝난 것 */
+  tasks?: { title: string; status: string; due: string }[];
 };
 
-type WeeklyReport = { week: string; done: string; next: string; issues: string };
-type Meeting = { date: string; title: string; decisions: string };
+type WeeklyReport = { week: string; done: string; next: string; issues: string; asks?: string };
+type Meeting = { date: string; title: string; decisions: string; actions?: string };
 
 type RequestItem = {
   id: string;
-  kind: "수정 요청" | "장애 신고";
+  kind: "수정 요청" | "장애 신고" | "문의";
   title: string;
   status: "접수" | "확인" | "처리 중" | "완료";
   date: string;
@@ -81,4 +87,6 @@ export type PortalData = {
   subscription: Subscription | null;
   company: { name: string; businessNumber: string; taxEmail: string };
   members: { name: string; email: string; role: "관리자" | "담당자" }[];
+  /** 요청을 보낼 수 있는 고객사·프로젝트 (프로젝트 관리 저장소 기준) */
+  requestTargets: { clientId: string; projectId?: string; label: string }[];
 };

@@ -1,3 +1,4 @@
+import { withCaseImages } from "@/content/portfolio";
 import { SolutionTemplate } from "@/shared/sections";
 import { routes } from "@/shared/config";
 import {
@@ -14,7 +15,11 @@ import { adCheckContent, adCheckDisclaimer, adCheckLimits, adCheckStates } from 
 export function AdCheckPage() {
   return (
     <SolutionTemplate
-      content={adCheckContent}
+      content={{ ...adCheckContent, cases: withCaseImages(adCheckContent.cases) }}
+      summary={[
+        { label: "시작 요금", value: "무료 (월 5회)" },
+        { label: "결제 방식", value: "AI 검색 최적화 구독 시 무제한" },
+      ]}
       slots={{
         afterFeatures: (
           <Note title="고지">

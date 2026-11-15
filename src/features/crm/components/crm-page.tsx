@@ -1,3 +1,4 @@
+import { withCaseImages } from "@/content/portfolio";
 import Link from "next/link";
 import { installedSolutionRows } from "@/content/company";
 import { crmDemo, crmSecurity } from "@/content/hospital";
@@ -11,7 +12,17 @@ import { crmContent } from "../model/content";
 export function CrmPage() {
   return (
     <SolutionTemplate
-      content={crmContent}
+      content={{ ...crmContent, cases: withCaseImages(crmContent.cases) }}
+      summary={(() => {
+        const basic = solutionPlans.find((p) => p.id === "crm-basic");
+        return [
+          {
+            label: "시작 요금",
+            value: `세팅비 ${formatKRW(basic?.setup ?? 0)} + 월 ${formatKRW(basic?.monthly ?? 0)}부터`,
+          },
+          { label: "결제 방식", value: "상담 후 결제" },
+        ];
+      })()}
       slots={{
         afterFeatures: (
           <>

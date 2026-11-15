@@ -3,3 +3,4 @@ export { PortalSessionNav } from "./components/portal-session-nav";
 export { SignupPage } from "./components/signup-page";
 export { ForgotPasswordPage, ResetPasswordPage } from "./components/password-pages";
 export { InvitePage } from "./components/invite-page";
+export { oauthCallback, oauthStart } from "./api/oauth-routes";
