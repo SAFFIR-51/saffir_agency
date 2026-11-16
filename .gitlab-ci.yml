@@ -1,0 +1,86 @@
+# SAFFIR 배포 파이프라인
+#
+#   build  : 공용 Runner(docker-in-docker)에서 이미지를 빌드해 GitLab Container Registry 로 push
+#   deploy : 배포 서버의 self-hosted Runner(shell executor, 태그 saffir-prod)가 ci/deploy.sh 실행
+#
+# 서버 RAM 이 2GB 뿐이라 Next.js 빌드는 서버에서 돌리지 않는다. 서버는 pull 만 한다.
+# 트리거: main 브랜치 push / merge
+
+stages:
+  - build
+  - deploy
+
+variables:
+  DOCKER_TLS_CERTDIR: "/certs"
+  GIT_DEPTH: "20"
+
+# ── build ────────────────────────────────────────────────────────
+.docker_build:
+  stage: build
+  image: docker:27
+  services:
+    - docker:27-dind
+  interruptible: true
+  timeout: 30m
+  variables:
+    DOCKER_HOST: tcp://docker:2376
+    DOCKER_TLS_VERIFY: "1"
+    DOCKER_CERT_PATH: "/certs/client"
+  before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
+  script:
+    - IMG="$CI_REGISTRY_IMAGE/$COMPONENT"
+    # 직전 latest 를 캐시로 사용해 빌드 시간을 줄인다 (없으면 그냥 풀빌드)
+    - docker pull "$IMG:latest" || true
+    - >
+      docker build
+      --build-arg BUILDKIT_INLINE_CACHE=1
+      --cache-from "$IMG:latest"
+      -f "$DOCKERFILE"
+      -t "$IMG:$CI_COMMIT_SHORT_SHA"
+      -t "$IMG:latest"
+      .
+    - docker push "$IMG:$CI_COMMIT_SHORT_SHA"
+    - docker push "$IMG:latest"
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+
+build:web:
+  extends: .docker_build
+  variables:
+    COMPONENT: web
+    DOCKERFILE: Dockerfile.frontend
+
+build:server:
+  extends: .docker_build
+  variables:
+    COMPONENT: server
+    DOCKERFILE: Dockerfile.server
+
+build:nginx:
+  extends: .docker_build
+  variables:
+    COMPONENT: nginx
+    DOCKERFILE: Dockerfile.nginx
+
+# ── deploy ───────────────────────────────────────────────────────
+deploy:prod:
+  stage: deploy
+  tags:
+    - saffir-prod          # 배포 서버의 self-hosted Runner
+  needs:
+    - build:web
+    - build:server
+    - build:nginx
+  timeout: 15m
+  resource_group: production   # 동시 배포 방지
+  environment:
+    name: production
+    url: https://saffir.co.kr
+  # Runner 는 자기 빌드 디렉토리에 체크아웃해 "최신" deploy.sh 를 실행하고,
+  # 스크립트가 내부에서 실제 배포 디렉토리(/home/ec2-user/saffir_web)로 이동한다.
+  # (compose 프로젝트명이 디렉토리명에서 나오므로 배포는 반드시 그쪽에서 해야 한다)
+  script:
+    - bash ci/deploy.sh
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"

@@ -1,0 +1,61 @@
+# 개발용: Next.js dev + NestJS --watch + PostgreSQL
+# 실행: docker compose -f docker-compose.dev.yml up
+# (프론트만 로컬에서 돌리려면: docker compose -f docker-compose.dev.yml up server db + npm run dev)
+volumes:
+  node_modules_frontend:
+  node_modules_server:
+  postgres_data:
+
+services:
+  frontend:
+    image: node:24-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+      - node_modules_frontend:/app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      API_URL: "http://server:4000"
+    command: sh -c "npm ci && npx next dev -H 0.0.0.0 -p 3000"
+    depends_on:
+      - server
+
+  server:
+    image: node:22-alpine
+    working_dir: /app
+    volumes:
+      - ./server:/app
+      - node_modules_server:/app/node_modules
+    ports:
+      - "4000:4000"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      NODE_ENV: development
+      PORT: "4000"
+      DATABASE_URL: postgresql://${POSTGRES_USER:-saffir}:${POSTGRES_PASSWORD:-saffir_pw}@db:5432/${POSTGRES_DB:-saffir}
+    command: sh -c "npm install && npm run start:dev"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:17-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-saffir}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-saffir_pw}
+      POSTGRES_DB: ${POSTGRES_DB:-saffir}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/init.sh:/docker-entrypoint-initdb.d/init.sh:ro
+      - ./db:/db:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-saffir}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s

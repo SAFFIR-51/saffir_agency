@@ -56,10 +56,10 @@ export function SiteHeader() {
   return (
     /* kolonworkwear.com 헤더: 흰 바탕, 선 없음, 높이 80, 12칸 그리드 (로고 1–6칸, 메뉴 7칸부터, 오른쪽 끝 링크) */
     <header className="sticky top-0 z-40 bg-white text-black">
-      <div className="relative flex h-16 w-full items-center gap-3 px-5 lg:grid lg:h-20 lg:grid-cols-12 lg:gap-4 lg:px-10">
+      <div className="relative flex h-16 w-full items-center gap-3 px-5 lg:h-20 lg:gap-10 lg:px-10 xl:gap-14">
         <Link
           href={routes.home}
-          className="shrink-0 justify-self-start rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 lg:col-span-6"
+          className="mr-auto shrink-0 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4"
           aria-label={site.name}
         >
           <Image
@@ -76,7 +76,7 @@ export function SiteHeader() {
         <nav
           ref={desktopNav}
           aria-label="주요 메뉴"
-          className="hidden self-stretch lg:col-span-4 lg:block"
+          className="hidden self-stretch lg:block"
           onPointerEnter={() => clearTimeout(closeTimer.current)}
           onPointerLeave={(event) => {
             if (event.pointerType !== "mouse") return;
@@ -208,7 +208,7 @@ export function SiteHeader() {
           </ul>
         </nav>
 
-        <div className="ml-auto flex shrink-0 items-center justify-end gap-4 sm:gap-6 lg:col-span-2 lg:ml-0 lg:gap-8">
+        <div className="flex shrink-0 items-center justify-end gap-4 sm:gap-6 lg:gap-8">
           <Link
             href={routes.auth.login}
             data-brochure-anchor

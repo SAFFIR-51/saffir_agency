@@ -4,3 +4,6 @@ package-lock.json
 next-env.d.ts
 *.docx
 .agent-output
+/server
+/db
+/ci
