@@ -11,9 +11,10 @@ import { JwtService } from '@nestjs/jwt';
 import { randomBytes } from 'crypto';
 import { and, eq, isNull } from 'drizzle-orm';
 import { DRIZZLE, DrizzleDb } from '../db/db.module';
-import { passwordResets, users } from '../db/schema';
+import { clientMembers, clients, geoSites, passwordResets, users } from '../db/schema';
+import { acceptInvite } from '../common/invite-accept';
 import { MailService } from '../mail/mail.service';
-import { FindEmailDto, RegisterDto } from './dto/auth.dto';
+import { FindEmailDto, RegisterDto, UpdateProfileDto } from './dto/auth.dto';
 import {
   hashPassword,
   isStrongEnough,
@@ -94,10 +95,20 @@ export class AuthService {
         passwordHash: await hashPassword(dto.password),
         phone: dto.phone ? normalizePhone(dto.phone) : null,
         role: 'client',
+        organization: dto.organization?.trim() || null,
+        customerType: dto.customerType ?? null,
+        termsAgreedAt: dto.agreed ? new Date() : null,
+        marketingOptIn: dto.marketing ?? false,
       })
       .returning();
 
     this.logger.log(`로컬 회원가입 #${created.id} ${created.email}`);
+    // 초대 링크로 가입하면 그 고객사에 바로 연결 (초대가 틀려도 가입은 된다)
+    if (dto.inviteToken) {
+      await acceptInvite(this.db, dto.inviteToken, created).catch((err: unknown) => {
+        this.logger.warn(`초대 수락 실패 #${created.id}: ${err instanceof Error ? err.message : String(err)}`);
+      });
+    }
     return created;
   }
 
@@ -191,6 +202,66 @@ export class AuthService {
 
     this.logger.log(`비밀번호 재설정 완료 #${user.id}`);
     return user;
+  }
+
+  /**
+   * 화면이 쓰는 내 정보 (GET /api/auth/me). 토큰 내용 대신 DB의 현재 값으로 답한다.
+   * 비밀번호 해시 등 내부 필드는 내보내지 않는다.
+   */
+  async profile(id: number) {
+    const [user] = await this.db.select().from(users).where(eq(users.id, id));
+    if (!user) throw new UnauthorizedException();
+    const [org] = await this.db
+      .select({ id: clients.id, name: clients.name })
+      .from(clientMembers)
+      .innerJoin(clients, eq(clients.id, clientMembers.clientId))
+      .where(eq(clientMembers.userId, id))
+      .limit(1);
+    const [geo] = await this.db.select({ plan: geoSites.plan }).from(geoSites).where(eq(geoSites.userId, id));
+    return {
+      sub: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      /** GEO 구독(pro)이면 포털에 구독 메뉴가 열린다 */
+      geoPlan: geo?.plan ?? null,
+      phone: user.phone,
+      provider: user.provider,
+      customerType: user.customerType,
+      /** 가입 때 적은 병원(회사)명, 없으면 연결된 고객사 이름 */
+      organization: user.organization ?? org?.name ?? null,
+      /** 고객사에 연결돼 프로젝트 포털을 쓰는 계정인지 */
+      clientMember: Boolean(org),
+      businessNumber: user.businessNumber,
+      taxEmail: user.taxEmail,
+      /** 같은 고객사 계정들 (포털 '담당자') */
+      colleagues: org
+        ? await this.db
+            .select({ name: users.name, email: users.email, role: clientMembers.role })
+            .from(clientMembers)
+            .innerJoin(users, eq(users.id, clientMembers.userId))
+            .where(eq(clientMembers.clientId, org.id))
+        : [{ name: user.name, email: user.email, role: 'owner' }],
+    };
+  }
+
+  /** 포털 계정에서 내 정보·회사 정보를 고친다. 빈 문자열은 지움 */
+  async updateProfile(id: number, dto: UpdateProfileDto) {
+    const clean = (v: string | undefined) => (v === undefined ? undefined : v.trim() || null);
+    const digits = dto.businessNumber?.replace(/\D/g, '');
+    await this.db
+      .update(users)
+      .set({
+        ...(dto.name?.trim() && { name: dto.name.trim() }),
+        ...(dto.phone !== undefined && { phone: normalizePhone(dto.phone) || null }),
+        ...(dto.organization !== undefined && { organization: clean(dto.organization) }),
+        ...(digits !== undefined && {
+          businessNumber: digits ? `${digits.slice(0, 3)}-${digits.slice(3, 5)}-${digits.slice(5)}` : null,
+        }),
+        ...(dto.taxEmail !== undefined && { taxEmail: clean(dto.taxEmail)?.toLowerCase() ?? null }),
+      })
+      .where(eq(users.id, id));
+    return this.profile(id);
   }
 
   issueToken(user: { id: number; name: string; email: string; role: string }) {

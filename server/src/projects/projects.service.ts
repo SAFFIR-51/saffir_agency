@@ -4,6 +4,7 @@ import { DRIZZLE, DrizzleDb } from '../db/db.module';
 import { milestones, projects, works, deliverables, payments } from '../db/schema';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
+import { RequestUser, assertProjectAccess } from '../common/project-access';
 
 @Injectable()
 export class ProjectsService {
@@ -32,12 +33,8 @@ export class ProjectsService {
     });
   }
 
-  async findOne(id: number) {
-    const [project] = await this.db
-      .select()
-      .from(projects)
-      .where(eq(projects.id, id));
-    if (!project) throw new NotFoundException(`Project #${id} not found`);
+  async findOne(id: number, user: RequestUser) {
+    const project = await assertProjectAccess(this.db, user, id);
 
     const ms = await this.db
       .select()

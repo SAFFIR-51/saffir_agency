@@ -1,7 +1,9 @@
 import {
   Body, Controller, Delete, Get, HttpCode,
-  Param, ParseIntPipe, Patch, Post, UseGuards,
+  Param, ParseIntPipe, Patch, Post, Req, UseGuards,
 } from '@nestjs/common';
+import { Request } from 'express';
+import { RequestUser } from '../common/project-access';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AdminGuard } from '../auth/guards/admin.guard';
 import { CreatePaymentDto } from './dto/create-payment.dto';
@@ -33,16 +35,17 @@ export class PaymentsController {
 
   @Post(':id/toss/order')
   @UseGuards(JwtAuthGuard)
-  tossOrder(@Param('id', ParseIntPipe) id: number) {
-    return this.service.createTossOrder(id);
+  tossOrder(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
+    return this.service.createTossOrder(id, req.user as RequestUser);
   }
 
   @Post(':id/toss/confirm')
   @UseGuards(JwtAuthGuard)
   tossConfirm(
+    @Req() req: Request,
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: TossConfirmDto,
   ) {
-    return this.service.confirmToss(id, dto);
+    return this.service.confirmToss(id, dto, req.user as RequestUser);
   }
 }

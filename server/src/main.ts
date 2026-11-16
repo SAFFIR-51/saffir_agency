@@ -17,6 +17,9 @@ async function bootstrap() {
   app.useStaticAssets(uploadsDir, { prefix: '/uploads' });
 
   app.use(helmet());
+  // nginx·화면 서버(같은 도커 내부망)가 넘겨 준 X-Forwarded-For로 실제 방문자 IP를 본다.
+  // 그래야 로그인·문의 횟수 제한이 방문자별로 걸린다 (사설망 주소에서 온 헤더만 믿는다)
+  app.set('trust proxy', 'loopback, linklocal, uniquelocal');
   app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
   app.useGlobalFilters(new GlobalExceptionFilter());

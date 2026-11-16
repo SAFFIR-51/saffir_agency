@@ -49,6 +49,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-saffir}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-saffir_pw}
       POSTGRES_DB: ${POSTGRES_DB:-saffir}
+      SEED_DEMO: "1" # 새 볼륨이면 데모 계정(db/seeds/demo.sql)을 넣는다
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./db/init.sh:/docker-entrypoint-initdb.d/init.sh:ro

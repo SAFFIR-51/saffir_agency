@@ -15,7 +15,13 @@ export const REQUEST_PRIORITIES = ["긴급", "높음", "보통", "낮음"] as co
 export type RequestPriority = (typeof REQUEST_PRIORITIES)[number];
 
 /** 고객사: 포털 계정(accountIds)으로 로그인한 사람이 이 고객사의 공개 항목을 본다 */
-export type PmClient = { id: string; name: string; accountIds: string[] };
+export type PmClient = {
+  id: string;
+  name: string;
+  accountIds: string[];
+  /** 백엔드 모드: 연결된 포털 계정 (가입한 사용자) */
+  members?: { userId: number; name: string; email: string }[];
+};
 
 export type Milestone = {
   id: string;
@@ -98,8 +104,20 @@ export type PmProject = {
   meetings: Meeting[];
   deliverables: Deliverable[];
   activity: Activity[];
+  /** 청구 (고객 포털 '청구·결제'). 데모 시드에 없는 프로젝트는 비어 있을 수 있다 */
+  payments?: PmPayment[];
   /** 끝난 프로젝트 보관 (목록 아래로, 대시보드에서 빠짐) */
   archivedAt?: string;
+};
+
+/** 청구 한 건. 금액은 원(부가세 포함), due는 YYYY-MM-DD */
+export type PmPayment = {
+  id: string;
+  title: string;
+  amount: number;
+  due?: string;
+  paidAt?: string;
+  invoiceNumber?: string;
 };
 
 export const DELIVERABLE_STATUSES = ["작성 중", "승인 요청", "수정 요청", "승인 완료"] as const;

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Patch, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Throttle } from '@nestjs/throttler';
 import { Request, Response } from 'express';
@@ -9,6 +9,7 @@ import {
   LoginDto,
   RegisterDto,
   ResetPasswordDto,
+  UpdateProfileDto,
 } from './dto/auth.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
@@ -103,7 +104,8 @@ export class AuthController {
   private async handleCallback(req: Request, res: Response) {
     const user = await this.authService.findOrCreateUser(req.user as any);
     this.setAuthCookie(res, user);
-    res.redirect(`${FRONTEND_URL}/portal`);
+    // 화면의 고객 포털은 /dashboard (내부 계정이면 화면이 다시 /admin으로 보낸다)
+    res.redirect(`${FRONTEND_URL}/dashboard`);
   }
 
   private setAuthCookie(
@@ -127,7 +129,14 @@ export class AuthController {
   @Get('me')
   @UseGuards(JwtAuthGuard)
   me(@Req() req: Request) {
-    return req.user;
+    return this.authService.profile((req.user as { sub: number }).sub);
+  }
+
+  /** 포털 계정: 내 정보·회사 정보 수정 */
+  @Patch('me')
+  @UseGuards(JwtAuthGuard)
+  updateMe(@Req() req: Request, @Body() dto: UpdateProfileDto) {
+    return this.authService.updateProfile((req.user as { sub: number }).sub, dto);
   }
 
   // ── Logout ──────────────────────────────────────────────

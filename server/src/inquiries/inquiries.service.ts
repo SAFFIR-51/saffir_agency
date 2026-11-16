@@ -1,5 +1,5 @@
 import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { count, desc, eq } from 'drizzle-orm';
+import { and, count, desc, eq } from 'drizzle-orm';
 import { DRIZZLE, DrizzleDb } from '../db/db.module';
 import { inquiries } from '../db/schema';
 import { CreateInquiryDto } from './dto/create-inquiry.dto';
@@ -23,13 +23,25 @@ export class InquiriesService {
     return row;
   }
 
-  async findAll(page: number, limit: number) {
+  async findAll(page: number, limit: number, filter: { status?: string; kind?: string } = {}) {
     const offset = (page - 1) * limit;
+    const where = and(
+      filter.status ? eq(inquiries.status, filter.status) : undefined,
+      filter.kind ? eq(inquiries.kind, filter.kind) : undefined,
+    );
     const [[{ total }], data] = await Promise.all([
-      this.db.select({ total: count() }).from(inquiries),
-      this.db.select().from(inquiries).orderBy(desc(inquiries.receivedAt)).limit(limit).offset(offset),
+      this.db.select({ total: count() }).from(inquiries).where(where),
+      this.db.select().from(inquiries).where(where).orderBy(desc(inquiries.receivedAt)).limit(limit).offset(offset),
     ]);
     return { data, total: Number(total), page, limit };
+  }
+
+  async counts() {
+    const rows = await this.db
+      .select({ status: inquiries.status, n: count() })
+      .from(inquiries)
+      .groupBy(inquiries.status);
+    return Object.fromEntries(rows.map((r) => [r.status, Number(r.n)]));
   }
 
   async findOne(id: number) {
@@ -41,10 +53,10 @@ export class InquiriesService {
     return row;
   }
 
-  async updateStatus(id: number, status: string) {
+  async update(id: number, dto: { status?: string; assignee?: string; memo?: string }) {
     const [row] = await this.db
       .update(inquiries)
-      .set({ status })
+      .set({ ...dto, updatedAt: new Date() })
       .where(eq(inquiries.id, id))
       .returning();
     if (!row) throw new NotFoundException(`Inquiry #${id} not found`);

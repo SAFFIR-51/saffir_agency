@@ -1,6 +1,7 @@
 import "server-only";
 import { randomBytes } from "node:crypto";
 import { NextResponse, type NextRequest } from "next/server";
+import { dataSource } from "@/server/api";
 import { authorizeUrl, fetchProfile, isOAuthProvider, startSession } from "@/server/auth";
 import { routes, toInternalRoute } from "@/shared/config";
 
@@ -31,6 +32,11 @@ function backToLogin(request: NextRequest, error: string) {
 export async function oauthStart(request: NextRequest, { params }: Ctx) {
   const { provider } = await params;
   if (!isOAuthProvider(provider)) return backToLogin(request, "oauth_unknown");
+  // 백엔드 모드: 백엔드(passport)가 간편 로그인을 처리하고 access_token 쿠키를 심은 뒤 /dashboard로 보낸다.
+  // 같은 도메인의 /api로 보낸다 (개발은 next.config rewrites, 운영은 nginx가 백엔드로 넘김)
+  if (dataSource() === "api") {
+    return NextResponse.redirect(new URL(`/api/auth/${provider}`, origin(request)));
+  }
 
   const state = randomBytes(16).toString("base64url");
   const next = toInternalRoute(

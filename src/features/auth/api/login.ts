@@ -2,7 +2,8 @@
 
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { startSession, verifyDemoLogin } from "@/server/auth";
+import { dataSource } from "@/server/api";
+import { backendLogin, startSession, verifyDemoLogin } from "@/server/auth";
 import { getClientKey, isRateLimited } from "@/server/inquiry";
 import { routes, toInternalRoute } from "@/shared/config";
 import type { ActionResult } from "@/shared/lib";
@@ -23,6 +24,18 @@ export async function login(input: unknown): Promise<ActionResult<never>> {
       fieldErrors: z.flattenError(parsed.error).fieldErrors,
     };
   }
+  // 백엔드 모드: 백엔드(NestJS)로 로그인하고 그 쿠키를 그대로 쓴다
+  if (dataSource() === "api") {
+    const result = await backendLogin(parsed.data.email, parsed.data.password);
+    if (!result.ok) return { ok: false, error: result.error };
+    redirect(
+      toInternalRoute(
+        parsed.data.next,
+        result.session.staff ? routes.admin.home : routes.portal.home,
+      ),
+    );
+  }
+
   const account = verifyDemoLogin(parsed.data.email, parsed.data.password);
   if (!account) return { ok: false, error: "이메일 또는 비밀번호가 맞지 않습니다." };
 

@@ -10,6 +10,7 @@ import { DRIZZLE, DrizzleDb } from '../db/db.module';
 import { payments } from '../db/schema';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { TossConfirmDto } from './dto/toss-confirm.dto';
+import { RequestUser, assertProjectAccess } from '../common/project-access';
 
 @Injectable()
 export class PaymentsService {
@@ -46,12 +47,14 @@ export class PaymentsService {
     return row;
   }
 
-  async createTossOrder(id: number) {
+  async createTossOrder(id: number, user: RequestUser) {
     const [payment] = await this.db
       .select()
       .from(payments)
       .where(eq(payments.id, id));
     if (!payment) throw new NotFoundException(`Payment #${id} not found`);
+    // 자기(또는 소속 고객사) 프로젝트의 청구만 결제할 수 있다
+    await assertProjectAccess(this.db, user, payment.projectId);
     if (payment.paidAt) throw new BadRequestException('Already paid');
 
     const orderId = `saffir_${id}_${Date.now()}`;
@@ -72,12 +75,13 @@ export class PaymentsService {
     };
   }
 
-  async confirmToss(id: number, dto: TossConfirmDto) {
+  async confirmToss(id: number, dto: TossConfirmDto, user: RequestUser) {
     const [payment] = await this.db
       .select()
       .from(payments)
       .where(eq(payments.id, id));
     if (!payment) throw new NotFoundException(`Payment #${id} not found`);
+    await assertProjectAccess(this.db, user, payment.projectId);
     if (payment.paidAt) throw new BadRequestException('Already paid');
     if (payment.tossOrderId !== dto.orderId)
       throw new BadRequestException('Order ID mismatch');

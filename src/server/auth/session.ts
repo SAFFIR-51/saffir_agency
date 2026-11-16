@@ -2,7 +2,9 @@ import "server-only";
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
 import { connection } from "next/server";
+import { dataSource } from "../api";
 import { isProduction } from "../env";
+import { BACKEND_COOKIE, getBackendSession } from "./backend-session";
 import { DEMO_PASSWORD, demoAccounts, findDemoAccount, type DemoAccount } from "./demo-accounts";
 
 const SESSION_COOKIE = "saffir_session";
@@ -15,7 +17,10 @@ type Payload = { sub: string; exp: number; name?: string; email?: string };
 
 const providerLabel: Record<string, string> = { kakao: "카카오", naver: "네이버" };
 
-/** 데모 로그인 허용: 개발 환경이거나 DEMO_LOGIN=1 (토스 심사 기간 등) */
+/**
+ * 데모 로그인 허용: 개발 환경이거나 DEMO_LOGIN=1 (토스 심사 기간 등).
+ * 백엔드 모드에서도 같은 데모 계정을 쓴다 (db/seeds/demo.sql로 넣은 계정, 비밀번호 같음).
+ */
 export const demoLoginEnabled = !isProduction || process.env.DEMO_LOGIN === "1";
 
 function secret() {
@@ -53,6 +58,11 @@ function decode(token: string): Payload | null {
 
 /** 로그인한 회원. 없으면 null. 개발 중 PORTAL_AUTH_BYPASS=1이면 로그인 전에도 모든 서비스 계정으로 본다 */
 export async function getSession(): Promise<Session | null> {
+  // 백엔드 모드: 백엔드 JWT 쿠키로 확인 (데모 계정·자체 세션은 쓰지 않는다)
+  if (dataSource() === "api") {
+    await connection();
+    return getBackendSession();
+  }
   const token = (await cookies()).get(SESSION_COOKIE)?.value;
   // 만료 확인(Date.now)은 요청 시점에만: 쿠키를 미리 읽는 프리패치에서는 여기서 멈춘다
   await connection();
@@ -92,6 +102,7 @@ export async function startSession(
 
 export async function endSession() {
   (await cookies()).delete(SESSION_COOKIE);
+  (await cookies()).delete(BACKEND_COOKIE);
 }
 
 /** 데모 계정 확인. 이메일·비밀번호가 맞으면 계정, 아니면 null */

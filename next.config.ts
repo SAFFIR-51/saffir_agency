@@ -12,6 +12,10 @@ const nextConfig: NextConfig = {
   typedRoutes: true,
   // 자동 메모이제이션. useMemo·useCallback·memo를 직접 쓰지 않는다 (frontend-guide 7번)
   reactCompiler: true,
+  experimental: {
+    // 어드민 산출물 파일 올리기(서버 액션 → 백엔드 /api/upload, 50MB)
+    serverActions: { bodySizeLimit: "50mb" },
+  },
   turbopack: {
     rules: {
       "*.css": {

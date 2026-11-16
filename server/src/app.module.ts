@@ -16,6 +16,8 @@ import { PaymentLinksModule } from './payment-links/payment-links.module';
 import { OrdersModule } from './orders/orders.module';
 import { UploadModule } from './upload/upload.module';
 import { MailModule } from './mail/mail.module';
+import { PmModule } from './pm/pm.module';
+import { GeoModule } from './geo/geo.module';
 import { AppController } from './app.controller';
 
 @Module({
@@ -57,6 +59,8 @@ import { AppController } from './app.controller';
     PaymentLinksModule,
     OrdersModule,
     UploadModule,
+    PmModule,
+    GeoModule,
   ],
   controllers: [AppController],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],

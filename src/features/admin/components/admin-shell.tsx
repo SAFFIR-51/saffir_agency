@@ -3,7 +3,8 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { apiHealthy, dataSource } from "@/server/api";
 import { getSession } from "@/server/auth";
-import { listProjects, listRequests } from "@/server/projects";
+import { inquiryCounts } from "@/server/inquiry";
+import { listProjects, listRequests, loadPm } from "@/server/projects";
 import { routes } from "@/shared/config";
 import { adminLogout } from "../api/logout";
 import { AdminNav } from "./admin-nav";
@@ -53,11 +54,14 @@ async function DataSourceBadge() {
 async function NavWithCounts() {
   const session = await getSession();
   if (!session?.staff) return <AdminNav />;
+  await loadPm();
+  const inquiries = await inquiryCounts().catch(() => null);
   return (
     <AdminNav
       counts={{
         [routes.admin.projects]: listProjects().filter((p) => !p.archivedAt).length,
         [routes.admin.requests]: listRequests().filter((r) => r.status !== "완료").length,
+        [routes.admin.inquiries]: inquiries?.new ?? 0,
       }}
     />
   );

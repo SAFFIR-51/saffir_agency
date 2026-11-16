@@ -318,3 +318,12 @@ export function getDemoPortalData(accountId: string): PortalData | null {
   const data = demoData[accountId];
   return data ? structuredClone(data) : null;
 }
+
+/** 빈 포털 데이터 (백엔드 모드에서 포털을 백엔드로 옮기기 전까지 쓰는 자리) */
+export function emptyPortalData(company: string): PortalData {
+  return {
+    ...structuredClone(base),
+    company: { name: company, businessNumber: "-", taxEmail: "-" },
+    members: [],
+  };
+}

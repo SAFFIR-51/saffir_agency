@@ -23,7 +23,10 @@ export function proxy(request: NextRequest) {
 
   if (pathname.startsWith("/dashboard") || pathname.startsWith("/admin")) {
     if (process.env.PORTAL_AUTH_BYPASS === "1") return NextResponse.next();
-    if (request.cookies.has(SESSION_COOKIE)) return NextResponse.next();
+    // 데모 세션(saffir_session) 또는 백엔드 로그인(access_token) 쿠키
+    if (request.cookies.has(SESSION_COOKIE) || request.cookies.has("access_token")) {
+      return NextResponse.next();
+    }
     const url = new URL("/login", request.url);
     url.searchParams.set("next", pathname);
     return NextResponse.redirect(url);

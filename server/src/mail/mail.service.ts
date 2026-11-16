@@ -6,9 +6,10 @@ import type { Transporter } from 'nodemailer';
 export interface InquiryNotification {
   id: number;
   name: string;
-  email: string;
+  email: string | null;
   phone: string | null;
   company: string | null;
+  kind?: string;
   projectType: string | null;
   budget: string | null;
   targetDate: string | null;
@@ -84,8 +85,8 @@ export class MailService {
     await this.transporter.sendMail({
       from: `"SAFFIR 문의 알림" <${this.from}>`,
       to: this.notifyEmail,
-      replyTo: inquiry.email,
-      subject: `[문의 접수] ${inquiry.name}${inquiry.company ? ` (${inquiry.company})` : ''} — ${inquiry.projectType ?? '유형 미지정'}`,
+      ...(inquiry.email && { replyTo: inquiry.email }),
+      subject: `[${inquiry.kind === 'estimate' ? '견적 요청' : '문의 접수'}] ${inquiry.name}${inquiry.company ? ` (${inquiry.company})` : ''} — ${inquiry.projectType ?? '유형 미지정'}`,
       html,
     });
     this.logger.log(`문의 #${inquiry.id} 알림 메일 발송 완료 → ${this.notifyEmail}`);
@@ -118,6 +119,32 @@ export class MailService {
       html,
     });
     this.logger.log(`비밀번호 재설정 메일 발송 완료 → ${to}`);
+  }
+
+  /** 고객 포털 초대 — 링크는 7일짜리 1회용 토큰이다 */
+  async sendInviteMail({ to, inviter, client, link }: { to: string; inviter: string; client: string; link: string }) {
+    if (!this.transporter) {
+      this.logger.warn(`SMTP 미설정 — 포털 초대 링크(${to}): ${link}`);
+      return;
+    }
+    const html = `
+      <div style="font-family:sans-serif;max-width:520px;">
+        <h2 style="color:#111;">사피어 고객 포털 초대</h2>
+        <p style="font-size:14px;">${escapeHtml(inviter)}님이 <b>${escapeHtml(client)}</b> 포털에 초대했습니다. 프로젝트 진행 현황, 주간 보고, 청구를 이곳에서 함께 확인할 수 있습니다.</p>
+        <p style="margin:28px 0;">
+          <a href="${link}" style="display:inline-block;background:#111;color:#fff;text-decoration:none;padding:13px 26px;border-radius:8px;font-weight:bold;font-size:14px;">초대 수락하기</a>
+        </p>
+        <p style="font-size:13px;color:#666;">버튼이 눌리지 않으면 아래 주소를 복사해 브라우저에 붙여넣어 주세요.<br><span style="color:#888;word-break:break-all;">${link}</span></p>
+        <p style="font-size:13px;color:#666;border-top:1px solid #eee;padding-top:12px;">이 링크는 <b>7일</b> 뒤 만료되며 이 이메일 주소로만 쓸 수 있습니다. 모르는 초대라면 이 메일을 무시하셔도 됩니다.</p>
+        <p style="font-size:12px;color:#aaa;">saffir.co.kr 에서 자동 발송된 메일입니다.</p>
+      </div>`;
+    await this.transporter.sendMail({
+      from: `"SAFFIR" <${this.from}>`,
+      to,
+      subject: `[SAFFIR] ${client} 포털에 초대되었습니다`,
+      html,
+    });
+    this.logger.log(`포털 초대 메일 발송 완료 → ${to}`);
   }
 
   /** 상품 결제 완료 알림 — 토스 승인이 끝난 뒤 호출 (fire-and-forget) */

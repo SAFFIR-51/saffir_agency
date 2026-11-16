@@ -7,7 +7,7 @@ import { diskStorage } from 'multer';
 import { extname, join } from 'path';
 import { randomUUID } from 'crypto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { AdminGuard } from '../auth/guards/admin.guard';
+import { StaffGuard } from '../auth/guards/staff.guard';
 
 const ALLOWED_EXT = ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx',
   '.zip', '.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg'];
@@ -23,9 +23,9 @@ const makeStorage = () => diskStorage({
 
 @Controller('upload')
 export class UploadController {
-  // 관리자용 파일 업로드 (납품물 등)
+  // 내부 계정(admin·staff)용 파일 업로드 (산출물 등)
   @Post()
-  @UseGuards(JwtAuthGuard, AdminGuard)
+  @UseGuards(JwtAuthGuard, StaffGuard)
   @UseInterceptors(
     FileInterceptor('file', {
       storage: makeStorage(),

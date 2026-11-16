@@ -1,6 +1,6 @@
-import { routes } from "@/shared/config";
-import { ButtonLink, PageHeader, Section, StateTable, WireButton, WireInput } from "@/shared/ui";
+import { Suspense } from "react";
 import { FindAccount } from "./find-account";
+import { ResetPasswordForm } from "./reset-password-form";
 
 /** 아이디·비밀번호 찾기 */
 export function ForgotPasswordPage() {
@@ -17,30 +17,22 @@ export function ForgotPasswordPage() {
   );
 }
 
-const resetStates = [
-  { state: "링크가 맞음", screen: "새 비밀번호 입력창", next: "비밀번호 바꾸기" },
-  { state: "링크 시간이 지남·이미 씀", screen: "링크를 쓸 수 없다는 안내", next: "다시 요청하기" },
-  { state: "바꾸기 완료", screen: "비밀번호를 바꿨다는 안내", next: "로그인" },
-];
-
 /** 메일 링크로 들어와 새 비밀번호 정하기 */
 export function ResetPasswordPage() {
   return (
-    <div className="w-full max-w-3xl">
-      <PageHeader label="S1 · 제목" title="새 비밀번호 정하기" />
-      <Section label="S2 · 새 비밀번호">
-        <div className="max-w-sm space-y-4">
-          <WireInput label="새 비밀번호" required />
-          <WireInput label="새 비밀번호 확인" required />
-          <WireButton>비밀번호 바꾸기</WireButton>
-        </div>
-      </Section>
-      <Section label="S3 · 상태" title="상태별 화면">
-        <StateTable states={resetStates} />
-        <ButtonLink href={routes.auth.forgotPassword} variant="secondary">
-          링크 다시 요청하기
-        </ButtonLink>
-      </Section>
+    <div className="w-full max-w-[400px]">
+      <h1 className="text-[1.75rem] leading-[1.3] font-bold tracking-[-0.03em]">
+        새 비밀번호 정하기
+      </h1>
+      <p className="mt-2 text-[0.9375rem] text-neutral-600">
+        앞으로 로그인할 때 쓸 비밀번호를 정해 주세요.
+      </p>
+      <div className="mt-8">
+        {/* ?token= 을 읽으므로 Suspense 안에서 그린다 */}
+        <Suspense fallback={<div aria-hidden="true" className="h-56" />}>
+          <ResetPasswordForm />
+        </Suspense>
+      </div>
     </div>
   );
 }

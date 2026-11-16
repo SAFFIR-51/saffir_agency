@@ -1,5 +1,6 @@
 import "server-only";
 import { randomUUID } from "node:crypto";
+import { cache } from "react";
 import { addDays, daysBetween, mondayOf, nowKST, todayKST, weekLabel } from "./dates";
 import { seedClients, seedNotifications, seedProjects, seedRequests, seedStaff } from "./seed";
 import { PM_STAGES } from "./types";
@@ -24,7 +25,7 @@ import type {
  * 프로젝트 관리 저장소. 지금은 서버 메모리(데모)라 서버를 다시 켜면 시드로 돌아간다.
  * 사이트 DB를 붙이면 이 파일의 함수 안쪽만 DB 조회·저장으로 바꾼다 (함수 모양은 유지).
  */
-type State = {
+export type State = {
   clients: PmClient[];
   projects: PmProject[];
   requests: PmRequest[];
@@ -37,7 +38,7 @@ type State = {
  * 데이터 모양이 바뀌면 이 숫자를 올린다. 개발 서버가 켜진 채로 코드를 바꿔도
  * 예전 모양의 메모리 데이터를 버리고 시드로 다시 시작한다 (예전 데이터로 화면이 깨지는 것 방지).
  */
-const STORE_VERSION = 4;
+const STORE_VERSION = 5;
 
 const holder = globalThis as typeof globalThis & {
   __saffirPm?: State;
@@ -62,16 +63,31 @@ function state(): State {
 
 const newId = () => randomUUID().slice(0, 8);
 
+/**
+ * 요청 하나 동안 쓸 데이터 사진. 백엔드 모드에서는 화면을 그리기 전에 loadPm()이 백엔드 데이터를
+ * 여기에 넣고, 아래 읽기 함수들은 이걸 읽는다. 데모 모드에서는 비어 있어 메모리 저장소를 그대로 읽는다.
+ */
+const snapshotRef = cache((): { current: State | null } => ({ current: null }));
+
+export function setSnapshot(snapshot: State) {
+  snapshotRef().current = snapshot;
+}
+
+/** 지금 읽을 데이터 (렌더 중 백엔드 사진이 있으면 그것, 없으면 메모리 저장소) */
+export function readState(): State {
+  return snapshotRef().current ?? state();
+}
+
 /* ───────── 읽기 ───────── */
 
-export const listStaff = () => state().staff;
-export const listClients = () => state().clients;
-export const getClient = (id: string) => state().clients.find((c) => c.id === id) ?? null;
-export const listProjects = () => state().projects;
-export const getProject = (id: string) => state().projects.find((p) => p.id === id) ?? null;
+export const listStaff = () => readState().staff;
+export const listClients = () => readState().clients;
+export const getClient = (id: string) => readState().clients.find((c) => c.id === id) ?? null;
+export const listProjects = () => readState().projects;
+export const getProject = (id: string) => readState().projects.find((p) => p.id === id) ?? null;
 
 export function listRequests(filter: { projectId?: string; clientId?: string } = {}) {
-  return state()
+  return readState()
     .requests.filter(
       (r) =>
         (!filter.projectId || r.projectId === filter.projectId) &&
@@ -81,14 +97,6 @@ export function listRequests(filter: { projectId?: string; clientId?: string } =
 }
 
 /** 포털 계정이 속한 고객사 */
-export const clientsOfAccount = (accountId: string) =>
-  state().clients.filter((c) => c.accountIds.includes(accountId));
-
-export const notificationsFor = (clientIds: string[]) =>
-  state()
-    .notifications.filter((n) => clientIds.includes(n.clientId))
-    .toSorted((a, b) => b.date.localeCompare(a.date));
-
 /* ───────── 계산 ───────── */
 
 /** 진행률: 전체 마일스톤 중 완료 비율 (단계 전체 일정을 기준으로 한다) */
@@ -449,6 +457,36 @@ export function removeDeliverable(projectId: string, deliverableId: string) {
   project.deliverables = project.deliverables.filter((d) => d.id !== deliverableId);
 }
 
+/* ───────── 청구 ───────── */
+
+export function addPayment(
+  projectId: string,
+  input: { title: string; amount: number; due?: string },
+) {
+  const project = mustProject(projectId);
+  const payment = { id: newId(), ...input };
+  (project.payments ??= []).push(payment);
+  const won = `${input.amount.toLocaleString("ko-KR")}원`;
+  notify(
+    project.clientId,
+    `새 청구: ${input.title} ${won}${input.due ? ` (기한 ${input.due.slice(5)})` : ""}`,
+  );
+  return { payment, won };
+}
+
+export function markPaymentPaid(projectId: string, paymentId: string) {
+  const payment = mustProject(projectId).payments?.find((x) => x.id === paymentId && !x.paidAt);
+  if (payment) payment.paidAt = todayKST();
+  return payment;
+}
+
+export function removePayment(projectId: string, paymentId: string) {
+  const project = mustProject(projectId);
+  const payment = project.payments?.find((x) => x.id === paymentId && !x.paidAt);
+  if (payment) project.payments = project.payments?.filter((x) => x !== payment);
+  return payment;
+}
+
 /* ───────── 새 프로젝트 ───────── */
 
 const templateTitles: Record<PmStage, string> = {
@@ -606,7 +644,7 @@ export function removeStaff(name: string) {
 
 /** 담당 수 (팀 화면) */
 export function workloadOf(name: string) {
-  const s = state();
+  const s = readState();
   return {
     pm: s.projects.filter((p) => p.pm === name && !p.archivedAt).length,
     tasks: s.projects

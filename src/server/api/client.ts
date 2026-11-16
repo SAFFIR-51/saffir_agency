@@ -1,5 +1,5 @@
 import "server-only";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 
 /**
  * 백엔드(api/, NestJS) 호출. Next 서버 코드(서버 컴포넌트·서버 액션·route handler)에서만 쓴다.
@@ -25,11 +25,13 @@ export class ApiError extends Error {
 
 export async function apiFetch<T>(path: `/${string}`, init: RequestInit = {}): Promise<T> {
   const cookieHeader = (await cookies()).toString();
+  const forwarded = await visitorIp();
   const res = await fetch(`${apiUrl()}/api${path}`, {
     ...init,
     headers: {
       "content-type": "application/json",
       ...(cookieHeader ? { cookie: cookieHeader } : {}),
+      ...(forwarded ? { "x-forwarded-for": forwarded } : {}),
       ...init.headers,
     },
     cache: "no-store",
@@ -50,4 +52,13 @@ export async function apiHealthy() {
   } catch {
     return false;
   }
+}
+
+/**
+ * 방문자 IP를 백엔드에 넘긴다. 화면 서버가 대신 호출하므로 이게 없으면
+ * 백엔드의 횟수 제한(로그인 분당 10회 등)이 모든 방문자에게 한꺼번에 걸린다.
+ */
+export async function visitorIp() {
+  const h = await headers();
+  return h.get("x-forwarded-for")?.split(",")[0]?.trim() || h.get("x-real-ip") || "";
 }

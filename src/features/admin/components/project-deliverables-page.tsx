@@ -1,6 +1,7 @@
 import { Picker, toOptions } from "@/shared/ui";
 import type { Route } from "next";
 import Link from "next/link";
+import { dataSource } from "@/server/api";
 import { DELIVERABLE_STATUSES, PM_STAGES, short, type Deliverable } from "@/server/projects";
 import { cn } from "@/shared/lib";
 import {
@@ -14,6 +15,12 @@ import {
 import { AdminPage } from "./admin-page";
 import { loadProject, ProjectFrame } from "./project-frame";
 import { Panel, btnDark, btnLight, btnSmall, input, label, textarea } from "./ui";
+
+/** 파일 첨부 (백엔드 모드만, 백엔드 /api/upload와 같은 확장자·50MB) */
+const UPLOAD_ACCEPT = ".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.png,.jpg,.jpeg,.gif,.webp,.svg";
+const UPLOAD_HINT = "PDF·문서·이미지·ZIP, 50MB까지";
+const fileInput =
+  "block w-full text-sm text-neutral-600 file:mr-3 file:h-9 file:rounded-md file:border file:border-neutral-300 file:bg-white file:px-3 file:text-sm file:font-semibold hover:file:border-black";
 
 const tone: Record<Deliverable["status"], string> = {
   "작성 중": "border-neutral-300 text-neutral-600",
@@ -29,7 +36,8 @@ async function Body({
 }: {
   projectId: string;
   edit?: string;
-  error?: boolean;
+  /** "1" 입력 확인, "file" 파일 올리기 실패 */
+  error?: string;
 }) {
   const { project, href } = await loadProject(projectId, "deliverables");
   const counts = DELIVERABLE_STATUSES.map(
@@ -42,6 +50,7 @@ async function Body({
       PM_STAGES.indexOf(a.stage) - PM_STAGES.indexOf(b.stage),
   );
   const milestoneTitle = (id?: string) => project.milestones.find((m) => m.id === id)?.title;
+  const uploads = dataSource() === "api";
 
   return (
     <ProjectFrame project={project} tab="deliverables" href={href}>
@@ -243,6 +252,20 @@ async function Body({
                           </label>
                           <input id={`nl-${d.id}`} name="link" className={`${input} w-64`} />
                         </div>
+                        {uploads ? (
+                          <div>
+                            <label htmlFor={`nf-${d.id}`} className={label}>
+                              또는 새 파일
+                            </label>
+                            <input
+                              id={`nf-${d.id}`}
+                              name="file"
+                              type="file"
+                              accept={UPLOAD_ACCEPT}
+                              className={`${fileInput} w-64`}
+                            />
+                          </div>
+                        ) : null}
                         <button type="submit" className={btnDark}>
                           올리고 다시 승인 요청
                         </button>
@@ -283,7 +306,9 @@ async function Body({
         >
           {error ? (
             <p role="alert" className="text-sm text-red-600 sm:col-span-4">
-              이름과 단계를 입력해 주세요.
+              {error === "file"
+                ? "파일을 올리지 못했습니다. 형식(PDF·문서·이미지·ZIP)과 크기(50MB)를 확인해 주세요."
+                : "이름과 단계를 입력해 주세요."}
             </p>
           ) : null}
           <div className="sm:col-span-2">
@@ -320,6 +345,20 @@ async function Body({
               링크 (Figma, 테스트 주소, 문서)
             </label>
             <input id="d-link" name="link" placeholder="https://" className={input} />
+            {uploads ? (
+              <div className="mt-2">
+                <label htmlFor="d-file" className={label}>
+                  또는 파일 ({UPLOAD_HINT})
+                </label>
+                <input
+                  id="d-file"
+                  name="file"
+                  type="file"
+                  accept={UPLOAD_ACCEPT}
+                  className={fileInput}
+                />
+              </div>
+            ) : null}
           </div>
           <div className="sm:col-span-2">
             <label htmlFor="d-ms" className={label}>
@@ -369,7 +408,7 @@ export function ProjectDeliverablesPage({
 }: {
   projectId: string;
   edit?: string;
-  error?: boolean;
+  error?: string;
 }) {
   return (
     <AdminPage>

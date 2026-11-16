@@ -18,7 +18,7 @@ async function Deliverables({
     <ProjectDeliverablesPage
       projectId={projectId}
       edit={typeof query.edit === "string" ? query.edit : undefined}
-      error={query.error === "1"}
+      error={query.error === "1" || query.error === "file" ? query.error : undefined}
     />
   );
 }

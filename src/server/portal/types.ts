@@ -66,7 +66,15 @@ export type GeoData = {
 type Invoice = {
   id: string;
   item: string;
-  kind: "구독" | "월 이용료" | "서버 운영비" | "메시지 발송료" | "외주 계약금" | "외주 잔금";
+  kind:
+    | "구독"
+    | "월 이용료"
+    | "서버 운영비"
+    | "메시지 발송료"
+    | "외주 계약금"
+    | "외주 잔금"
+    | "프로젝트 청구"
+    | "상품 결제";
   amount: number;
   due: string;
   status: "미결제" | "결제 완료";
