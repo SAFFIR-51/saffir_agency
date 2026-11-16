@@ -43,7 +43,7 @@ export class MailService {
     const user = config.get<string>('SMTP_USER');
     const pass = config.get<string>('SMTP_PASS');
     this.from = user ?? '';
-    this.notifyEmail = config.get<string>('NOTIFY_EMAIL') ?? 'saffir.kr@gmail.com';
+    this.notifyEmail = config.get<string>('NOTIFY_EMAIL') || 'saffir.kr@gmail.com';
 
     if (user && pass) {
       const port = Number(config.get<string>('SMTP_PORT') ?? 465);

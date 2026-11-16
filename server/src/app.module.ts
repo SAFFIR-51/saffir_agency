@@ -41,7 +41,8 @@ import { AppController } from './app.controller';
         SMTP_PORT: Joi.number().default(465),
         SMTP_USER: Joi.string().allow('').optional(),
         SMTP_PASS: Joi.string().allow('').optional(),
-        NOTIFY_EMAIL: Joi.string().email().default('saffir.kr@gmail.com'),
+        // 비워 두면 기본 주소로 (.env.example이 빈 값으로 둔다)
+        NOTIFY_EMAIL: Joi.string().email().allow('').default('saffir.kr@gmail.com'),
       }),
       validationOptions: { abortEarly: true },
     }),

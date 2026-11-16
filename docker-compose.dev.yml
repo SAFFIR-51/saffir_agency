@@ -44,7 +44,8 @@ services:
   db:
     image: postgres:17-alpine
     ports:
-      - "5432:5432"
+      # PC에서 DB를 열 때 쓰는 포트. 5432는 다른 프로젝트가 쓰는 경우가 많아 기본 5434 (.env의 DB_PORT로 바꿈)
+      - "${DB_PORT:-5434}:5432"
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-saffir}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-saffir_pw}
