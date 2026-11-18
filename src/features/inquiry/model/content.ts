@@ -89,21 +89,7 @@ export const contactContent = {
 
 export const estimateContent = {
   title: "견적 요청",
-  lead: "정찰가 패키지에 없는 개발은 견적으로 안내해 드립니다.",
-  sub: [
-    "정찰가 패키지에 없는 개발은 견적으로 안내해 드립니다.",
-    `요구사항을 남기시면 ${replyTime}에 범위와 견적을 보내 드립니다.`,
-  ],
-  steps: [
-    { step: "요청서 검토", detail: "요구사항을 보고 필요하면 통화로 더 여쭙습니다." },
-    { step: "견적서", detail: "기능 범위, 일정, 금액을 정리해 보내 드립니다." },
-    { step: "계약·계약금", detail: "계약 후 계약금을 결제하면 착수합니다." },
-    { step: "착수", detail: "포털에서 주간 보고와 진행 현황을 봅니다." },
-  ],
-  fixed: {
-    caption: "정찰가로 바로 시작",
-    note: "범위가 정해진 패키지는 견적 없이 계약금 결제로 시작합니다.",
-  },
+  sub: [`요구사항을 남기시면 ${replyTime}에 범위와 견적을 보내 드립니다.`],
   done: {
     title: "견적 요청이 접수됐습니다",
     description: `내용을 검토한 뒤 ${replyTime}에 연락드립니다.`,
