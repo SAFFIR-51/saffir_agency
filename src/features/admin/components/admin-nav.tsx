@@ -10,6 +10,8 @@ const items: { label: string; href: Route; exact?: boolean }[] = [
   { label: "대시보드", href: routes.admin.home, exact: true },
   { label: "프로젝트", href: routes.admin.projects },
   { label: "요청함", href: routes.admin.requests },
+  { label: "문의", href: routes.admin.inquiries },
+  { label: "GEO", href: routes.admin.geo },
   { label: "고객사", href: routes.admin.clients },
   { label: "팀", href: routes.admin.team },
 ];

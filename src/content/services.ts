@@ -4,7 +4,7 @@ import type { Route } from "next";
 export type ServiceLine = "hospital" | "business";
 
 export type Service = {
-  id: "geo" | "ad-check" | "hospital-website" | "crm" | "connect" | "erp" | "ai-chatbot";
+  id: "geo" | "hospital-website" | "crm" | "connect" | "erp";
   line: ServiceLine;
   name: string;
   href: Route;
@@ -21,7 +21,7 @@ export const serviceLines: Record<ServiceLine, { name: string; description: stri
   },
   business: {
     name: "비즈니스 솔루션",
-    description: "커머스 연동, 업무 통합 ERP, AI 챗봇을 두 번째 라인으로 둡니다.",
+    description: "커머스 연동과 업무 통합 ERP를 두 번째 라인으로 둡니다.",
   },
 };
 
@@ -34,16 +34,6 @@ export const services: Service[] = [
     message: "ChatGPT·네이버 AI가 우리 병원을 추천하는지 확인",
     highlights: ["주소 입력창", "8개 분야 50여 항목", "샘플 리포트", "등급별 요금"],
     nextAction: "무료 진단하기",
-    evidence: ["자체 서비스"],
-  },
-  {
-    id: "ad-check",
-    line: "hospital",
-    name: "사피어 의료광고 검사기",
-    href: "/geo/ad-check",
-    message: "의료법 제56조 위험 표현을 미리 찾아드립니다",
-    highlights: ["문구 입력창", "결과", "법률 자문 아님 고지"],
-    nextAction: "무료 검사하기",
     evidence: ["자체 서비스"],
   },
   {
@@ -90,16 +80,6 @@ export const services: Service[] = [
     highlights: ["재고·발주·정산", "단계적 전환", "데이터 이관"],
     nextAction: "1단계 진단 신청",
     evidence: ["엑셀 30개 통합", "병원 ERP"],
-  },
-  {
-    id: "ai-chatbot",
-    line: "business",
-    name: "사피어 AI 챗봇",
-    href: "/solutions/ai-chatbot",
-    message: "사내 문서로 답하는 AI",
-    highlights: ["문서 기반 답변", "폐쇄망 설치 가능", "PoC 후 확장"],
-    nextAction: "PoC 신청",
-    evidence: ["감정 AI 코칭", "AI 예측 플랫폼"],
   },
 ];
 

@@ -18,7 +18,7 @@ export function listPortfolioByGroup() {
     group,
     name: portfolioGroups[group],
     items: portfolioItems
-      .filter((item) => item.group === group)
+      .filter((item) => item.group === group && !item.hideFromGallery)
       .map((item) => ({
         ...item,
         techNames: item.tech.map((t) => techLabels[t]),

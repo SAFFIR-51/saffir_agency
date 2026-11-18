@@ -1,30 +1,62 @@
 import type { Route } from "next";
 import { routes } from "./routes";
 
+export const hospitalPageNavigation = {
+  label: "사피어 병원 솔루션",
+  items: [
+    { href: routes.hospital.geo, label: "AI 검색최적화" },
+    { href: routes.hospital.website, label: "병원 홈페이지" },
+    { href: routes.hospital.crm, label: "병원 CRM" },
+  ],
+} as const;
+
+export const businessPageNavigation = {
+  label: "사피어 비즈니스 솔루션",
+  items: [
+    { href: routes.solutions.connect, label: "커머스 연동" },
+    { href: routes.solutions.erp, label: "업무 통합 ERP" },
+  ],
+} as const;
+
+export const developmentPageNavigation = {
+  label: "사피어 맞춤 개발",
+  items: [
+    {
+      label: "맞춤 개발 소개",
+      href: routes.development.process,
+      description: "개발 범위, 진행 단계, 포털에서 확인하는 방법",
+    },
+    {
+      label: "견적 요청",
+      href: routes.development.estimate,
+      description: "정찰가에 없는 개발은 견적으로 안내",
+    },
+  ],
+} as const;
+
 export type NavItem = {
   label: string;
   href: Route;
   /** 메뉴에 덧붙이는 한 줄 설명 */
   description?: string;
-  children?: NavItem[];
 };
 
 /** 기획서의 서비스 갈래와 공개 페이지 */
-export const mainNav: NavItem[] = [
+type MainNavGroup = "hospital" | "business" | "development";
+type MainNavItem =
+  | (NavItem & { group?: never; children?: never })
+  | { group: MainNavGroup; label: string; description: string; children: NavItem[]; href?: never };
+
+export const mainNav: MainNavItem[] = [
   {
     label: "병원 솔루션",
-    href: routes.hospital.root,
+    group: "hospital",
     description: "AI 검색 진단부터 홈페이지, 환자 관리까지",
     children: [
       {
         label: "사피어 AI 검색 최적화",
         href: routes.hospital.geo,
         description: "ChatGPT·네이버 AI가 우리 병원을 추천하는지 확인",
-      },
-      {
-        label: "사피어 의료광고 검사기",
-        href: routes.hospital.adCheck,
-        description: "의료법 제56조 위험 표현을 미리 확인 (무료)",
       },
       {
         label: "사피어 병원 홈페이지",
@@ -40,7 +72,7 @@ export const mainNav: NavItem[] = [
   },
   {
     label: "비즈니스 솔루션",
-    href: routes.solutions.root,
+    group: "business",
     description: "반복해 온 기능을 개발 대신 세팅으로 도입",
     children: [
       {
@@ -53,29 +85,13 @@ export const mainNav: NavItem[] = [
         href: routes.solutions.erp,
         description: "흩어진 엑셀을 하나의 시스템으로",
       },
-      {
-        label: "사피어 AI 챗봇",
-        href: routes.solutions.aiChatbot,
-        description: "사내 문서로 답하는 AI",
-      },
     ],
   },
   {
     label: "맞춤 개발",
-    href: routes.development.root,
+    group: "development",
     description: "웹·앱, 쇼핑몰, 플랫폼 연동, AI, IoT를 만들고 운영까지",
-    children: [
-      {
-        label: "개발 프로세스",
-        href: routes.development.process,
-        description: "6단계 진행과 포털에서 확인하는 방법",
-      },
-      {
-        label: "견적 요청",
-        href: routes.development.estimate,
-        description: "정찰가에 없는 개발은 견적으로 안내",
-      },
-    ],
+    children: [...developmentPageNavigation.items],
   },
   {
     label: "포트폴리오",
@@ -87,12 +103,12 @@ export const mainNav: NavItem[] = [
 
 type HeaderQuickLink = { label: string; href: Route; description: string };
 
-const headerQuickLinks: Partial<Record<Route, readonly HeaderQuickLink[]>> = {
-  [routes.hospital.root]: [
+const headerQuickLinks: Record<MainNavGroup, readonly HeaderQuickLink[]> = {
+  hospital: [
     {
-      label: "병원 솔루션 데모",
-      href: routes.contactFor("crm-demo"),
-      description: "환자 관리와 재방문 관리에 쓰이는 CRM 데모를 신청하세요.",
+      label: "병원 통합 성장 패키지",
+      href: routes.contactFor("hospital-bundle"),
+      description: "AI 검색 최적화 관리형과 병원 CRM 베이직을 함께 도입할 수 있습니다.",
     },
     {
       label: "병원 홈페이지 요금제",
@@ -100,11 +116,11 @@ const headerQuickLinks: Partial<Record<Route, readonly HeaderQuickLink[]>> = {
       description: "병원 홈페이지 제작 패키지와 비용을 확인하세요.",
     },
   ],
-  [routes.solutions.root]: [
+  business: [
     {
       label: "비즈니스 데모",
       href: routes.contactFor("business-demo"),
-      description: "커머스 연동, ERP, AI 챗봇 중 필요한 솔루션의 데모를 신청하세요.",
+      description: "커머스 연동과 ERP 솔루션의 데모를 신청하세요.",
     },
     {
       label: "비즈니스 솔루션 요금제",
@@ -112,7 +128,7 @@ const headerQuickLinks: Partial<Record<Route, readonly HeaderQuickLink[]>> = {
       description: "솔루션별 초기 세팅비와 월 이용료를 확인하세요.",
     },
   ],
-  [routes.development.root]: [
+  development: [
     {
       label: "맞춤 개발 상담",
       href: routes.development.estimate,
@@ -127,19 +143,21 @@ const headerQuickLinks: Partial<Record<Route, readonly HeaderQuickLink[]>> = {
 };
 
 /** 기획서의 메뉴를 데스크톱과 모바일 헤더에서 함께 쓴다. */
-export const headerNav = mainNav.map((item) => ({
-  ...item,
-  children: item.children
-    ? [
-        { label: `${item.label} 소개`, href: item.href },
-        ...item.children.map((child) => ({ ...child, label: child.label.replace(/^사피어 /, "") })),
-      ]
-    : undefined,
-  quickLinks: headerQuickLinks[item.href] ?? [],
-}));
+export const headerNav = mainNav.map((item) =>
+  item.group
+    ? {
+        ...item,
+        children: item.children.map((child) => ({
+          ...child,
+          label: child.label.replace(/^사피어 /, ""),
+        })),
+        quickLinks: headerQuickLinks[item.group],
+      }
+    : item,
+);
 
 /** 하단 사이트맵에 서비스 갈래와 회사·정책 링크를 표시한다. */
-export type FooterGroup = { title: string; href?: Route; items: NavItem[] };
+export type FooterGroup = { title: string; items: NavItem[] };
 
 const policyNav: NavItem[] = [
   { label: "이용약관", href: routes.legal.terms },
@@ -151,7 +169,7 @@ const policyNav: NavItem[] = [
 export const footerGroups: FooterGroup[] = [
   ...mainNav
     .filter((item) => item.children)
-    .map((item) => ({ title: item.label, href: item.href, items: item.children ?? [] })),
+    .map((item) => ({ title: item.label, items: item.children ?? [] })),
   {
     title: "회사",
     items: [
@@ -167,7 +185,7 @@ export const footerGroups: FooterGroup[] = [
 
 /** 하단(간단형): 주요 메뉴 한 줄 + 정책 링크 */
 export const footerNav: NavItem[] = [
-  ...mainNav.map(({ label, href }) => ({ label, href })),
+  ...mainNav.flatMap((item) => (item.group ? item.children.slice(0, 1) : [item])),
   { label: "FAQ", href: routes.faq },
   { label: "문의", href: routes.contact },
 ];

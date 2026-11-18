@@ -1,7 +1,9 @@
 import type { Route } from "next";
 import Link from "next/link";
+import { dataSource } from "@/server/api";
 import { demoAccounts } from "@/server/auth";
 import { listClients, listProjects, listRequests, requireStaff } from "@/server/projects";
+import type { PmClient } from "@/server/projects";
 import { routes } from "@/shared/config";
 import {
   createClientAction,
@@ -15,15 +17,18 @@ import { AdminTitle, Panel, btnDark, btnLight, btnSmall, input, label, linkName 
 
 const errors: Record<string, string> = {
   email: "이메일 형식을 확인해 주세요.",
+  nouser: "그 이메일로 가입한 계정이 없습니다. 먼저 회원가입을 안내해 주세요.",
   inuse: "프로젝트나 요청이 있는 고객사는 지울 수 없습니다. 프로젝트를 먼저 정리해 주세요.",
 };
 
 /** 고객사: 이름, 포털 계정 연결, 프로젝트 */
-async function Body({ edit, error }: { edit?: string; error?: string }) {
+async function Body({ edit, error, invited }: Props) {
   await requireStaff(routes.admin.clients);
   const clients = listClients();
   const projects = listProjects();
-  const accountLabel = (id: string) => {
+  const accountLabel = (id: string, members: PmClient["members"]) => {
+    const m = members?.find((x) => x.email === id);
+    if (m) return { email: m.email, name: m.name, pending: false };
     const a = demoAccounts.find((x) => x.id === id);
     return a
       ? { email: a.email, name: a.name, pending: false }
@@ -39,6 +44,12 @@ async function Body({ edit, error }: { edit?: string; error?: string }) {
       {error && errors[error] ? (
         <p role="alert" className="mb-4 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
           {errors[error]}
+        </p>
+      ) : null}
+      {invited ? (
+        <p role="status" className="mb-4 rounded-lg bg-neutral-100 px-4 py-3 text-sm">
+          {invited}은(는) 아직 가입 전이라 초대 메일을 보냈습니다. 7일 안에 링크로 가입하면 이
+          고객사에 연결됩니다.
         </p>
       ) : null}
 
@@ -131,7 +142,7 @@ async function Body({ edit, error }: { edit?: string; error?: string }) {
                   <p className={label}>포털 계정</p>
                   <ul className="flex flex-col gap-1.5 text-sm">
                     {c.accountIds.map((id) => {
-                      const a = accountLabel(id);
+                      const a = accountLabel(id, c.members);
                       return (
                         <li key={id} className="flex items-center justify-between gap-3">
                           <span>
@@ -177,8 +188,9 @@ async function Body({ edit, error }: { edit?: string; error?: string }) {
                     </button>
                   </form>
                   <p className="mt-1.5 text-xs text-neutral-400">
-                    아직 가입하지 않은 이메일은 &lsquo;가입 전&rsquo;으로 남고, 가입하면
-                    연결됩니다(회원 DB 연결 후).
+                    {dataSource() === "api"
+                      ? "가입한 이메일은 바로 연결하고, 가입 전이면 초대 메일을 보냅니다."
+                      : "아직 가입하지 않은 이메일은 ‘가입 전’으로 남고, 가입하면 연결됩니다."}
                   </p>
                 </div>
               </div>
@@ -208,10 +220,12 @@ async function Body({ edit, error }: { edit?: string; error?: string }) {
   );
 }
 
-export function AdminClientsPage({ edit, error }: { edit?: string; error?: string }) {
+type Props = { edit?: string; error?: string; invited?: string };
+
+export function AdminClientsPage(props: Props) {
   return (
     <AdminPage>
-      <Body edit={edit} error={error} />
+      <Body {...props} />
     </AdminPage>
   );
 }

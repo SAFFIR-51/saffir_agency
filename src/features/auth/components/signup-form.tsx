@@ -2,8 +2,10 @@
 
 import type { Route } from "next";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
 import { cn } from "@/shared/lib";
+import { signupAction } from "../api/account";
 import { authInput, authLabel, authSubmit } from "./auth-ui";
 
 type FieldName = "name" | "organization" | "email" | "phone" | "password" | "passwordConfirm";
@@ -26,14 +28,21 @@ const passwordRules = [
 ];
 
 /**
- * 이메일 가입서. 가입 기능(서버)은 아직 없어서 입력·동의 확인까지만 하고 준비 중 안내를 보여 준다.
+ * 이메일 가입서. 백엔드 모드면 회원 서버에 가입하고 바로 포털로, 데모 모드면 준비 중 안내.
  */
-export function SignupForm({ links }: { links: { terms: Route; privacy: Route } }) {
+export function SignupForm({
+  links,
+  invite,
+}: {
+  links: { terms: Route; privacy: Route };
+  /** 초대 링크로 들어온 경우: 이메일은 초대받은 주소로 고정, 가입하면 그 고객사에 연결 */
+  invite?: { token: string; email: string; client: string };
+}) {
   const [kind, setKind] = useState<"병원" | "기업">("병원");
   const [values, setValues] = useState<Record<FieldName, string>>({
     name: "",
-    organization: "",
-    email: "",
+    organization: invite?.client ?? "",
+    email: invite?.email ?? "",
     phone: "",
     password: "",
     passwordConfirm: "",
@@ -48,6 +57,8 @@ export function SignupForm({ links }: { links: { terms: Route; privacy: Route } 
   });
   const [tried, setTried] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
+  const router = useRouter();
 
   const errors: Partial<Record<FieldName, string>> = {};
   const v = values;
@@ -82,7 +93,23 @@ export function SignupForm({ links }: { links: { terms: Route; privacy: Route } 
       if (first) document.getElementById(`signup-${first}`)?.focus();
       return;
     }
-    setMessage("이메일 가입 연결을 준비하고 있습니다. 지금은 카카오·네이버로 가입해 주세요.");
+    setMessage(null);
+    startTransition(async () => {
+      const result = await signupAction({
+        customerType: kind,
+        name: v.name,
+        organization: v.organization,
+        email: v.email,
+        phone: v.phone,
+        password: v.password,
+        agreed: requiredAgreed,
+        marketing: agree.marketing,
+        ...(invite && { inviteToken: invite.token }),
+      });
+      if (!result.ok) return setMessage(result.error);
+      router.push(result.next as Route);
+      router.refresh();
+    });
   }
 
   const field = (
@@ -157,11 +184,12 @@ export function SignupForm({ links }: { links: { terms: Route; privacy: Route } 
         autoComplete: "organization",
         placeholder: kind === "병원" ? "사피어의원" : "주식회사 사피어",
       })}
-      {field("email", "이메일 (아이디)", {
+      {field("email", invite ? "이메일 (초대받은 주소)" : "이메일 (아이디)", {
         type: "email",
         autoComplete: "email",
         inputMode: "email",
         placeholder: "name@example.com",
+        ...(invite && { readOnly: true, className: `${authInput} bg-neutral-50 text-neutral-600` }),
       })}
       {field("phone", "휴대폰 번호", {
         type: "tel",
@@ -265,8 +293,8 @@ export function SignupForm({ links }: { links: { terms: Route; privacy: Route } 
         </p>
       )}
 
-      <button type="submit" className={`mt-2 ${authSubmit}`}>
-        가입하기
+      <button type="submit" disabled={pending} className={`mt-2 ${authSubmit}`}>
+        {pending ? "가입하는 중…" : "가입하기"}
       </button>
       {message && (
         <p role="status" className="rounded-lg bg-neutral-100 px-4 py-3 text-sm text-neutral-700">

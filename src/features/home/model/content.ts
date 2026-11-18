@@ -1,5 +1,69 @@
+import { portfolioCoverImages } from "@/content/portfolio";
+
 /** 메인 화면 문구 */
 export const homeContent = {
+  portfolioCards: [
+    {
+      image: portfolioCoverImages["side-dish-order"],
+      title: "찬찬 반찬가게 주문·예약",
+      type: "WEB APP",
+    },
+    {
+      image: portfolioCoverImages["derma-clinic-web"],
+      title: "피부과 의원 브랜드 사이트",
+      type: "WEB",
+    },
+    {
+      image: portfolioCoverImages["internal-clinic-web"],
+      title: "내과·인공신장실 홈페이지",
+      type: "WEB",
+    },
+    {
+      image: portfolioCoverImages["hospital-erp-2"],
+      title: "병원 ERP 리뉴얼",
+      type: "ERP",
+    },
+    {
+      image: portfolioCoverImages["cosmetics-shop-app"],
+      title: "이퓨어 뷰티 커머스",
+      type: "APP",
+    },
+    {
+      image: portfolioCoverImages["mentoring-app"],
+      title: "츄 캘린더",
+      type: "APP",
+    },
+    {
+      image: portfolioCoverImages["wardrobe-app"],
+      title: "워드로브 패션 쇼핑",
+      type: "APP",
+    },
+    {
+      image: portfolioCoverImages["pixel-rpg"],
+      title: "DirepX",
+      type: "GAME",
+    },
+    {
+      image: portfolioCoverImages["smart-planter-ble"],
+      title: "스마트 화분 식물 케어",
+      type: "IoT",
+    },
+    {
+      image: portfolioCoverImages["hearing-health-app"],
+      title: "Earguard",
+      type: "APP",
+    },
+    {
+      image: portfolioCoverImages["vivarium-iot-camera"],
+      title: "파충류 사육장 카메라",
+      type: "IoT",
+    },
+    {
+      image: portfolioCoverImages["sports-ai-web"],
+      title: "GGYP 스포츠·로또 분석",
+      type: "WEB/APP",
+    },
+  ],
   /** 메인 화면 구성 (kolonworkwear.com 메인 배치 참고: 12칸 그리드, 영문 큰 제목 + 짧은 한글 설명) */
   layout: {
     /** 글자로 만드는 화면 (ANCORS·Goodai·IT 에이전시 레퍼런스: 큰 워드마크, 짧은 영문 태그, 흐르는 문장) */

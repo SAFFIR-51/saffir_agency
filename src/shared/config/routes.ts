@@ -10,7 +10,6 @@ export type ContactTopic =
   | "business-demo"
   | "connect"
   | "erp"
-  | "ai-chatbot"
   | "development-estimate";
 
 const contactTopicValues: readonly string[] = [
@@ -22,7 +21,6 @@ const contactTopicValues: readonly string[] = [
   "business-demo",
   "connect",
   "erp",
-  "ai-chatbot",
   "development-estimate",
 ] satisfies ContactTopic[];
 
@@ -39,20 +37,15 @@ export function isContactTopic(value: string | undefined): value is ContactTopic
 export const routes = {
   home: "/",
   hospital: {
-    root: "/hospital",
     website: "/hospital/website",
     geo: "/geo",
-    adCheck: "/geo/ad-check",
     crm: "/hospital/crm",
   },
   solutions: {
-    root: "/solutions",
     connect: "/solutions/connect",
     erp: "/solutions/erp",
-    aiChatbot: "/solutions/ai-chatbot",
   },
   development: {
-    root: "/development",
     process: "/development/process",
     estimate: "/development/estimate",
   },
@@ -113,11 +106,14 @@ export const routes = {
     project: (id: string) => `/admin/projects/${id}` as Route,
     projectDeliverables: (id: string) => `/admin/projects/${id}/deliverables` as Route,
     projectActivity: (id: string) => `/admin/projects/${id}/activity` as Route,
+    projectBilling: (id: string) => `/admin/projects/${id}/billing` as Route,
     projectSettings: (id: string) => `/admin/projects/${id}/settings` as Route,
     projectReports: (id: string) => `/admin/projects/${id}/reports` as Route,
     projectRequests: (id: string) => `/admin/projects/${id}/requests` as Route,
     projectPreview: (id: string) => `/admin/projects/${id}/preview` as Route,
     requests: "/admin/requests",
+    inquiries: "/admin/inquiries",
+    geo: "/admin/geo",
     clients: "/admin/clients",
     team: "/admin/team",
   },

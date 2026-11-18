@@ -49,3 +49,7 @@ http://localhost:3000
 VS Code를 쓰면 추천 확장(ESLint, Prettier, Tailwind CSS IntelliSense 등)이 자동으로 안내되고, 저장할 때 정렬됩니다.
 
 구조와 규칙은 [ARCHITECTURE.md](./ARCHITECTURE.md)를 보세요.
+
+## 백엔드
+
+`server/`(NestJS + PostgreSQL)와 Docker 설정이 함께 있습니다. 실행 방법, 화면과 API의 대응, 추가할 테이블은 [docs/backend-setup.md](docs/backend-setup.md)를 보세요.

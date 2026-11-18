@@ -67,8 +67,8 @@ export function MobileNav() {
       >
         <ul className="space-y-1">
           {headerNav.map((item) => (
-            <li key={item.href}>
-              {item.children ? (
+            <li key={item.group ?? item.href}>
+              {item.group ? (
                 <details name="mobile-header-nav" className="group">
                   <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between rounded-md px-3 text-nav hover:bg-black/5 focus-visible:outline-2 [&::-webkit-details-marker]:hidden">
                     {item.label}

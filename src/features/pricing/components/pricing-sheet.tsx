@@ -18,7 +18,7 @@ import {
 } from "@/content/pricing";
 import { isContactTopic, routes, type ContactTopic } from "@/shared/config";
 import { formatKRW } from "@/shared/lib";
-import { SubpageSection, underlineLink } from "@/shared/sections";
+import { detailPageWidth, underlineLink } from "@/shared/sections";
 import { TrackPageView } from "@/shared/ui";
 import { PricingFilter } from "./pricing-filter";
 
@@ -185,205 +185,208 @@ function PlanSheet({
   );
 }
 
-/** 요금 묶음: 굵은 한글 이름 + 한 줄 설명 + 표 */
-function Group({
-  id,
-  name,
-  note,
-  children,
-}: {
-  id: string;
-  name: string;
-  note?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <section
-      id={id}
-      data-group={id}
-      aria-labelledby={`${id}-title`}
-      className="scroll-mt-28 pt-12 md:pt-16 lg:pt-20"
-    >
-      <div className="mb-5 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
-        <h2
-          id={`${id}-title`}
-          className="text-xl leading-[1.3] font-bold tracking-[-0.03em] lg:text-[1.375rem]"
-        >
-          {name}
-        </h2>
-        {note && <p className="text-sm text-neutral-600">{note}</p>}
-      </div>
-      {children}
-    </section>
-  );
+function planSearchFields(plans: readonly Plan[]) {
+  return plans.flatMap(({ name, includes, setup, monthly, note }) => [
+    name,
+    includes,
+    setup === undefined ? "" : price(setup),
+    monthly === undefined ? "" : price(monthly),
+    note ?? "",
+  ]);
 }
-
-const groups = [
-  { id: "geo", name: "AI 검색 최적화" },
-  { id: "solutions", name: "구축형 솔루션" },
-  { id: "hospital-website", name: "병원 홈페이지" },
-  { id: "bundle", name: "병원 성장 패키지" },
-  { id: "development", name: "맞춤 개발" },
-  { id: "server", name: "서버 운영비" },
-  { id: "message", name: "메시지 발송" },
-  { id: "payment", name: "결제 안내" },
-];
 
 export function PricingSheet() {
   const bundle = hospitalGrowthBundle;
+  const bundlePlans: Plan[] = [
+    {
+      id: "hospital-bundle",
+      consult: "hospital-bundle",
+      name: bundle.name,
+      includes: bundle.includesLabel,
+      monthly: bundle.monthly,
+    },
+  ];
+  const messagePlans = messagePriceRows.map((message) => ({
+    id: message.name,
+    name: message.name,
+    includes: "병원 CRM 리콜·사후관리 메시지",
+    monthly: message.unit,
+  }));
+
   return (
-    <div className="bg-white pb-28 text-black lg:pb-40">
+    <div className={`${detailPageWidth} min-h-dvh bg-white pb-28 text-black lg:pb-40`}>
       <TrackPageView event="pricing_viewed" />
       <h1 className="sr-only">요금 안내</h1>
-
-      {/* 포트폴리오(ALL WORK)와 같은 시작 높이·제목 */}
-      <SubpageSection
-        id="pricing-title"
-        first
-        en="Pricing"
-        sub={[
-          "모든 금액은 VAT 포함입니다.",
-          "파란 버튼 상품은 주문서에서 바로 결제하고, 나머지는 상담 후 결제합니다.",
-        ]}
-      >
-        <PricingFilter groups={groups}>
-          <Group id="geo" name="AI 검색 최적화 · 월 구독" note={geoPricingHeadline}>
-            <PlanSheet
-              caption="AI 검색 최적화 요금"
-              plans={geoPlans}
-              action={{
-                consult: "geo-fix",
-                free: { label: "무료 진단", href: `${routes.hospital.geo}#diagnosis` as Route },
-              }}
-            />
-          </Group>
-
-          <Group id="solutions" name="구축형 솔루션" note="고객사 전용 서버에 세팅합니다.">
-            <PlanSheet
-              caption="구축형 솔루션 요금"
-              plans={solutionPlans}
-              setupLabel="도입 세팅비"
-              monthlyLabel="월 이용료"
-              action={{ consult: "crm-adopt", consultLabel: "도입 상담" }}
-            />
-          </Group>
-
-          <Group
-            id="hospital-website"
-            name="병원 홈페이지 제작"
-            note={hospitalWebsiteNotes.join(" ")}
-          >
-            <PlanSheet
-              caption="병원 홈페이지 제작 요금"
-              plans={hospitalWebsitePlans}
-              setupLabel="제작비"
-              action={{ consult: "hospital-website", consultLabel: "제작 상담" }}
-            />
-          </Group>
-
-          <Group id="bundle" name={bundle.name} note={bundle.benefit}>
-            <PlanSheet
-              caption="병원 성장 패키지 요금"
-              plans={[
-                {
-                  id: "hospital-bundle",
-                  consult: "hospital-bundle",
-                  name: bundle.name,
-                  includes: bundle.includesLabel,
-                  monthly: bundle.monthly,
-                },
-              ]}
-              action={{ consult: "hospital-bundle", consultLabel: "패키지 상담" }}
-            />
-          </Group>
-
-          <Group id="development" name="맞춤 개발 정찰가" note={outsourcingNotes.join(" ")}>
-            <PlanSheet
-              caption="맞춤 개발 정찰가"
-              plans={outsourcingDeposits}
-              setupLabel="계약금"
-              action={{ consult: "hospital-website" }}
-            />
-            <p className="mt-3 text-sm">
-              <Link href={routes.development.estimate} className={underlineLink}>
-                맞춤 개발 견적 요청
-              </Link>
-            </p>
-          </Group>
-
-          <Group id="server" name="서버 운영비" note={serverTierNotes.join(" ")}>
-            <PlanSheet caption="서버 운영비" plans={serverTiers} />
-          </Group>
-
-          <Group id="message" name="메시지 발송 (병원 CRM)" note={messagePriceNote}>
-            <PlanSheet
-              caption="메시지 발송 단가"
-              monthlyLabel="건당"
-              plans={messagePriceRows.map((m) => ({
-                id: m.name,
-                name: m.name,
-                includes: "병원 CRM 리콜·사후관리 메시지",
-                monthly: m.unit,
-              }))}
-            />
-          </Group>
-
-          <Group id="payment" name="결제 안내" note="토스페이먼츠로 결제합니다.">
-            <dl className="flex flex-col border-t border-neutral-300 md:hidden">
-              {paymentTypes.map((p) => (
-                <div key={p.type} className="border-b border-neutral-300 py-4 text-sm">
-                  <dt className="text-base font-bold">{p.type}</dt>
-                  <dd className="mt-2 grid grid-cols-[4.5rem_minmax(0,1fr)] gap-x-3 gap-y-1 text-neutral-700">
-                    <span className="text-neutral-500">대상</span>
-                    <span>{p.products}</span>
-                    <span className="text-neutral-500">결제 위치</span>
-                    <span>{p.where}</span>
-                    <span className="text-neutral-500">결제 수단</span>
-                    <span>{p.toss}</span>
-                  </dd>
-                </div>
-              ))}
-            </dl>
-            <div className="hidden overflow-x-auto md:block">
-              <table className="w-full border-collapse text-[0.9375rem] leading-[1.5]">
-                <caption className="sr-only">결제 방식</caption>
-                <thead>
-                  <tr>
-                    {["결제 유형", "대상 상품", "결제 위치", "결제 수단"].map((h) => (
-                      <th key={h} scope="col" className={head}>
-                        {h}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
+      <PricingFilter
+        groups={[
+          {
+            id: "geo",
+            name: "AI 검색 최적화",
+            title: "AI 검색 최적화 · 월 구독",
+            note: geoPricingHeadline,
+            search: planSearchFields(geoPlans),
+            content: (
+              <PlanSheet
+                caption="AI 검색 최적화 요금"
+                plans={geoPlans}
+                action={{
+                  consult: "geo-fix",
+                  free: { label: "무료 진단", href: `${routes.hospital.geo}#diagnosis` as Route },
+                }}
+              />
+            ),
+          },
+          {
+            id: "solutions",
+            name: "구축형 솔루션",
+            note: "고객사 전용 서버에 세팅합니다.",
+            search: planSearchFields(solutionPlans),
+            content: (
+              <PlanSheet
+                caption="구축형 솔루션 요금"
+                plans={solutionPlans}
+                setupLabel="도입 세팅비"
+                monthlyLabel="월 이용료"
+                action={{ consult: "crm-adopt", consultLabel: "도입 상담" }}
+              />
+            ),
+          },
+          {
+            id: "hospital-website",
+            name: "병원 홈페이지",
+            title: "병원 홈페이지 제작",
+            note: hospitalWebsiteNotes.join(" "),
+            search: planSearchFields(hospitalWebsitePlans),
+            content: (
+              <PlanSheet
+                caption="병원 홈페이지 제작 요금"
+                plans={hospitalWebsitePlans}
+                setupLabel="제작비"
+                action={{ consult: "hospital-website", consultLabel: "제작 상담" }}
+              />
+            ),
+          },
+          {
+            id: "bundle",
+            name: bundle.name,
+            note: bundle.benefit,
+            search: planSearchFields(bundlePlans),
+            content: (
+              <PlanSheet
+                caption="병원 성장 패키지 요금"
+                plans={bundlePlans}
+                action={{ consult: "hospital-bundle", consultLabel: "패키지 상담" }}
+              />
+            ),
+          },
+          {
+            id: "development",
+            name: "맞춤 개발",
+            title: "맞춤 개발 정찰가",
+            note: outsourcingNotes.join(" "),
+            search: planSearchFields(outsourcingDeposits),
+            content: (
+              <>
+                <PlanSheet
+                  caption="맞춤 개발 정찰가"
+                  plans={outsourcingDeposits}
+                  setupLabel="계약금"
+                  action={{ consult: "hospital-website" }}
+                />
+                <p className="mt-3 text-sm">
+                  <Link href={routes.development.estimate} className={underlineLink}>
+                    맞춤 개발 견적 요청
+                  </Link>
+                </p>
+              </>
+            ),
+          },
+          {
+            id: "server",
+            name: "서버 운영비",
+            note: serverTierNotes.join(" "),
+            search: planSearchFields(serverTiers),
+            content: <PlanSheet caption="서버 운영비" plans={serverTiers} />,
+          },
+          {
+            id: "message",
+            name: "메시지 발송",
+            title: "메시지 발송 (병원 CRM)",
+            note: messagePriceNote,
+            search: planSearchFields(messagePlans),
+            content: (
+              <PlanSheet caption="메시지 발송 단가" monthlyLabel="건당" plans={messagePlans} />
+            ),
+          },
+          {
+            id: "payment",
+            name: "결제 안내",
+            note: "토스페이먼츠로 결제합니다.",
+            search: paymentTypes.flatMap(({ type, products, where, toss }) => [
+              type,
+              products,
+              where,
+              toss,
+            ]),
+            content: (
+              <>
+                <dl className="flex flex-col border-t border-neutral-300 md:hidden">
                   {paymentTypes.map((p) => (
-                    <tr key={p.type}>
-                      <th scope="row" className={`${cell} text-left font-semibold`}>
-                        {p.type}
-                      </th>
-                      <td className={`${cell} text-neutral-700`}>{p.products}</td>
-                      <td className={`${cell} text-neutral-700`}>{p.where}</td>
-                      <td className={`${cell} text-neutral-700`}>{p.toss}</td>
-                    </tr>
+                    <div key={p.type} className="border-b border-neutral-300 py-4 text-sm">
+                      <dt className="text-base font-bold">{p.type}</dt>
+                      <dd className="mt-2 grid grid-cols-[4.5rem_minmax(0,1fr)] gap-x-3 gap-y-1 text-neutral-700">
+                        <span className="text-neutral-500">대상</span>
+                        <span>{p.products}</span>
+                        <span className="text-neutral-500">결제 위치</span>
+                        <span>{p.where}</span>
+                        <span className="text-neutral-500">결제 수단</span>
+                        <span>{p.toss}</span>
+                      </dd>
+                    </div>
                   ))}
-                </tbody>
-              </table>
-            </div>
-            <p className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium">
-              <Link href={routes.legal.refund as Route} className={underlineLink}>
-                취소 및 환불 규정
-              </Link>
-              <Link href={routes.legal.terms as Route} className={underlineLink}>
-                이용약관
-              </Link>
-              <Link href={routes.legal.privacy as Route} className={underlineLink}>
-                개인정보처리방침
-              </Link>
-            </p>
-          </Group>
-        </PricingFilter>
-      </SubpageSection>
+                </dl>
+                <div className="hidden overflow-x-auto md:block">
+                  <table className="w-full border-collapse text-[0.9375rem] leading-[1.5]">
+                    <caption className="sr-only">결제 방식</caption>
+                    <thead>
+                      <tr>
+                        {["결제 유형", "대상 상품", "결제 위치", "결제 수단"].map((h) => (
+                          <th key={h} scope="col" className={head}>
+                            {h}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {paymentTypes.map((p) => (
+                        <tr key={p.type}>
+                          <th scope="row" className={`${cell} text-left font-semibold`}>
+                            {p.type}
+                          </th>
+                          <td className={`${cell} text-neutral-700`}>{p.products}</td>
+                          <td className={`${cell} text-neutral-700`}>{p.where}</td>
+                          <td className={`${cell} text-neutral-700`}>{p.toss}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <p className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium">
+                  <Link href={routes.legal.refund as Route} className={underlineLink}>
+                    취소 및 환불 규정
+                  </Link>
+                  <Link href={routes.legal.terms as Route} className={underlineLink}>
+                    이용약관
+                  </Link>
+                  <Link href={routes.legal.privacy as Route} className={underlineLink}>
+                    개인정보처리방침
+                  </Link>
+                </p>
+              </>
+            ),
+          },
+        ]}
+      />
     </div>
   );
 }

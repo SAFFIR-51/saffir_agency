@@ -17,7 +17,14 @@ import { AutoSubmitSelect } from "./auto-submit-select";
 import { Dot, Progress } from "./ui";
 
 export type ProjectTab =
-  "plan" | "deliverables" | "reports" | "requests" | "activity" | "preview" | "settings";
+  | "plan"
+  | "deliverables"
+  | "reports"
+  | "requests"
+  | "billing"
+  | "activity"
+  | "preview"
+  | "settings";
 
 /** 프로젝트 화면 위쪽: 이름, 고객사, 단계, 상태, 탭 */
 export async function loadProject(projectId: string, tab: ProjectTab) {
@@ -26,6 +33,7 @@ export async function loadProject(projectId: string, tab: ProjectTab) {
     deliverables: routes.admin.projectDeliverables(projectId),
     reports: routes.admin.projectReports(projectId),
     requests: routes.admin.projectRequests(projectId),
+    billing: routes.admin.projectBilling(projectId),
     activity: routes.admin.projectActivity(projectId),
     preview: routes.admin.projectPreview(projectId),
     settings: routes.admin.projectSettings(projectId),
@@ -53,6 +61,7 @@ export function ProjectFrame({
   const openRequests = listRequests({ projectId: project.id }).filter(
     (r) => r.status !== "완료",
   ).length;
+  const unpaid = (project.payments ?? []).filter((p) => !p.paidAt).length;
   const waiting = project.deliverables.filter(
     (d) => d.status === "승인 요청" || d.status === "수정 요청",
   ).length;
@@ -62,6 +71,7 @@ export function ProjectFrame({
     { key: "deliverables", label: `산출물${count(waiting)}` },
     { key: "reports", label: "주간 보고 · 회의록" },
     { key: "requests", label: `요청${count(openRequests)}` },
+    { key: "billing", label: `청구${count(unpaid)}` },
     { key: "activity", label: "기록" },
     { key: "preview", label: "고객 화면" },
     { key: "settings", label: "설정" },

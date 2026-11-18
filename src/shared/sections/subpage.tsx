@@ -8,6 +8,9 @@ import { cn } from "@/shared/lib";
  */
 
 export const subpagePad = "px-5 lg:px-10";
+export const detailPageWidth = "mx-auto w-full max-w-[68rem]";
+export const detailSectionSpacing =
+  "[--section-content-gap:2.5rem] [--section-gap:6rem] lg:[--section-content-gap:3.5rem] lg:[--section-gap:8rem]";
 
 /** 섹션 제목: 영문 Archivo 45/800 대문자 한 줄, 아래 한글 Pretendard 14/500 한두 줄 */
 export const sectionTitle =
@@ -60,60 +63,6 @@ export function ButtonPair({ secondary, primary }: { secondary: LinkSpec; primar
 export const underlineLink =
   "underline decoration-1 underline-offset-4 hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black";
 
-/**
- * 첫 화면: 영문 태그(Archivo) + 한글 소개, 그 왼쪽 끝을 가운데 큰 제목 글자 왼쪽 끝에 맞춘다.
- * 제목 아래 버튼 두 개, 그 아래 화면 너비 그림 자리.
- */
-export function SubpageHero({
-  tagline,
-  lead,
-  title,
-  srTitle,
-  buttons,
-  visual,
-}: {
-  tagline: readonly string[];
-  lead: string;
-  title: string;
-  srTitle: string;
-  buttons: { secondary: LinkSpec; primary: LinkSpec };
-  visual?: React.ReactNode;
-}) {
-  return (
-    <section aria-labelledby="subpage-title" className="pt-12 lg:pt-20">
-      <div className={subpagePad}>
-        <div className="mx-auto w-fit max-w-full">
-          <div className="flex max-w-3xl flex-col items-start gap-4">
-            <p className="font-display text-sm leading-[1.45] font-medium tracking-[-0.06em] uppercase lg:text-base">
-              {tagline.map((line) => (
-                <span key={line} className="block">
-                  {line}
-                </span>
-              ))}
-            </p>
-            <p className="text-sm leading-[1.55] font-medium tracking-[-0.03em] whitespace-pre-line text-black lg:text-[0.9375rem]">
-              {lead}
-            </p>
-          </div>
-          <h1
-            id="subpage-title"
-            className="mt-10 -ml-[0.04em] text-[clamp(3rem,9vw,8.25rem)] leading-[0.95] font-extrabold tracking-[-0.05em] lg:mt-8"
-          >
-            <span className="sr-only">{srTitle}</span>
-            <span aria-hidden="true">{title}</span>
-          </h1>
-        </div>
-      </div>
-      <div className="mt-8 flex justify-center lg:mt-10">
-        <ButtonPair {...buttons} />
-      </div>
-      <div className="mt-10 lg:mt-14">
-        {visual ?? <div aria-hidden="true" className="aspect-[3/1] min-h-56 bg-[#f3f3f3]" />}
-      </div>
-    </section>
-  );
-}
-
 /** 섹션: 영문 제목 한 줄 + 한글 한두 줄 (+ 버튼), 아래 내용 */
 export function SubpageSection({
   id,
@@ -121,6 +70,9 @@ export function SubpageSection({
   sub,
   action,
   first = false,
+  topPadding = first
+    ? "pt-[var(--section-gap,5rem)] lg:pt-[var(--section-gap,7rem)]"
+    : "pt-[var(--section-gap,7rem)] lg:pt-[var(--section-gap,10rem)]",
   children,
 }: {
   id: string;
@@ -129,24 +81,31 @@ export function SubpageSection({
   action?: React.ReactNode;
   /** 페이지 맨 위 섹션이면 위 여백을 줄인다 */
   first?: boolean;
+  topPadding?: string;
   children: React.ReactNode;
 }) {
   return (
-    <section aria-labelledby={id} className={first ? "pt-20 lg:pt-28" : "pt-28 lg:pt-40"}>
+    <section aria-labelledby={id} className={topPadding}>
       <div className={subpagePad}>
         <h2 id={id} className={sectionTitle}>
           {en}
         </h2>
-        <p className={sectionSub}>
-          {sub.map((line) => (
-            <span key={line} className="block">
-              {line}
-            </span>
-          ))}
-        </p>
+        {sub.length > 0 && (
+          <p className={sectionSub}>
+            {sub.map((line) => (
+              <span key={line} className="block">
+                {line}
+              </span>
+            ))}
+          </p>
+        )}
         {action && <div className="mt-6">{action}</div>}
       </div>
-      <div className={`mt-12 lg:mt-20 ${subpagePad}`}>{children}</div>
+      <div
+        className={`mt-[var(--section-content-gap,3rem)] lg:mt-[var(--section-content-gap,5rem)] ${subpagePad}`}
+      >
+        {children}
+      </div>
     </section>
   );
 }
@@ -213,7 +172,7 @@ export function SpecStrip({
   numbered = false,
 }: {
   items: readonly { name: string; detail: React.ReactNode }[];
-  numbered?: boolean;
+  numbered?: boolean | "inline";
 }) {
   const cols: Record<number, string> = {
     2: "lg:grid-cols-2",
@@ -228,7 +187,7 @@ export function SpecStrip({
     >
       {items.map((item, i) => (
         <li key={item.name} className="border-t border-black pt-5">
-          {numbered && (
+          {numbered === true && (
             <span className="font-display text-sm font-medium tracking-[-0.02em] text-neutral-400 tabular-nums">
               {String(i + 1).padStart(2, "0")}
             </span>
@@ -236,10 +195,10 @@ export function SpecStrip({
           <p
             className={cn(
               "text-xl leading-[1.3] font-bold tracking-[-0.03em] lg:text-[1.375rem]",
-              numbered && "mt-6 lg:mt-10",
+              numbered === true && "mt-6 lg:mt-10",
             )}
           >
-            {item.name}
+            {numbered === "inline" ? `${String(i + 1).padStart(2, "0")}.${item.name}` : item.name}
           </p>
           <p className="mt-2.5 pr-4 text-[0.9375rem] leading-[1.6] text-neutral-700">
             {item.detail}
@@ -250,123 +209,16 @@ export function SpecStrip({
   );
 }
 
-/**
- * 번호 묶음: 묶음마다 연회색 판. 위에 큰 번호 · 이름 · 제목 · 밑줄 링크,
- * 아래 흰 칸 2열 + 오른쪽 화면 자리(흰 칸, 비워 둠).
- */
-export function NumberedPanels({
-  panels,
-}: {
-  panels: readonly {
-    name: string;
-    title: string;
-    note?: string;
-    link: LinkSpec;
-    cells: readonly { title: string; detail?: string; icon?: React.ReactNode }[];
-  }[];
-}) {
-  return (
-    <ol className="flex flex-col gap-4 lg:gap-6">
-      {panels.map((panel, index) => (
-        <li key={panel.name} className="bg-[#f3f3f3] p-5 sm:p-8 lg:p-10">
-          <div className="flex flex-col items-start gap-5 sm:flex-row sm:items-end sm:justify-between">
-            <div className="flex items-end gap-5 lg:gap-8">
-              <span
-                aria-hidden="true"
-                className="font-display text-[3.5rem] leading-[0.8] font-extrabold tracking-[-0.06em] lg:text-[5rem]"
-              >
-                {index + 1}.
-              </span>
-              <div>
-                <p className="text-sm font-semibold text-neutral-500">{panel.name}</p>
-                <h3 className="mt-1.5 text-[1.375rem] leading-[1.3] font-bold tracking-[-0.03em] lg:text-[1.75rem]">
-                  {panel.title}
-                </h3>
-                {panel.note && <p className="mt-1.5 text-sm text-neutral-600">{panel.note}</p>}
-              </div>
-            </div>
-            <Link
-              href={panel.link.href}
-              className={`shrink-0 text-[0.9375rem] font-medium tracking-[-0.02em] ${underlineLink}`}
-            >
-              {panel.link.label}
-            </Link>
-          </div>
-          <div className="mt-6 grid gap-2 lg:mt-8 lg:grid-cols-12">
-            <ul className="grid gap-2 sm:grid-cols-2 lg:col-span-9">
-              {panel.cells.map((cell) => (
-                <li key={cell.title} className="bg-white p-5 lg:p-6">
-                  <p className="flex items-center gap-2.5 text-base leading-[1.4] font-semibold tracking-[-0.02em] lg:text-[1.0625rem]">
-                    {cell.icon}
-                    {cell.title}
-                  </p>
-                  {cell.detail && (
-                    <p className="mt-2 text-[0.9375rem] leading-[1.6] text-neutral-700">
-                      {cell.detail}
-                    </p>
-                  )}
-                </li>
-              ))}
-            </ul>
-            <div
-              aria-hidden="true"
-              className="aspect-[4/3] bg-white lg:col-span-3 lg:aspect-auto"
-            />
-          </div>
-        </li>
-      ))}
-    </ol>
-  );
-}
-
-/** 검은 카드 줄: 번호(Archivo) + 이름(28/500). href가 있으면 카드 전체가 링크 */
-export function BlackCards({
-  cards,
-  columns = 4,
-}: {
-  cards: readonly { name: string; tag?: string; href?: Route }[];
-  columns?: 3 | 4;
-}) {
-  const body = (card: (typeof cards)[number], i: number) => (
-    <>
-      <span className="flex justify-between gap-4 font-display text-sm font-medium tracking-[-0.02em] text-white/50 tabular-nums">
-        {String(i + 1).padStart(2, "0")}
-        {card.tag && <span className="font-sans tracking-normal">{card.tag}</span>}
-      </span>
-      <span className="mt-auto text-xl leading-[1.2] font-medium tracking-[-0.02em] lg:text-[1.75rem]">
-        {card.name}
-      </span>
-    </>
-  );
-  const box = "flex h-full min-h-44 flex-col bg-black p-6 text-white lg:min-h-64 lg:p-8";
-  return (
-    <ol
-      className={cn("grid grid-cols-2 gap-2", columns === 4 ? "lg:grid-cols-4" : "lg:grid-cols-3")}
-    >
-      {cards.map((card, i) => (
-        <li key={card.name}>
-          {card.href ? (
-            <Link
-              href={card.href}
-              className={`${box} hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black motion-safe:transition-colors`}
-            >
-              {body(card, i)}
-            </Link>
-          ) : (
-            <div className={box}>{body(card, i)}</div>
-          )}
-        </li>
-      ))}
-    </ol>
-  );
-}
-
 /** 자주 묻는 질문: 접고 펴는 목록 */
-export function FaqList({ items }: { items: readonly { q: string; a: string }[] }) {
+export function FaqList({
+  items,
+}: {
+  items: readonly { q: string; a: string; defaultOpen?: boolean }[];
+}) {
   return (
     <div className="border-t border-black">
       {items.map((item) => (
-        <details key={item.q} className="group border-b border-neutral-200">
+        <details key={item.q} open={item.defaultOpen} className="group border-b border-neutral-200">
           <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-[1.0625rem] font-semibold tracking-[-0.02em] [&::-webkit-details-marker]:hidden">
             {item.q}
             <span
@@ -392,13 +244,13 @@ export function SubpageClosing({
   buttons,
 }: {
   title: string;
-  description: string;
+  description: React.ReactNode;
   buttons: { secondary: LinkSpec; primary: LinkSpec };
 }) {
   return (
     <section
       aria-labelledby="subpage-closing"
-      className={`py-28 text-center lg:py-44 ${subpagePad}`}
+      className={`pt-[var(--section-gap,7rem)] pb-28 text-center lg:pt-[var(--section-gap,11rem)] lg:pb-44 ${subpagePad}`}
     >
       <h2
         id="subpage-closing"

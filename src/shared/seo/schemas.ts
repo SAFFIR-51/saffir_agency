@@ -1,5 +1,5 @@
 import type { Route } from "next";
-import { mainNav, routes, site } from "@/shared/config";
+import { routes, site } from "@/shared/config";
 
 const ORG_ID = `${site.domain}/#organization`;
 const absolute = (path: string) => `${site.domain}${path === "/" ? "" : path}`;
@@ -29,12 +29,11 @@ export function siteGraph() {
   };
 }
 
-/** 헤더 메뉴 구조로 이동 경로를 만든다: 홈 > 상위 메뉴 > 현재 페이지 */
 function breadcrumbItems(path: Route, name: string) {
-  const items = [{ name: "홈", path: routes.home as string }];
-  const parent = mainNav.find((item) => item.children?.some((child) => child.href === path));
-  if (parent) items.push({ name: parent.label, path: parent.href });
-  items.push({ name, path });
+  const items = [
+    { name: "홈", path: routes.home },
+    { name, path },
+  ];
   return items.map((item, index) => ({
     "@type": "ListItem",
     position: index + 1,

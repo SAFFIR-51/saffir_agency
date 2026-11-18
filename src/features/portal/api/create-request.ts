@@ -4,7 +4,8 @@ import type { Route } from "next";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requirePortal } from "@/server/portal";
-import { createRequest } from "@/server/projects";
+import { dataSource } from "@/server/api";
+import { createRequest, remote, requestCode } from "@/server/projects";
 import { routes } from "@/shared/config";
 
 const kinds = ["수정 요청", "장애 신고", "문의"] as const;
@@ -22,6 +23,21 @@ export async function sendRequest(form: FormData) {
     .slice(0, 4000);
   if (!target || !kind || !title || !body) {
     redirect(`${routes.portal.requests}?error=1#new` as Route);
+  }
+  if (dataSource() === "api") {
+    const created = await remote
+      .createRequest({
+        clientOrgId: Number(target.clientId),
+        ...(target.projectId && { projectId: Number(target.projectId) }),
+        kind,
+        title,
+        body,
+        requestedBy: session.name,
+      })
+      .catch(() => null);
+    if (!created) redirect(`${routes.portal.requests}?error=1#new` as Route);
+    revalidatePath("/dashboard", "layout");
+    redirect(`${routes.portal.requests}?sent=${requestCode(created.id)}` as Route);
   }
   const id = createRequest({
     clientId: target.clientId,

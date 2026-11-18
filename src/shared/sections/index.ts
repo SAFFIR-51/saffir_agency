@@ -1,3 +1,5 @@
+export { BeforeAfter } from "./before-after";
+export { FeatureRows, type FeatureLayout, type FeatureRow } from "./feature-rows";
 export {
   SolutionTemplate,
   SOLUTION_SECTION_ORDER,
@@ -5,20 +7,21 @@ export {
   type SolutionSummary,
 } from "./solution-template";
 export {
-  BlackCards,
   ButtonLabel,
   ButtonPair,
   FaqList,
-  NumberedPanels,
   SheetTable,
   SpecStrip,
   SubpageClosing,
-  SubpageHero,
   SubpageSection,
   darkButton,
+  detailPageWidth,
+  detailSectionSpacing,
   lightButton,
   sectionSub,
   sectionTitle,
   subpagePad,
   underlineLink,
 } from "./subpage";
+export { CaseMarquee } from "./case-marquee";
+export { SubpageNavigation } from "./subpage-navigation";

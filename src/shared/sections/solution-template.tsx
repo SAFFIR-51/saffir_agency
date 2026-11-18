@@ -3,7 +3,14 @@ import Link from "next/link";
 import { routes } from "@/shared/config";
 import { serviceGraph, JsonLd } from "@/shared/seo";
 import { DetailTabs } from "./detail-tabs";
-import { ButtonPair, FaqList, SpecStrip, subpagePad, underlineLink } from "./subpage";
+import {
+  ButtonPair,
+  detailPageWidth,
+  FaqList,
+  SpecStrip,
+  subpagePad,
+  underlineLink,
+} from "./subpage";
 
 /**
  * 세부(서비스) 페이지 공통 틀. 상위 페이지(/hospital 등)와 달리 "상품 상세"처럼 구성한다.
@@ -48,11 +55,6 @@ type Slots = {
 
 /** 오른쪽 요약 상자 한 줄 (예: 시작 요금 · 월 49,000원부터) */
 export type SolutionSummary = { label: string; value: string }[];
-
-const parents: Record<string, Route> = {
-  "병원 솔루션": routes.hospital.root as Route,
-  "비즈니스 솔루션": routes.solutions.root as Route,
-};
 
 /** 요금표·보조 표를 엑셀식으로 (모든 칸에 옅은 선, 회색 머리줄) */
 const sheet =
@@ -105,7 +107,6 @@ export function SolutionTemplate({
   summary?: SolutionSummary;
 }) {
   const c = content;
-  const parent = parents[c.eyebrow];
   const rows: SolutionSummary = [
     ...summary,
     { label: "도입 절차", value: `${c.process.length}단계` },
@@ -114,19 +115,13 @@ export function SolutionTemplate({
   const price = summary[0];
 
   return (
-    <div className="bg-white pb-28 text-black lg:pb-40">
+    <div className={`${detailPageWidth} bg-white pb-28 text-black lg:pb-40`}>
       <JsonLd data={serviceGraph({ path: c.path, name: c.name, description: c.message })} />
 
       {/* 상단: 이동 경로 · 이름 · 소개 · 버튼 | 요약 상자 */}
       <header className={`pt-8 pb-14 lg:pt-12 lg:pb-20 ${subpagePad}`}>
         <nav aria-label="이동 경로" className="text-sm text-neutral-500">
-          {parent ? (
-            <Link href={parent} className="hover:text-black hover:underline">
-              {c.eyebrow}
-            </Link>
-          ) : (
-            c.eyebrow
-          )}
+          {c.eyebrow}
           <span aria-hidden="true" className="mx-2">
             ›
           </span>

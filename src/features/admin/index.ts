@@ -12,3 +12,6 @@ export { ProjectSettingsPage } from "./components/project-settings-page";
 export { NewProjectPage } from "./components/new-project-page";
 export { AdminClientsPage } from "./components/admin-clients-page";
 export { AdminTeamPage } from "./components/admin-team-page";
+export { AdminInquiriesPage } from "./components/admin-inquiries-page";
+export { ProjectBillingPage } from "./components/project-billing-page";
+export { AdminGeoPage } from "./components/admin-geo-page";

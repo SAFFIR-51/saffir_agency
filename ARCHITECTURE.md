@@ -33,14 +33,13 @@ src/
 │  ├─ layout.tsx                 루트 (html, 폰트, 기본 metadata)
 │  ├─ (marketing)/               공개 사이트 — 헤더 + 푸터
 │  │  ├─ page.tsx                /            메인
-│  │  ├─ hospital/               /hospital    병원 솔루션
-│  │  │  └─ website/             /hospital/website
-│  │  ├─ geo/                    /geo         AI 검색 최적화
-│  │  │  └─ ad-check/            /geo/ad-check 의료광고 검사기
+│  │  ├─ hospital/               병원 솔루션 세부 페이지
+│  │  │  ├─ website/             /hospital/website
 │  │  │  └─ crm/                 /hospital/crm
-│  │  ├─ solutions/              /solutions   비즈니스 솔루션
-│  │  │  └─ connect/ erp/ ai-chatbot/   /solutions/...
-│  │  ├─ development/            /development 맞춤 개발
+│  │  ├─ geo/                    /geo         AI 검색 최적화
+│  │  ├─ solutions/              비즈니스 솔루션 세부 페이지
+│  │  │  └─ connect/ erp/         /solutions/...
+│  │  ├─ development/            맞춤 개발 세부 페이지
 │  │  │  └─ process/ estimate/   /development/...
 │  │  ├─ about/                  /about       회사 소개
 │  │  ├─ portfolio/ (+ [slug])
@@ -71,7 +70,7 @@ src/
 │  └─ lib/       cn, formatKRW
 ├─ content/
 │  ├─ company.ts     한눈에 보기, 사업 구조, 시스템 구성, 일하는 방식, 보유 모듈
-│  ├─ services.ts    서비스 7개 (메시지, 주요 내용, 다음 행동, 근거)
+│  ├─ services.ts    서비스 5개 (메시지, 주요 내용, 다음 행동, 근거)
 │  ├─ hospital.ts    병원 고객 흐름, 차별점, CRM 보안·데모
 │  ├─ membership.ts  로그인 용도, 회원 유형
 │  ├─ pricing.ts     요금 전체, 결제 유형, 가격 근거(내부)

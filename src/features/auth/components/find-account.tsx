@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { routes } from "@/shared/config";
 import { cn } from "@/shared/lib";
+import { findEmailAction, forgotPasswordAction } from "../api/account";
 import { authInput, authLabel, authSubmit } from "./auth-ui";
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -17,7 +18,7 @@ function formatPhone(raw: string) {
 
 type Tab = "id" | "password";
 
-/** 아이디 찾기 / 비밀번호 찾기. 처리 서버가 아직 없어 확인 뒤 준비 중 안내를 보여 준다 */
+/** 아이디 찾기 / 비밀번호 찾기. 백엔드 모드면 회원 서버로, 데모 모드면 준비 중 안내 */
 export function FindAccount({ initial = "password" }: { initial?: Tab }) {
   const [tab, setTab] = useState<Tab>(initial);
   const [name, setName] = useState("");
@@ -25,6 +26,7 @@ export function FindAccount({ initial = "password" }: { initial?: Tab }) {
   const [email, setEmail] = useState("");
   const [tried, setTried] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
 
   const errors: Record<string, string | undefined> =
     tab === "id"
@@ -54,11 +56,29 @@ export function FindAccount({ initial = "password" }: { initial?: Tab }) {
     event.preventDefault();
     setTried(true);
     if (Object.values(errors).some(Boolean)) return;
-    setMessage(
-      tab === "id"
-        ? "아이디 찾기를 준비하고 있습니다. 급하시면 문의하기로 남겨 주세요."
-        : "재설정 메일 발송을 준비하고 있습니다. 급하시면 문의하기로 남겨 주세요.",
-    );
+    setMessage(null);
+    startTransition(async () => {
+      if (tab === "password") {
+        const result = await forgotPasswordAction(email);
+        return setMessage(
+          result.ok
+            ? `${email.trim()}(으)로 가입된 계정이 있으면 재설정 링크를 보냈습니다. 메일함(스팸함 포함)을 확인해 주세요.`
+            : result.error,
+        );
+      }
+      const result = await findEmailAction({ name, phone });
+      if (!result.ok) return setMessage(result.error);
+      if (!result.found) return setMessage("입력한 이름과 번호로 가입된 계정이 없습니다.");
+      const via =
+        result.provider === "kakao"
+          ? " (카카오 간편 로그인)"
+          : result.provider === "naver"
+            ? " (네이버 간편 로그인)"
+            : result.provider === "google"
+              ? " (구글 간편 로그인)"
+              : "";
+      setMessage(`가입한 아이디는 ${result.email}${via}입니다.`);
+    });
   }
 
   const input = (
@@ -130,7 +150,7 @@ export function FindAccount({ initial = "password" }: { initial?: Tab }) {
         <p className="mb-6 text-sm leading-[1.6] text-neutral-600">
           {tab === "id"
             ? "가입할 때 입력한 이름과 휴대폰 번호로 아이디(이메일)를 찾아 드립니다."
-            : "가입한 이메일로 비밀번호를 다시 정하는 링크를 보내 드립니다. 링크는 30분 동안 쓸 수 있습니다."}
+            : "가입한 이메일로 비밀번호를 다시 정하는 링크를 보내 드립니다. 링크는 1시간 동안 한 번만 쓸 수 있습니다."}
         </p>
         <form onSubmit={submit} noValidate className="flex flex-col gap-5">
           {tab === "id" ? (
@@ -161,8 +181,8 @@ export function FindAccount({ initial = "password" }: { initial?: Tab }) {
               placeholder: "name@example.com",
             })
           )}
-          <button type="submit" className={`mt-2 ${authSubmit}`}>
-            {tab === "id" ? "아이디 찾기" : "재설정 링크 보내기"}
+          <button type="submit" disabled={pending} className={`mt-2 ${authSubmit}`}>
+            {pending ? "확인하는 중…" : tab === "id" ? "아이디 찾기" : "재설정 링크 보내기"}
           </button>
           {message ? (
             <p

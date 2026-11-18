@@ -2,7 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { requirePortal } from "@/server/portal";
-import { decideDeliverable } from "@/server/projects";
+import { dataSource } from "@/server/api";
+import { decideDeliverable, remote } from "@/server/projects";
 import { routes } from "@/shared/config";
 
 /** 고객이 산출물을 승인하거나 수정을 요청한다 (자기 고객사 프로젝트만) */
@@ -18,6 +19,10 @@ export async function decideDeliverableAction(
     .trim()
     .slice(0, 1000);
   if (!approve && !feedback) return;
+  if (dataSource() === "api") {
+    await remote.decide(deliverableId, { approve, ...(feedback && { feedback }) });
+    return revalidatePath("/dashboard", "layout");
+  }
   decideDeliverable(projectId, deliverableId, { approve, who: session.name, feedback });
   revalidatePath("/dashboard", "layout");
   revalidatePath("/admin", "layout");

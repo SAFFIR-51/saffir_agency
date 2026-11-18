@@ -4,18 +4,17 @@ import type { Route } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import type { PortfolioCardType } from "@/content/portfolio";
 import { cn } from "@/shared/lib";
 
 type Item = {
   slug: string;
   href: Route;
   title: string;
-  groupName: string;
   group: string;
-  techNames: string[];
+  cardType?: PortfolioCardType;
   summary?: string;
   image?: string;
-  related?: { href: Route; name: string };
 };
 
 /** 분야 글자 단추: 18/600, 고른 것은 아래 검은 선 위에 굵은 막대 */
@@ -24,7 +23,7 @@ const tab =
 
 /**
  * 사례 목록: 위 분야 단추(건수)로 거르고, 아래 카드 3열.
- * 카드: 대표 이미지(정사각) · 분야 · 이름 · 한 줄 소개 · 기술 · 관련 솔루션 밑줄 링크.
+ * 카드: 대표 이미지(4:3) 위에 프로젝트 이름과 유형, 이미지 아래에 한 줄 소개.
  */
 export function PortfolioGallery({
   items,
@@ -69,39 +68,34 @@ export function PortfolioGallery({
       <ul className="mt-4 grid gap-x-4 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
         {shown.map((item) => (
           <li key={item.slug} className="group relative">
-            <div className="relative aspect-square overflow-hidden bg-[#f3f3f3]">
-              {item.image && (
-                <Image
-                  src={item.image}
-                  alt=""
-                  fill
-                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                  className="object-cover group-hover:scale-[1.02] motion-safe:transition-transform motion-safe:duration-500"
-                />
-              )}
-            </div>
-            <p className="mt-4 text-sm font-medium text-neutral-500">{item.groupName}</p>
-            <h3 className="mt-1 text-xl leading-[1.3] font-bold tracking-[-0.03em]">
-              <Link
-                href={item.href}
-                className="group-hover:underline group-hover:underline-offset-4 after:absolute after:inset-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black"
-              >
-                {item.title}
-              </Link>
-            </h3>
+            <Link
+              href={item.href}
+              className="block after:absolute after:inset-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black"
+            >
+              <div className="relative aspect-[4/3] overflow-hidden bg-[#f3f3f3]">
+                {item.image && (
+                  <Image
+                    src={item.image}
+                    alt=""
+                    fill
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    className="object-cover motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-[1.02]"
+                  />
+                )}
+                <div className="absolute inset-x-0 bottom-0 flex items-baseline justify-between gap-3 bg-linear-to-t from-black/85 via-black/60 to-transparent px-4 pt-9 pb-4 text-lg/tight font-semibold text-white md:px-5 md:text-xl/tight">
+                  <h3 className="break-keep">{item.title}</h3>
+                  {item.cardType && (
+                    <span className="shrink-0 tracking-wider whitespace-nowrap">
+                      {item.cardType}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </Link>
             {item.summary && (
               <p className="mt-2 text-[0.9375rem] leading-[1.55] text-neutral-700">
                 {item.summary}
               </p>
-            )}
-            <p className="mt-2 text-sm text-neutral-500">{item.techNames.join(" · ")}</p>
-            {item.related && (
-              <Link
-                href={item.related.href}
-                className="relative z-10 mt-3 inline-block text-sm font-medium underline decoration-1 underline-offset-4 hover:no-underline"
-              >
-                {item.related.name}
-              </Link>
             )}
           </li>
         ))}

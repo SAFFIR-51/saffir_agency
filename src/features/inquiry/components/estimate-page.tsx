@@ -2,7 +2,7 @@ import Link from "next/link";
 import { outsourcingDeposits } from "@/content/pricing";
 import { routes } from "@/shared/config";
 import { formatKRW } from "@/shared/lib";
-import { SubpageSection, underlineLink } from "@/shared/sections";
+import { detailPageWidth, SubpageSection, underlineLink } from "@/shared/sections";
 import { estimateContent as c } from "../model/content";
 import { EstimateForm } from "./estimate-form";
 
@@ -16,7 +16,7 @@ const td = "border border-neutral-300 px-3 py-3";
  */
 export function EstimatePage() {
   return (
-    <div className="bg-white pb-28 text-black lg:pb-40">
+    <div className={`${detailPageWidth} bg-white pb-28 text-black lg:pb-40`}>
       <h1 className="sr-only">{c.title}</h1>
       <SubpageSection id="estimate-title" first en="Estimate" sub={c.sub}>
         <div className="grid gap-12 border-t border-black pt-8 lg:grid-cols-12 lg:gap-x-4 lg:pt-10">

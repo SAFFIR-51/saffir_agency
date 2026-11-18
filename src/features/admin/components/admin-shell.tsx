@@ -1,8 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
+import { apiHealthy, dataSource } from "@/server/api";
 import { getSession } from "@/server/auth";
-import { listProjects, listRequests } from "@/server/projects";
+import { inquiryCounts } from "@/server/inquiry";
+import { listProjects, listRequests, loadPm } from "@/server/projects";
 import { routes } from "@/shared/config";
 import { adminLogout } from "../api/logout";
 import { AdminNav } from "./admin-nav";
@@ -12,7 +14,8 @@ async function StaffBox() {
   if (!session?.staff) return null;
   return (
     <div className="text-sm">
-      <p className="font-semibold">{session.name}</p>
+      <DataSourceBadge />
+      <p className="mt-4 font-semibold">{session.name}</p>
       <p className="text-xs text-neutral-500">{session.organization}</p>
       <form action={adminLogout} className="mt-3">
         <button
@@ -26,15 +29,39 @@ async function StaffBox() {
   );
 }
 
+/** 지금 어떤 데이터를 쓰는지: 데모(백엔드 없음) / 백엔드 연결됨 / 백엔드 응답 없음 */
+async function DataSourceBadge() {
+  const source = dataSource();
+  const healthy = source === "api" ? await apiHealthy() : null;
+  const [dot, label] =
+    source === "demo"
+      ? ["bg-neutral-400", "데모 데이터"]
+      : healthy
+        ? ["bg-emerald-500", "백엔드 연결됨"]
+        : ["bg-red-600", "백엔드 응답 없음"];
+  return (
+    <p
+      className="inline-flex items-center gap-1.5 rounded-full border border-neutral-200 px-2 py-0.5 text-[0.6875rem] text-neutral-600"
+      title={source === "demo" ? "API_URL이 없어 예시 데이터로 동작합니다" : process.env.API_URL}
+    >
+      <span aria-hidden="true" className={`size-1.5 rounded-full ${dot}`} />
+      {label}
+    </p>
+  );
+}
+
 /** 메뉴 옆 숫자: 진행 중 프로젝트, 열린 요청 */
 async function NavWithCounts() {
   const session = await getSession();
   if (!session?.staff) return <AdminNav />;
+  await loadPm();
+  const inquiries = await inquiryCounts().catch(() => null);
   return (
     <AdminNav
       counts={{
         [routes.admin.projects]: listProjects().filter((p) => !p.archivedAt).length,
         [routes.admin.requests]: listRequests().filter((r) => r.status !== "완료").length,
+        [routes.admin.inquiries]: inquiries?.new ?? 0,
       }}
     />
   );

@@ -8,10 +8,13 @@ export const contactTypes: { topic?: ContactTopic; label: string; href: Route }[
   { topic: "crm-demo", label: "병원 CRM 데모 신청", href: routes.hospital.crm },
   { topic: "crm-adopt", label: "병원 CRM 도입 신청", href: routes.hospital.crm },
   { topic: "hospital-bundle", label: "병원 성장 패키지 상담", href: `${routes.pricing}#bundle` },
-  { topic: "business-demo", label: "비즈니스 솔루션 데모 신청", href: routes.solutions.root },
+  {
+    topic: "business-demo",
+    label: "비즈니스 솔루션 데모 신청",
+    href: routes.contactFor("business-demo"),
+  },
   { topic: "connect", label: "커머스 연동 도입 상담", href: routes.solutions.connect },
   { topic: "erp", label: "업무 통합 ERP 1단계 진단 신청", href: routes.solutions.erp },
-  { topic: "ai-chatbot", label: "AI 챗봇 PoC 신청", href: routes.solutions.aiChatbot },
   {
     topic: "development-estimate",
     label: "맞춤 개발 견적 요청",

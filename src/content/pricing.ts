@@ -17,15 +17,14 @@ export const geoPlans: Plan[] = [
   {
     id: "geo-free",
     name: "무료",
-    includes: "1회 진단, 가입 시 전체 근거·수정 코드, 의료광고 검사 월 5회",
+    includes: "1회 진단, 가입 시 전체 근거·수정 코드",
     monthly: 0,
   },
   {
     id: "geo-monitoring",
     checkout: true,
     name: "모니터링",
-    includes:
-      "월 재진단, AI 가시성 월 1회 측정(질문 20개 × AI 4종), 점수 추이, 의료광고 검사 무제한",
+    includes: "월 재진단, AI 가시성 월 1회 측정(질문 20개 × AI 4종), 점수 추이",
     monthly: 49000,
   },
   {
@@ -73,7 +72,7 @@ export const solutionPlans: Plan[] = [
     id: "connect",
     consult: "connect",
     name: "커머스 연동",
-    includes: "마켓 2곳, 마켓 추가 시 세팅비 별도",
+    includes: "마켓 연동 세팅, 마켓 추가 시 세팅비 별도",
     setup: 2200000,
     monthly: 165000,
   },
@@ -84,15 +83,6 @@ export const solutionPlans: Plan[] = [
     includes: "1단계 진단·설계, 구축 후 견적, 단계별 계약",
     setup: 1100000,
     monthly: null,
-  },
-  {
-    id: "ai-chatbot",
-    consult: "ai-chatbot",
-    name: "AI 챗봇",
-    includes: "PoC, AI API 사용량 별도 정산",
-    setup: 2200000,
-    monthly: 220000,
-    note: "월 이용료 220,000원~",
   },
 ];
 
@@ -108,8 +98,7 @@ export const hospitalWebsitePlans: Plan[] = [
   {
     id: "web-standard",
     name: "표준형",
-    includes:
-      "기본형 + 진료항목별 페이지(최대 20면), 예약·상담 동선, 구조화데이터 전체, 의료광고 문구 점검 (5~6주)",
+    includes: "기본형 + 진료항목별 페이지(최대 20면), 예약·상담 동선, 구조화데이터 전체 (5~6주)",
     setup: 3850000,
   },
   {

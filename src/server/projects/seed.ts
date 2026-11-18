@@ -18,6 +18,23 @@ export const seedProjects: PmProject[] = [
     start: "2026-09-15",
     end: "2026-12-20",
     stage: "개발",
+    payments: [
+      {
+        id: "pay1",
+        invoiceNumber: "INV-2609-11",
+        title: "웹앱 MVP 계약금",
+        amount: 2200000,
+        due: "2026-09-15",
+        paidAt: "2026-09-15",
+      },
+      {
+        id: "pay2",
+        invoiceNumber: "INV-2612-11",
+        title: "웹앱 MVP 잔금 (검수 후)",
+        amount: 3300000,
+        due: "2026-12-20",
+      },
+    ],
     milestones: [
       {
         id: "m1",
