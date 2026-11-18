@@ -33,7 +33,7 @@ export function PlanNotesPage() {
         <BulletList
           items={mainNav.map((item) =>
             item.children
-              ? `${item.label} ${item.href} — ${item.children.map((c) => `${c.label} ${c.href}`).join(", ")}`
+              ? `${item.label} — ${item.children.map((c) => `${c.label} ${c.href}`).join(", ")}`
               : `${item.label} ${item.href}`,
           )}
         />

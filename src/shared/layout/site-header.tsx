@@ -9,9 +9,8 @@ import { MobileNav } from "./mobile-nav";
 
 /** 드롭다운 카드 사진: 메인 세 카드와 같은 이미지 */
 const menuImage: Record<string, string> = {
-  [routes.hospital.root]: "url(/home/hospital-card.webp)",
-  [routes.solutions.root]: "url(/home/business-card.webp)",
-  [routes.development.root]: "url(/home/development-card.webp)",
+  hospital: "url(/home/hospital-card.webp)",
+  business: "url(/home/business-card.webp)",
 };
 
 export function SiteHeader() {
@@ -88,28 +87,24 @@ export function SiteHeader() {
         >
           <ul className="flex h-full gap-6 text-sm leading-[1.4] font-medium tracking-[-0.008em] xl:gap-10">
             {headerNav.map((item, index) => {
-              const active = menu?.key === item.href;
+              const key = item.group ?? item.href;
+              const active = menu?.key === key;
               const panelId = `${menuId}-${index}`;
-              const links = item.children;
-              const listOnly = item.href === routes.development.root;
+              const listOnly = item.group === "development";
 
               return (
                 <li
-                  key={item.href}
+                  key={key}
                   className="relative"
                   onPointerEnter={(event) => {
                     if (event.pointerType !== "mouse") return;
                     setMenu((current) =>
-                      links
-                        ? current?.key === item.href
-                          ? current
-                          : { key: item.href, pinned: false }
-                        : null,
+                      item.group ? (current?.key === key ? current : { key, pinned: false }) : null,
                     );
                   }}
                   onBlur={(event) => {
                     if (event.currentTarget.contains(event.relatedTarget)) return;
-                    setMenu((current) => (current?.key === item.href ? null : current));
+                    setMenu((current) => (current?.key === key ? null : current));
                   }}
                   onKeyDown={(event) => {
                     if (event.key !== "Escape" || !active) return;
@@ -118,7 +113,7 @@ export function SiteHeader() {
                     event.currentTarget.querySelector("button")?.focus();
                   }}
                 >
-                  {links ? (
+                  {item.group ? (
                     <>
                       <button
                         type="button"
@@ -126,9 +121,7 @@ export function SiteHeader() {
                         aria-expanded={active}
                         onClick={() =>
                           setMenu((current) =>
-                            current?.key === item.href && current.pinned
-                              ? null
-                              : { key: item.href, pinned: true },
+                            current?.key === key && current.pinned ? null : { key, pinned: true },
                           )
                         }
                         className="peer group relative flex h-full cursor-pointer items-center gap-2 whitespace-nowrap hover:text-black/65 focus-visible:outline-2 focus-visible:-outline-offset-4"
@@ -152,7 +145,7 @@ export function SiteHeader() {
                           )}
                         >
                           <ul className="flex flex-col gap-0.5 px-4 py-6 xl:px-5 xl:py-7">
-                            {links.map((link) => (
+                            {item.children.map((link) => (
                               <li key={link.href}>
                                 <Link
                                   href={link.href}
@@ -173,14 +166,14 @@ export function SiteHeader() {
                                   key={link.label}
                                   href={link.href}
                                   onClick={() => setMenu(null)}
-                                  className="group block min-w-0 focus-visible:outline-2 focus-visible:outline-offset-4"
+                                  className="group/quick-link block min-w-0 focus-visible:outline-2 focus-visible:outline-offset-4"
                                 >
                                   <div
                                     aria-hidden="true"
-                                    className="aspect-[16/10] bg-[#f4f4f4] bg-cover bg-center"
-                                    style={{ backgroundImage: menuImage[item.href] }}
+                                    className="aspect-[16/5] bg-[#f4f4f4] bg-cover bg-center"
+                                    style={{ backgroundImage: menuImage[item.group] }}
                                   />
-                                  <span className="mt-3 block text-[0.9375rem] leading-[1.4] font-semibold tracking-[-0.02em] group-hover:underline group-hover:underline-offset-4">
+                                  <span className="mt-3 block text-[0.9375rem] leading-[1.4] font-semibold tracking-[-0.02em] underline-offset-4 group-hover/quick-link:underline">
                                     {link.label}
                                   </span>
                                   <span className="mt-1 block text-[0.8125rem] leading-[1.5] font-normal text-black/55">

@@ -10,7 +10,6 @@ export type ContactTopic =
   | "business-demo"
   | "connect"
   | "erp"
-  | "ai-chatbot"
   | "development-estimate";
 
 const contactTopicValues: readonly string[] = [
@@ -22,7 +21,6 @@ const contactTopicValues: readonly string[] = [
   "business-demo",
   "connect",
   "erp",
-  "ai-chatbot",
   "development-estimate",
 ] satisfies ContactTopic[];
 
@@ -39,20 +37,15 @@ export function isContactTopic(value: string | undefined): value is ContactTopic
 export const routes = {
   home: "/",
   hospital: {
-    root: "/hospital",
     website: "/hospital/website",
     geo: "/geo",
-    adCheck: "/geo/ad-check",
     crm: "/hospital/crm",
   },
   solutions: {
-    root: "/solutions",
     connect: "/solutions/connect",
     erp: "/solutions/erp",
-    aiChatbot: "/solutions/ai-chatbot",
   },
   development: {
-    root: "/development",
     process: "/development/process",
     estimate: "/development/estimate",
   },

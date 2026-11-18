@@ -97,21 +97,3 @@ export async function removeGeoDiagnosisAction(siteId: string, id: string) {
   await geoAdmin.removeDiagnosis(id);
   await done(at(siteId));
 }
-
-export async function addGeoAdCheckAction(id: string, form: FormData) {
-  await requireStaff(routes.admin.geo);
-  const date = text(form, "date");
-  const summary = text(form, "summary");
-  const risks = Number(text(form, "risks") || "0");
-  if (!isDate(date) || !summary || !Number.isInteger(risks) || risks < 0 || risks > 100) {
-    redirect(`${at(id, "adcheck")}#adcheck` as Route);
-  }
-  await geoAdmin.addAdCheck(id, { date, summary, risks });
-  await done(at(id));
-}
-
-export async function removeGeoAdCheckAction(siteId: string, id: string) {
-  await requireStaff(routes.admin.geo);
-  await geoAdmin.removeAdCheck(id);
-  await done(at(siteId));
-}

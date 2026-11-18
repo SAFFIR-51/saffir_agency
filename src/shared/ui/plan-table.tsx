@@ -24,18 +24,18 @@ export type PlanRow = {
 type PlanActions = {
   consultFallback: ContactTopic;
   consultLabel?: string;
+  highlightConsult?: boolean;
   /** 0원 상품의 버튼 (예: GEO 무료 → 무료 진단) */
   free?: { label: string; href: Parameters<typeof ButtonLink>[0]["href"] };
 };
 
-/** 요금표 버튼: 바로 결제는 토스 파랑, 상담·무료는 토스 회색 (요금 안내 페이지와 같은 규칙) */
 function PlanButton({
   href,
-  pay = false,
+  highlighted = false,
   children,
 }: {
   href: Parameters<typeof ButtonLink>[0]["href"];
-  pay?: boolean;
+  highlighted?: boolean;
   children: React.ReactNode;
 }) {
   return (
@@ -43,7 +43,7 @@ function PlanButton({
       href={href}
       className={cn(
         "inline-flex h-9 items-center justify-center rounded-lg px-4 text-sm font-semibold tracking-[-0.02em] whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3182f6] motion-safe:transition-colors",
-        pay
+        highlighted
           ? "bg-[#3182f6] text-white hover:bg-[#1b64da]"
           : "bg-[#f2f4f6] text-[#4e5968] hover:bg-[#e5e8eb]",
       )}
@@ -59,13 +59,17 @@ function planAction(plan: PlanRow, actions: PlanActions) {
   }
   if (plan.checkout) {
     return (
-      <PlanButton href={routes.order(plan.id)} pay>
+      <PlanButton href={routes.order(plan.id)} highlighted>
         {plan.monthly ? "구독하기" : "결제하기"}
       </PlanButton>
     );
   }
   const topic = isContactTopic(plan.consult) ? plan.consult : actions.consultFallback;
-  return <PlanButton href={routes.contactFor(topic)}>{actions.consultLabel ?? "상담"}</PlanButton>;
+  return (
+    <PlanButton href={routes.contactFor(topic)} highlighted={actions.highlightConsult}>
+      {actions.consultLabel ?? "상담"}
+    </PlanButton>
+  );
 }
 
 function price(value: number | null | undefined) {

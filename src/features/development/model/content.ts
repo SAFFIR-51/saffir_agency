@@ -1,75 +1,123 @@
-/** 맞춤 개발 화면 문구 */
-export const developmentContent = {
-  title: "필요한 서비스를 만들고, 운영까지",
-  lead: "웹·앱부터 AI, IoT까지 만들어 납품하고, 납품 후 유지보수까지 맡습니다.",
-  /** 분야별 관련 포트폴리오 */
-  areas: [
-    { name: "웹·앱", slugs: ["derma-clinic-web", "hearing-health-app", "mentoring-app"] },
-    {
-      name: "쇼핑몰",
-      slugs: [
-        "cosmetics-shop-app",
-        "side-dish-order",
-        "group-buying-platform",
-        "cosmetics-oem-web",
-      ],
-    },
-    { name: "플랫폼 연동", slugs: ["cafe24-admin"] },
-    { name: "AI", slugs: ["sports-ai-prediction", "sports-ai-web", "emotion-ai-coaching"] },
-    { name: "IoT", slugs: ["vivarium-iot-camera", "smart-planter-ble", "reptile-care-app"] },
-  ],
-};
+import { portfolioCoverImages } from "@/content/portfolio";
 
 export const processContent = {
-  title: "개발 프로세스",
-  lead: "단계마다 포털에서 진행 상황을 확인하고 승인합니다.",
-  contract: [
-    { item: "결제", detail: "계약금 + 잔금" },
-    { item: "납품 후", detail: "유지보수" },
+  title: "Custom Development",
+  name: "사피어 맞춤 개발",
+  lead: "웹·앱부터 쇼핑몰, AI, IoT까지 필요한 서비스를 만듭니다. 기획부터 개발, 납품 후 운영까지 한 팀이 맡습니다.",
+  caseSlugs: ["cosmetics-shop-app", "side-dish-order", "wardrobe-app", "pixel-rpg"] as const,
+  why: [
+    "웹과 앱, 결제, 외부 플랫폼이 얽힌 프로젝트는 어디까지 만들어야 하는지부터 정해야 합니다. 처음에 필요한 화면과 기능을 함께 정리하면 견적을 비교하고 일정에 맞춰 진행하기 수월합니다.",
+    "사피어는 기획과 디자인, 개발을 한 팀에서 이어갑니다. 단계마다 포털에서 진행 상황과 산출물을 확인할 수 있고, 납품 후 유지보수도 이어서 맡습니다.",
   ],
-};
-
-/** 맞춤 개발 소개(/development) 세부 페이지 문구 (/hospital과 같은 구성) */
-export const developmentLandingContent = {
-  hero: {
-    tagline: ["WEB, APP, AI AND IOT", "BUILT AND RUN FOR YOU"],
-    title: "Custom Development",
-    secondary: "개발 프로세스",
-    primary: "견적 요청",
-  },
-  areas: {
-    title: "What We Build",
-    sub: [
-      "웹·앱, 쇼핑몰, 플랫폼 연동, AI, IoT까지.",
-      "분야마다 직접 만들고 납품한 프로젝트입니다.",
+  comparison: {
+    lead: "대형 에이전시와 일하면 소통 창구가 여러 단계일 수 있고, 프리랜서에게 맡기면 운영이 한 사람에게 집중될 수 있습니다.",
+    message: "사피어는 팀의 안정성과 스타트업의 속도를 함께 드립니다.",
+    rows: [
+      {
+        item: "진행 공유",
+        agency: "정기 보고서로 확인",
+        freelancer: "메신저로 수시 확인",
+        saffir: "포털에서 실시간 확인 · 주간 작업 공유",
+      },
+      {
+        item: "산출물",
+        agency: "계약 범위에 따른 문서와 결과물",
+        freelancer: "합의한 작업 파일과 결과물",
+        saffir: "기획서·코드·운영 가이드까지 인계 범위 명시",
+      },
+      {
+        item: "소통 방식",
+        agency: "프로젝트 담당자를 통해 전달",
+        freelancer: "작업자와 직접 소통",
+        saffir: "개발팀과 직접 소통 · 정례 미팅",
+      },
+      {
+        item: "출시 후",
+        agency: "별도 운영 계약으로 지원",
+        freelancer: "일정과 지원 범위를 개별 협의",
+        saffir: "만든 팀이 유지보수와 기능 개선까지 지원",
+      },
     ],
-    columns: ["분야", "관련 프로젝트"],
   },
-  modules: {
-    title: "Ready Modules",
-    sub: ["이미 갖춘 모듈", "처음부터 짜지 않아서 빠릅니다."],
-  },
-  process: {
-    title: "Development Process",
-    sub: ["단계마다 포털에서 진행 상황을 확인하고 승인합니다."],
-    columns: ["단계", "이름", "하는 일"],
-    more: "개발 프로세스 보기",
-  },
-  pricing: {
-    title: "Fixed Price",
-    sub: ["정찰가 패키지", "금액은 VAT 포함입니다."],
-    columns: ["상품", "포함", "계약금", "신청"],
-    order: "결제하기",
-    contractColumns: ["항목", "내용"],
-    /** 정찰가에 없는 개발: 견적 요청 또는 문의로 */
-    custom: {
-      name: "맞춤 개발",
-      includes: "정찰가 패키지에 없는 기능·플랫폼",
-      price: "견적 후 안내",
-      estimate: "견적 요청",
-      contact: "문의하기",
+  features: [
+    {
+      title: "웹·앱 개발",
+      photo: "/images/development/web-app-workspace.webp",
+      photoAlt: "웹사이트와 앱 화면을 띄운 모니터, 태블릿과 휴대폰",
+      description:
+        "고객이 쓰는 화면과 직원이 관리하는 화면을 함께 설계합니다. 사용 환경에 맞춰 반응형 웹, 웹앱, 모바일 앱으로 구현합니다.",
+      points: [
+        "반응형 웹·웹앱·iOS·Android 앱 제작",
+        "회원·예약·알림 등 서비스 기능 구현",
+        "사용자와 운영자를 위한 관리자 화면 설계",
+      ],
     },
+    {
+      title: "IoT 개발",
+      photo: portfolioCoverImages["vivarium-iot-camera"],
+      photoAlt: "파충류 사육장에 장착한 카메라와 인식 화면, 분석 그래프",
+      description:
+        "현장 기기에서 들어오는 정보를 앱이나 대시보드에서 확인할 수 있게 연결합니다. 핵심 기능부터 구현해 설치 환경에서 동작을 확인합니다.",
+      points: [
+        "BLE 기기와 모바일 앱 연결",
+        "센서 데이터 수집과 상태 모니터링",
+        "기기 제어와 관제 화면을 포함한 IoT MVP 제작",
+      ],
+    },
+  ],
+  processLead: "단계마다 포털에서 진행 상황을 확인하고 승인합니다.",
+  aiBanner: {
+    title: "AI 시대의 개발 속도를 경험하세요.",
+    description: [
+      "사피어는 AI 페어 개발과 표준 프로세스로 견적부터 런칭까지의 시간을 절반으로 줄입니다.",
+      "빠르지만, 산출물과 품질 관리는 타협하지 않습니다.",
+    ],
+    points: [
+      "AI 페어 프로그래밍",
+      "주 단위 스프린트",
+      "실시간 진행 공유 포털",
+      "산출물 표준화",
+      "런칭 후 유지보수 연속성",
+    ],
+    label: "무료 견적받기",
   },
+  packageScope: {
+    "dev-website-deposit": "페이지 구성, 반응형 화면 디자인·개발, 배포",
+    "dev-mvp-deposit": "핵심 사용자 흐름 설계, 주요 화면·기능 구현, 테스트 배포",
+  } as Partial<Record<string, string>>,
+  pricingNote:
+    "표의 금액은 총 제작비에 포함되는 계약금입니다. 세부 기능, 총 제작비, 잔금 결제 시점은 계약서에 명시합니다.",
+  contract: [
+    {
+      item: "결제",
+      detail:
+        "착수 시 계약금을 결제합니다. 잔금은 계약서에 정한 검수 및 인수 일정에 맞춰 결제합니다.",
+    },
+    {
+      item: "납품 범위",
+      detail:
+        "소스코드, 디자인 원본, 운영 가이드의 인계 범위를 계약서에 정하고, 검수 완료 후 합의한 항목을 전달합니다.",
+    },
+    {
+      item: "계정·운영 인계",
+      detail: "도메인, 서버, 앱스토어 등 프로젝트에 쓰는 계정의 소유자와 인계 방법을 확인합니다.",
+    },
+    {
+      item: "유지보수",
+      detail:
+        "오류 수정과 운영 지원 범위를 정하고, 지원 항목과 주기에 따라 비용을 안내합니다. 새 기능이나 추가 연동은 작업 범위를 검토해 별도로 견적을 냅니다.",
+    },
+  ],
+  faq: [
+    {
+      q: "기존 홈페이지나 앱을 이어서 개발할 수 있나요?",
+      a: "기존 소스코드, 배포 환경, 계정 접근 권한을 먼저 확인합니다. 현재 구조에서 수정할 수 있는 부분과 새로 만들어야 하는 부분을 정리하고, 필요한 데이터 이관과 배포 작업을 견적에 반영합니다.",
+    },
+    {
+      q: "앱스토어 등록과 심사 대응도 해주시나요?",
+      a: "앱 출시가 계약 범위에 포함되면 App Store·Google Play 등록과 심사 제출을 지원합니다. 개발자 계정은 고객사 명의로 준비하고, 심사 중 수정 요청이 오면 필요한 작업과 대응 범위를 안내합니다.",
+    },
+  ],
   closing: {
     title: "만들고 싶은 것을 알려주세요",
     description: "필요한 기능과 일정을 들려주시면 범위와 견적을 안내해 드립니다.",

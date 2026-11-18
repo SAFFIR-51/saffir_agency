@@ -1,37 +1,3 @@
-/** 병원 고객 흐름 (기획서 "병원 고객 흐름") */
-export const hospitalJourney = [
-  {
-    step: "무료 진단",
-    detail: "홈페이지 주소를 넣으면 로그인 없이 총점, 영역별 점수, 우선 개선 항목을 봅니다.",
-    service: "AI 검색 최적화",
-  },
-  {
-    step: "무료 회원가입",
-    detail: "전체 근거와 수정 코드를 보고, 진단 기록을 저장합니다.",
-    service: "AI 검색 최적화",
-  },
-  {
-    step: "월간 추적",
-    detail: "매달 재진단과 AI 가시성 측정을 받습니다 (모니터링·프로).",
-    service: "AI 검색 최적화",
-  },
-  {
-    step: "홈페이지 개선",
-    detail: "직접 고치기 어렵거나 점수가 낮으면 제작·리뉴얼을 맡깁니다.",
-    service: "병원 홈페이지",
-  },
-  {
-    step: "월 관리",
-    detail: "납품 후 GEO 관리형 또는 유지보수로 관리합니다.",
-    service: "AI 검색 최적화 · 병원 홈페이지",
-  },
-  {
-    step: "환자 관리",
-    detail: "홈페이지로 들어온 예약·문의를 환자 관리와 재방문으로 이어갑니다.",
-    service: "병원 CRM",
-  },
-];
-
 export const hospitalDifferentiator = {
   title: "한 곳에 맡기면 성과가 이어집니다",
   description:

@@ -1,129 +1,96 @@
 import { faqForService } from "@/content/faq";
-import type { Route } from "next";
 import { routes } from "@/shared/config";
-import type { SolutionPageContent } from "@/shared/sections";
+import type { FeatureRow } from "@/shared/sections";
 
-export const geoContent: SolutionPageContent = {
+const diagnosisHref = `${routes.hospital.geo}#diagnosis` as const;
+
+export const geoContent = {
   path: routes.hospital.geo,
-  eyebrow: "병원 솔루션",
+  title: "AI Search Optimization",
   name: "사피어 AI 검색 최적화",
-  message: "ChatGPT·네이버 AI가 우리 병원을 추천하는지 확인하세요.",
-  problems: [
-    "AI 검색에서 우리 병원이 어떻게 보이는지 모른다",
-    "무엇부터 고쳐야 할지 판단하기 어렵다",
+  message:
+    "AI 답변에서 우리 병원이 어떻게 소개되는지 살펴보세요. 홈페이지에서 먼저 고칠 항목을 찾고, 개선 후의 변화도 확인할 수 있습니다.",
+  why: [
+    "환자는 병원을 방문하기 전에 AI에 가까운 병원이나 자신의 증상에 맞는 진료를 묻기도 합니다. 진료 시간이나 위치가 페이지마다 다르거나 중요한 안내가 이미지에만 있으면 AI가 병원 정보를 참고하기 어렵습니다.",
+    "사피어는 홈페이지의 진료 정보와 페이지 구조를 점검하고, 먼저 보완할 항목을 정리합니다. 이후 같은 질문을 다시 확인해 AI 답변에서 병원 정보가 어떻게 소개되는지 살펴봅니다.",
+  ],
+  comparison: [
+    {
+      before: "AI에 병원 관련 질문을 해도 우리 병원이 어떻게 소개되는지 알기 어렵습니다.",
+      after: "주요 진료와 지역에 관한 질문으로 AI 답변에서 병원 언급 여부를 확인합니다.",
+    },
+    {
+      before: "홈페이지의 어떤 정보부터 고쳐야 할지 판단하기 어렵습니다.",
+      after: "진료 안내와 병원 정보, 페이지 구조를 점검하고 우선 개선 항목을 정리합니다.",
+    },
+    {
+      before: "수정한 뒤 AI 검색에서 달라진 점을 확인하기 어렵습니다.",
+      after: "구독으로 반복 측정하고 진단 점수와 AI 답변 언급 추이를 각각 확인합니다.",
+    },
   ],
   features: [
-    "주소만 넣으면 무료 진단 (로그인 불필요)",
-    "8개 분야 50여 항목 진단",
-    "총점, 영역별 점수, 우선 개선 항목",
-    "가입하면 전체 근거와 수정 코드 열람, 진단 기록 저장",
-    "구독하면 매달 재진단, AI 가시성 측정, 점수 추이, 경쟁 병원 비교",
-  ],
-  screens: ["샘플 리포트"],
-  cases: [{ title: "사피어 자체 서비스" }],
+    {
+      title: "홈페이지 진단",
+      photo: "/images/geo/feature-review-session.webp",
+      photoAlt: "모니터에 표시된 내용을 가리키며 함께 검토하는 사람들",
+      photoClassName: "object-cover object-[50%_56%]",
+      description: "진료 정보, 구조화 데이터 등 8개 분야의 50여 항목을 점검합니다.",
+      points: [
+        "진료 안내와 병원 기본 정보, 페이지 구조를 살펴봅니다.",
+        "총점과 영역별 점수로 보완할 부분을 확인합니다.",
+        "우선 개선 항목을 정리해 무엇부터 고칠지 안내합니다.",
+      ],
+    },
+    {
+      title: "개선 근거와 수정 방법",
+      photo: "/images/geo/feature-clinic-analytics.webp",
+      photoAlt: "내과병원 사이트 분석 예시. 오늘 방문자 42명, 최근 7일 280명, 최근 30일 302명.",
+      photoClassName: "object-cover object-left-top",
+      photoUnoptimized: true,
+      description: "진단 결과를 홈페이지 수정에 활용할 수 있게 정리합니다.",
+      points: [
+        "회원가입 후 전체 진단 근거와 수정 코드를 확인할 수 있습니다.",
+        "진단 기록을 저장해 이전 결과와 비교합니다.",
+        "직접 수정하기 어려운 항목은 홈페이지 개선을 상담할 수 있습니다.",
+      ],
+    },
+    {
+      title: "AI 답변 노출 추적",
+      photo: "/images/geo/feature-ai-search-prompt.webp",
+      photoAlt: "AI 검색창에 한성대 입구역에서 좋은 내과를 추천해 달라고 입력한 화면",
+      photoClassName: "bg-black object-contain",
+      photoUnoptimized: true,
+      description: "구독을 통해 홈페이지 진단 결과와 AI 답변에서의 변화를 이어서 확인합니다.",
+      points: [
+        "같은 질문으로 다시 측정해 병원이 언급되는지 살펴봅니다.",
+        "진단 점수와 AI 가시성 추이를 각각 확인합니다.",
+        "프로부터는 경쟁 병원과 비교하고 월간 리포트를 확인합니다.",
+      ],
+    },
+  ] satisfies readonly FeatureRow[],
   process: [
-    { step: "무료 진단", detail: "홈페이지 주소를 넣고 결과를 봅니다." },
-    { step: "무료 회원가입", detail: "전체 근거와 수정 코드를 보고 기록을 저장합니다." },
-    { step: "구독", detail: "모니터링·프로 등급으로 매달 추적합니다." },
-    { step: "개선", detail: "직접 고치기 어려우면 홈페이지 제작을 상담합니다." },
-    { step: "관리", detail: "납품 후 관리형으로 매달 관리합니다." },
+    { name: "무료 진단", detail: "홈페이지 주소를 기준으로 우선 개선 항목을 확인합니다." },
+    { name: "결과 확인", detail: "가입 후 진단 근거와 수정 코드를 확인합니다." },
+    { name: "추적", detail: "구독으로 재진단하고 AI 답변 노출을 확인합니다." },
+    { name: "개선", detail: "우선순위에 따라 홈페이지를 보완합니다." },
+    { name: "관리", detail: "관리형을 선택해 진단과 수정 반영을 이어갑니다." },
+  ],
+  measurement: [
+    {
+      name: "홈페이지 진단",
+      detail: "진료 정보, 구조화 데이터 등 홈페이지에서 개선할 항목을 확인합니다.",
+    },
+    {
+      name: "AI 답변 노출",
+      detail: "정해진 질문에서 AI가 병원을 언급하는지 반복 측정합니다.",
+    },
+    {
+      name: "개선 반영",
+      detail: "관리형은 진단 결과를 바탕으로 홈페이지 수정까지 지원합니다.",
+    },
   ],
   faq: faqForService("geo"),
-  cta: { label: "무료 진단하기", href: `${routes.hospital.geo}#diagnosis` },
-  secondaryCta: { label: "요금 보기", href: `${routes.pricing}#geo` },
+  diagnosis: { label: "진단 예시 보기", href: diagnosisHref },
+  pricing: { label: "요금 보기", href: "#pricing" as const },
+  consult: { label: "홈페이지 개선 상담", href: routes.contactFor("geo-fix") },
 };
-
-/** 진단 결과 아래 세 갈래. action은 전환 이벤트(geo_result_cta_clicked) 속성으로 남긴다 */
-export const geoResultActions: {
-  action: "signup" | "fix" | "track";
-  label: string;
-  href: Route;
-}[] = [
-  {
-    action: "signup",
-    label: "가입하고 전체 보기",
-    href: routes.auth.signupFrom(`${routes.hospital.geo}#diagnosis`),
-  },
-  { action: "fix", label: "사피어가 고쳐드립니다", href: routes.contactFor("geo-fix") },
-  { action: "track", label: "매달 추적하기", href: `${routes.pricing}#geo` },
-];
-
-/** 진단 결과 중 가입해야 보이는 부분 */
-export const geoLockedResult = "전체 근거 · 수정 코드 (가입하면 바로 열립니다)";
-
-export const adCheckContent: SolutionPageContent = {
-  path: routes.hospital.adCheck,
-  eyebrow: "병원 솔루션 · 무료 도구",
-  name: "사피어 의료광고 검사기",
-  message: "의료법 제56조 위험 표현을 미리 찾아드립니다.",
-  problems: ["광고 문구가 의료법에 걸리는지 확인하기 어렵다"],
-  features: ["광고 문구를 넣으면 위험 표현을 찾아 표시", "검사 기록 저장 (회원)"],
-  screens: [],
-  cases: [{ title: "사피어 자체 서비스" }],
-  process: [
-    { step: "문구 입력", detail: "검사할 광고 문구를 붙여 넣습니다." },
-    { step: "결과 확인", detail: "위험 표현을 확인합니다." },
-    { step: "다시 검사", detail: "고친 문구를 다시 검사합니다." },
-  ],
-  faq: faqForService("ad-check"),
-  cta: { label: "무료 검사하기", href: `${routes.hospital.adCheck}#check` },
-  secondaryCta: { label: "AI 검색 최적화 보기", href: routes.hospital.geo },
-};
-
-export const adCheckDisclaimer = "검사 결과는 참고용이며 법률 자문이 아닙니다.";
-
-export const adCheckLimits = [
-  { plan: "무료 (회원)", limit: "월 5회" },
-  { plan: "모니터링 이상 구독", limit: "무제한" },
-];
-
-/** 무료 진단 상태별 화면 (상태 화면 정의) */
-export const geoDiagnosisStates = [
-  { state: "입력 전", screen: "주소 입력창, 진단 항목 안내", next: "무료 진단하기" },
-  {
-    state: "진단 중",
-    screen: "진행 단계 (사이트 접속 → 항목 검사 → 점수 계산), 예상 시간",
-    next: "기다리기 (창을 닫아도 가입하면 기록에서 다시 볼 수 있음)",
-  },
-  {
-    state: "결과",
-    screen: "총점, 영역별 점수, 우선 개선 항목 3개. 전체 근거·수정 코드는 잠금",
-    next: "가입하고 전체 보기 / 사피어가 고쳐드립니다 / 매달 추적하기",
-  },
-  {
-    state: "실패 · 주소 오류",
-    screen: "주소 형식을 확인해 달라는 안내",
-    next: "주소 고쳐서 다시 진단",
-  },
-  {
-    state: "실패 · 접속 불가·시간 초과",
-    screen: "사이트에 접속할 수 없었다는 안내와 흔한 원인",
-    next: "다시 시도 / 상담 신청",
-  },
-];
-
-/** 의료광고 검사 상태별 화면 */
-export const adCheckStates = [
-  { state: "입력 전", screen: "문구 입력창, 법률 자문이 아니라는 고지", next: "무료 검사하기" },
-  { state: "검사 중", screen: "진행 표시", next: "기다리기" },
-  {
-    state: "결과 · 위험 표현 있음",
-    screen: "위험 표현 강조, 이유(의료법 제56조 항목), 바꿔 쓸 문구 예시",
-    next: "가입하고 기록 저장 / 문구 점검·제작 상담",
-  },
-  {
-    state: "결과 · 위험 표현 없음",
-    screen: "찾은 위험 표현이 없다는 안내와 고지",
-    next: "가입하고 기록 저장",
-  },
-  {
-    state: "무료 횟수 초과",
-    screen: "이번 달 무료 검사(월 5회)를 다 썼다는 안내",
-    next: "구독하면 무제한 / 다음 달에 다시",
-  },
-  {
-    state: "실패",
-    screen: "검사하지 못했다는 안내 (글자 수 초과 등)",
-    next: "문구 줄여서 다시 검사",
-  },
-];

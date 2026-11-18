@@ -5,7 +5,6 @@ import { requirePortal } from "@/server/portal";
 import { routes } from "@/shared/config";
 import {
   NoteBox,
-  Pill,
   PortalPanel,
   PortalTitle,
   Sheet,
@@ -59,12 +58,6 @@ async function Body() {
           },
           { label: "진단일", value: <span className="text-base">{latest.date}</span> },
           { label: "우선 개선 항목", value: latest.priorities.length },
-          {
-            label: "의료광고 검사",
-            value: geo.adChecks.length,
-            note:
-              geo.adCheckFreeLeft !== undefined ? `무료 ${geo.adCheckFreeLeft}회 남음` : "무제한",
-          },
         ]}
       />
 
@@ -146,38 +139,6 @@ async function Body() {
             </Link>
           </div>
         )}
-      </PortalPanel>
-
-      <PortalPanel
-        title="의료광고 검사 기록"
-        action={
-          <Link
-            href={`${routes.hospital.adCheck}#check` as Route}
-            className="text-xs font-semibold"
-          >
-            새 문구 검사 →
-          </Link>
-        }
-      >
-        <Sheet
-          columns={["날짜", "검사한 문구", "위험 표현"]}
-          firstIsHeader={false}
-          rows={geo.adChecks.map((c) => [
-            <span key="d" className="tabular-nums">
-              {c.date}
-            </span>,
-            c.summary,
-            c.risks > 0 ? (
-              <Pill key="r" tone="danger">
-                {c.risks}개
-              </Pill>
-            ) : (
-              <Pill key="r" tone="done">
-                없음
-              </Pill>
-            ),
-          ])}
-        />
       </PortalPanel>
     </>
   );

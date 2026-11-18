@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { applyFieldErrors, cn, track } from "@/shared/lib";
 import { ButtonLabel, darkButton } from "@/shared/sections";
@@ -40,12 +40,17 @@ export function ContactForm() {
   const {
     register,
     handleSubmit,
+    resetField,
     setError,
     formState: { errors, isSubmitting },
   } = useForm<ContactInput>({
     resolver: zodResolver(contactSchema),
     defaultValues: { ...defaultValues, type: preselected },
   });
+
+  useEffect(() => {
+    resetField("type", { defaultValue: preselected });
+  }, [preselected, resetField]);
 
   const onSubmit = handleSubmit(async (values) => {
     setServerError(null);

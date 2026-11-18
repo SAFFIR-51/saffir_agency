@@ -1,4 +1,5 @@
 import type { Route } from "next";
+import { getPortfolioCardType, getPortfolioCoverImage } from "@/content/portfolio";
 import { routes } from "@/shared/config";
 import { ButtonPair, SubpageClosing, SubpageSection } from "@/shared/sections";
 import { listPortfolioByGroup } from "../api/queries";
@@ -19,7 +20,7 @@ const c = {
   },
 };
 
-/** 포트폴리오: 다른 세부 페이지와 같은 첫 화면 + 분야·기술로 거르는 사례 카드 */
+/** 포트폴리오: 다른 세부 페이지와 같은 첫 화면 + 분야별 사례 카드 */
 export function PortfolioLanding() {
   const groups = listPortfolioByGroup();
   const items = groups.flatMap((g) =>
@@ -28,14 +29,9 @@ export function PortfolioLanding() {
       href: routes.portfolioDetail(item.slug),
       title: item.title,
       group: g.group,
-      groupName: g.name,
-      techNames: item.techNames,
+      cardType: getPortfolioCardType(item),
       summary: item.summary,
-      image: item.image,
-      related:
-        item.relatedSolution && item.relatedName
-          ? { href: item.relatedSolution, name: item.relatedName.replace(/^사피어\s/, "") }
-          : undefined,
+      image: getPortfolioCoverImage(item),
     })),
   );
   const buttons = {

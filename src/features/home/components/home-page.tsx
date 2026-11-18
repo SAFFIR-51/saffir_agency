@@ -30,7 +30,7 @@ function Cards() {
         {/* 세 갈래 카드: 병원 · 비즈니스 · 맞춤 개발 (EntryCard) */}
         <EntryCard
           title={serviceLines.hospital.name}
-          href={routes.hospital.root}
+          href={routes.hospital.geo}
           moreLabel="더보기"
           description={entry.hospital.description}
           preview={<></>}
@@ -39,7 +39,7 @@ function Cards() {
         />
         <EntryCard
           title={serviceLines.business.name}
-          href={routes.solutions.root}
+          href={routes.solutions.connect}
           moreLabel="더보기"
           description={entry.business.description}
           descriptionClassName={`${cardText} text-white/85`}
@@ -48,7 +48,7 @@ function Cards() {
         />
         <EntryCard
           title="맞춤 개발"
-          href={routes.development.root}
+          href={routes.development.process}
           moreLabel="더보기"
           description={entry.development.description}
           descriptionClassName={`${cardText} text-white/85`}

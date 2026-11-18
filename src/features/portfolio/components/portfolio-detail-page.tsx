@@ -1,5 +1,7 @@
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { routes } from "@/shared/config";
+import { detailPageWidth } from "@/shared/sections";
 import { ButtonLink, DataTable, PageHeader, Section, WireBox } from "@/shared/ui";
 import { findPortfolio } from "../api/queries";
 
@@ -7,14 +9,23 @@ export function PortfolioDetailPage({ slug }: { slug: string }) {
   const item = findPortfolio(slug);
   if (!item) notFound();
   return (
-    <>
+    <div className={detailPageWidth}>
       <PageHeader
         eyebrow={`포트폴리오 · ${item.groupName}`}
         title={item.title}
         lead={`기술: ${item.techNames.join(", ")}`}
       />
       <Section label="S2 · 이미지">
-        <WireBox label="대표 이미지" size="lg" />
+        {item.detailImage ? (
+          <Image
+            {...item.detailImage}
+            alt={`${item.title} 관리자 대시보드`}
+            sizes="(min-width: 1088px) 1088px, 100vw"
+            className="h-auto w-full"
+          />
+        ) : (
+          <WireBox label="대표 이미지" size="lg" />
+        )}
       </Section>
       <Section label="S3 · 프로젝트 내용" title="프로젝트 내용">
         <DataTable
@@ -39,6 +50,6 @@ export function PortfolioDetailPage({ slug }: { slug: string }) {
           </ButtonLink>
         </div>
       </Section>
-    </>
+    </div>
   );
 }

@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+@keyframes portfolio-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 /* 브랜드 색은 디자인 확정 후 여기 토큰으로만 바꿉니다. */
 :root {
   --background: #ffffff;
@@ -11,6 +20,15 @@
   --color-home-card-status: #f3ff66;
   --color-home-card-business: #eae7f9;
   --color-home-card-development: #e8e5f2;
+  --color-development-banner-start: #487de3;
+  --color-development-banner-end: #62a2fa;
+  --background-image-development-banner-glow: radial-gradient(
+    circle at 35% 45%,
+    #b8ffda,
+    #66ed9a 45%,
+    #2868ee 75%,
+    transparent 78%
+  );
   --ease-menu: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
   /* 홈 카드 속 예시 UI. 라벨과 본문의 대비는 화면 크기가 바뀌어도 유지한다. */

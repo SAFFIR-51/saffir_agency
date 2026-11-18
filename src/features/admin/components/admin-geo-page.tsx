@@ -13,9 +13,7 @@ import { routes } from "@/shared/config";
 import { cn } from "@/shared/lib";
 import { Picker } from "@/shared/ui";
 import {
-  addGeoAdCheckAction,
   addGeoDiagnosisAction,
-  removeGeoAdCheckAction,
   removeGeoDiagnosisAction,
   removeGeoSiteAction,
   updateGeoSiteAction,
@@ -41,7 +39,6 @@ const errors: Record<string, string> = {
   site: "이메일과 사이트 주소를 입력해 주세요.",
   nouser: "그 이메일로 가입한 계정이 없습니다. 먼저 회원가입을 안내해 주세요.",
   diagnosis: "진단일과 점수(0~100)를 모두 넣어 주세요.",
-  adcheck: "점검일과 문구를 넣어 주세요. 위험 표현 수는 0~100입니다.",
 };
 
 const planOptions = (["free", "pro"] as const).map((p) => ({
@@ -94,7 +91,7 @@ function Detail({ site, error }: { site: GeoSiteDetail; error?: string }) {
           </button>
         </form>
         <p className="mt-2 text-xs text-neutral-500">
-          GEO 구독으로 바꾸면 고객 포털에 구독 메뉴가 열리고, 문구 점검 횟수 제한이 없어집니다.
+          GEO 구독으로 바꾸면 고객 포털에 구독 메뉴가 열립니다.
         </p>
       </Panel>
 
@@ -226,93 +223,6 @@ function Detail({ site, error }: { site: GeoSiteDetail; error?: string }) {
         </div>
       </Panel>
 
-      <Panel
-        id="adcheck"
-        title="의료광고 문구 점검"
-        sub={
-          site.plan === "pro"
-            ? "구독 고객은 횟수 제한이 없습니다."
-            : "무료 회원은 5회까지입니다. 남은 횟수는 고객 포털에 보입니다."
-        }
-      >
-        {error === "adcheck" ? <Alert code={error} /> : null}
-        <form
-          action={addGeoAdCheckAction.bind(null, site.id)}
-          className="grid max-w-4xl gap-3 sm:grid-cols-[10rem_1fr_8rem_auto] sm:items-end"
-        >
-          <div>
-            <label htmlFor="ga-date" className={label}>
-              점검일
-            </label>
-            <input id="ga-date" name="date" type="date" defaultValue={today} className={input} />
-          </div>
-          <div>
-            <label htmlFor="ga-sum" className={label}>
-              점검한 문구
-            </label>
-            <input
-              id="ga-sum"
-              name="summary"
-              maxLength={300}
-              placeholder="예: 레이저 시술 이벤트 문구"
-              className={input}
-            />
-          </div>
-          <div>
-            <label htmlFor="ga-risk" className={label}>
-              위험 표현 수
-            </label>
-            <input
-              id="ga-risk"
-              name="risks"
-              inputMode="numeric"
-              defaultValue="0"
-              className={input}
-            />
-          </div>
-          <button type="submit" className={btnDark}>
-            기록
-          </button>
-        </form>
-        <div className="mt-6 overflow-x-auto">
-          <table className={table}>
-            <thead>
-              <tr>
-                <th className={th}>점검일</th>
-                <th className={th}>문구</th>
-                <th className={th}>위험 표현</th>
-                <th className={th} />
-              </tr>
-            </thead>
-            <tbody>
-              {site.adChecks.map((c) => (
-                <tr key={c.id}>
-                  <td className={cn(td, "whitespace-nowrap tabular-nums")}>{c.date}</td>
-                  <td className={td}>{c.summary}</td>
-                  <td className={cn(td, "tabular-nums", c.risks > 0 && "font-semibold")}>
-                    {c.risks}건
-                  </td>
-                  <td className={td}>
-                    <form action={removeGeoAdCheckAction.bind(null, site.id, c.id)}>
-                      <button type="submit" className={cn(btnSmall, "hover:text-red-600")}>
-                        삭제
-                      </button>
-                    </form>
-                  </td>
-                </tr>
-              ))}
-              {site.adChecks.length === 0 ? (
-                <tr>
-                  <td colSpan={4} className={cn(td, "py-8 text-center text-neutral-500")}>
-                    점검 기록이 없습니다.
-                  </td>
-                </tr>
-              ) : null}
-            </tbody>
-          </table>
-        </div>
-      </Panel>
-
       <Panel id="danger" title="연결 해제">
         <form action={removeGeoSiteAction.bind(null, site.id)} className="flex items-center gap-3">
           <p className="text-sm text-neutral-600">
@@ -332,7 +242,7 @@ async function Body({ id, error }: { id?: string; error?: string }) {
   if (dataSource() !== "api") {
     return (
       <>
-        <AdminTitle title="GEO" sub="고객 사이트의 GEO 진단 결과와 의료광고 문구 점검 기록" />
+        <AdminTitle title="GEO" sub="고객 사이트의 GEO 진단 기록" />
         <p className="rounded-lg bg-neutral-100 px-4 py-4 text-sm text-neutral-700">
           GEO 진단 기록은 백엔드에 연결하면 이곳에서 입력합니다. 데모에서는 고객 포털 GEO에 예시
           결과가 보입니다.
@@ -344,7 +254,7 @@ async function Body({ id, error }: { id?: string; error?: string }) {
   if (site) {
     return (
       <>
-        <AdminTitle title="GEO" sub="고객 사이트의 GEO 진단 결과와 의료광고 문구 점검 기록" />
+        <AdminTitle title="GEO" sub="고객 사이트의 GEO 진단 기록" />
         <Detail site={site} error={error} />
       </>
     );
@@ -354,7 +264,7 @@ async function Body({ id, error }: { id?: string; error?: string }) {
     <>
       <AdminTitle
         title="GEO"
-        sub="고객 사이트의 GEO 진단 결과와 의료광고 문구 점검 기록. 진단 후 결과를 입력하면 고객 포털에 보입니다."
+        sub="고객 사이트의 GEO 진단 기록. 진단 후 결과를 입력하면 고객 포털에 보입니다."
       />
       <div className="overflow-x-auto">
         <table className={table}>
@@ -366,7 +276,6 @@ async function Body({ id, error }: { id?: string; error?: string }) {
               <th className={th}>플랜</th>
               <th className={th}>최근 진단</th>
               <th className={th}>진단 수</th>
-              <th className={th}>문구 점검</th>
             </tr>
           </thead>
           <tbody>
@@ -387,12 +296,11 @@ async function Body({ id, error }: { id?: string; error?: string }) {
                   {s.latest ? `${s.latest.score}점 · ${short(s.latest.date)}` : "진단 전"}
                 </td>
                 <td className={cn(td, "tabular-nums")}>{s.diagnosisCount}</td>
-                <td className={cn(td, "tabular-nums")}>{s.adCheckCount}</td>
               </tr>
             ))}
             {sites.length === 0 ? (
               <tr>
-                <td colSpan={7} className={cn(td, "py-8 text-center text-neutral-500")}>
+                <td colSpan={6} className={cn(td, "py-8 text-center text-neutral-500")}>
                   연결된 사이트가 없습니다.
                 </td>
               </tr>
