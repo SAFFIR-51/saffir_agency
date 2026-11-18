@@ -62,7 +62,7 @@ export function CaseMarquee({ items = [], id, placeholderCount = 0 }: CaseMarque
       aria-hidden={items.length === 0 || undefined}
       className="group scroll-mt-24 overflow-hidden has-[:focus-visible]:overflow-x-auto motion-reduce:overflow-x-auto"
     >
-      <div className="flex w-max group-hover:[animation-play-state:paused] motion-safe:animate-[portfolio-marquee_24s_linear_infinite] motion-safe:group-has-[:focus-visible]:animate-none">
+      <div className="portfolio-marquee-track flex w-max group-hover:[animation-play-state:paused] motion-safe:group-has-[:focus-visible]:animate-none">
         {renderRow()}
         {renderRow(true)}
       </div>

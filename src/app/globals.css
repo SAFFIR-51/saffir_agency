@@ -1,14 +1,5 @@
 @import "tailwindcss";
 
-@keyframes portfolio-marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
 /* 브랜드 색은 디자인 확정 후 여기 토큰으로만 바꿉니다. */
 :root {
   --background: #ffffff;
@@ -85,6 +76,25 @@
 }
 
 @layer components {
+  @media (prefers-reduced-motion: no-preference) {
+    .portfolio-marquee-track {
+      animation: portfolio-marquee 24s linear infinite;
+    }
+
+    .portfolio-marquee-track-slow {
+      animation-duration: 48s;
+    }
+
+    @keyframes portfolio-marquee {
+      from {
+        transform: translateX(0);
+      }
+      to {
+        transform: translateX(-50%);
+      }
+    }
+  }
+
   .development-ai-banner {
     background-color: #487de3;
     background-image: linear-gradient(90deg, #487de3, #62a2fa);

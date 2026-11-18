@@ -39,7 +39,7 @@ export function PortfolioMarquee() {
         aria-label="포트폴리오 목록 보기"
         className="group block overflow-hidden focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-foreground motion-reduce:overflow-x-auto"
       >
-        <div className="flex w-max group-hover:[animation-play-state:paused] group-focus-visible:[animation-play-state:paused] motion-safe:animate-[portfolio-marquee_48s_linear_infinite]">
+        <div className="portfolio-marquee-track portfolio-marquee-track-slow flex w-max group-hover:[animation-play-state:paused] group-focus-visible:[animation-play-state:paused]">
           {row(0)}
           {row(1)}
         </div>
