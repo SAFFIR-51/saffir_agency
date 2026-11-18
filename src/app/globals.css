@@ -20,15 +20,6 @@
   --color-home-card-status: #f3ff66;
   --color-home-card-business: #eae7f9;
   --color-home-card-development: #e8e5f2;
-  --color-development-banner-start: #487de3;
-  --color-development-banner-end: #62a2fa;
-  --background-image-development-banner-glow: radial-gradient(
-    circle at 35% 45%,
-    #b8ffda,
-    #66ed9a 45%,
-    #2868ee 75%,
-    transparent 78%
-  );
   --ease-menu: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
   /* 홈 카드 속 예시 UI. 라벨과 본문의 대비는 화면 크기가 바뀌어도 유지한다. */
@@ -91,6 +82,24 @@
   --text-lead-compact--line-height: 1.52;
   --text-lead-compact--letter-spacing: -0.02em;
   --text-lead-compact--font-weight: 400;
+}
+
+@layer components {
+  .development-ai-banner {
+    background-color: #487de3;
+    background-image: linear-gradient(90deg, #487de3, #62a2fa);
+    color: #fff;
+  }
+
+  .development-ai-banner-glow {
+    background-image: radial-gradient(
+      circle at 35% 45%,
+      #b8ffda,
+      #66ed9a 45%,
+      #2868ee 75%,
+      transparent 78%
+    );
+  }
 }
 
 @media (prefers-color-scheme: dark) {

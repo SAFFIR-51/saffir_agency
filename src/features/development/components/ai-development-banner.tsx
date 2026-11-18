@@ -6,10 +6,10 @@ export function AiDevelopmentBanner() {
   const { title, description, points, label } = processContent.aiBanner;
 
   return (
-    <div className="relative isolate mt-12 grid items-center gap-8 overflow-hidden bg-linear-to-r from-development-banner-start to-development-banner-end px-6 py-8 text-white sm:p-9 md:grid-cols-2 lg:p-10">
+    <div className="development-ai-banner relative isolate mt-12 grid items-center gap-8 overflow-hidden px-6 py-8 sm:p-9 md:grid-cols-2 lg:p-10">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute top-1/2 right-[8%] -z-10 hidden aspect-square w-[37%] -translate-y-1/2 rounded-full bg-development-banner-glow opacity-80 blur-[2px] md:block"
+        className="development-ai-banner-glow pointer-events-none absolute top-1/2 right-[8%] -z-10 hidden aspect-square w-[37%] -translate-y-1/2 rounded-full opacity-80 blur-[2px] md:block"
       />
       <div>
         <h3 className="text-[1.625rem] leading-snug font-extrabold tracking-tight lg:text-[1.875rem]">
