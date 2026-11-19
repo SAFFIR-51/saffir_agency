@@ -6,10 +6,14 @@ import { ButtonLink, DataTable, PageHeader, Section, WireBox } from "@/shared/ui
 import { findPortfolio } from "../api/queries";
 import { JsonLd } from "@/shared/seo";
 import { getPortfolioJsonLd } from "../api/metadata";
+import { portfolioCaseStudies } from "../model/case-studies";
+import { PortfolioCaseStudyPage } from "./portfolio-case-study-page";
 
 export function PortfolioDetailPage({ slug }: { slug: string }) {
   const item = findPortfolio(slug);
   if (!item) notFound();
+  const study = portfolioCaseStudies[slug];
+  if (study) return <PortfolioCaseStudyPage item={item} study={study} />;
   const jsonLd = getPortfolioJsonLd(slug);
   return (
     <div className={detailPageWidth}>

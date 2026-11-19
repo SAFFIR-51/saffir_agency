@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { useForm, useWatch, type UseFormRegisterReturn } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { applyFieldErrors, cn, track } from "@/shared/lib";
 import { ButtonLabel, darkButton } from "@/shared/sections";
 import { ConsentField, FormField, Input, Textarea, fieldA11y } from "@/shared/ui";
@@ -17,6 +17,7 @@ import {
 } from "../model/content";
 import { estimateSchema, type EstimateInput } from "../model/schema";
 import { DoneView } from "./done-view";
+import { EstimateSelect } from "./estimate-select";
 
 const defaultValues: EstimateInput = {
   company: "",
@@ -39,65 +40,11 @@ const field =
 const area =
   "min-h-52 rounded-lg border-neutral-300 bg-white px-4 py-3 text-[0.9375rem] leading-[1.7] focus-visible:border-black";
 
-/** 고르는 칸: 누르면 검게 채워지는 버튼 모양 (라디오·체크박스) */
-function Chips({
-  legend,
-  hint,
-  options,
-  type,
-  registration,
-  error,
-}: {
-  legend: string;
-  hint?: string;
-  options: readonly string[];
-  type: "radio" | "checkbox";
-  registration: UseFormRegisterReturn;
-  error?: string;
-}) {
-  return (
-    <fieldset>
-      <legend className="text-[0.9375rem] font-semibold">
-        {legend}
-        {hint ? <span className="ml-2 text-sm font-normal text-neutral-500">{hint}</span> : null}
-      </legend>
-      <div className="mt-3 flex flex-wrap gap-2">
-        {options.map((option) => (
-          <label key={option} className="cursor-pointer">
-            <input type={type} value={option} className="peer sr-only" {...registration} />
-            <span
-              className={cn(
-                "inline-flex h-10 items-center rounded-lg border border-neutral-300 px-4 text-sm text-neutral-700 select-none",
-                "hover:border-black hover:text-black",
-                "peer-checked:border-black peer-checked:bg-black peer-checked:font-semibold peer-checked:text-white",
-                "peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-black",
-                "motion-safe:transition-colors",
-              )}
-            >
-              {option}
-            </span>
-          </label>
-        ))}
-      </div>
-      {error ? (
-        <p role="alert" className="mt-2 text-sm text-red-600">
-          {error}
-        </p>
-      ) : null}
-    </fieldset>
-  );
-}
-
-/** 단계 제목: 01 담당자 정보 */
-function Step({ no, title, children }: { no: number; title: string; children: React.ReactNode }) {
+/** 단계 제목 */
+function Step({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="border-t border-neutral-300 pt-6 first:border-t-0 first:pt-0">
-      <h3 className="flex items-baseline gap-3 text-lg font-bold tracking-[-0.02em]">
-        <span className="font-display text-sm font-semibold text-neutral-400 tabular-nums">
-          {String(no).padStart(2, "0")}
-        </span>
-        {title}
-      </h3>
+      <h3 className="text-lg font-bold tracking-[-0.02em]">{title}</h3>
       <div className="mt-5 grid gap-x-4 gap-y-6 sm:grid-cols-2 [&_label]:text-[0.9375rem] [&_label]:font-semibold">
         {children}
       </div>
@@ -133,7 +80,7 @@ export function EstimateForm() {
 
   return (
     <form onSubmit={onSubmit} noValidate className="flex flex-col gap-10">
-      <Step no={1} title="담당자 정보">
+      <Step title="담당자 정보">
         <FormField id="company" label="회사명" required error={errors.company?.message}>
           <Input
             className={field}
@@ -189,43 +136,62 @@ export function EstimateForm() {
         </FormField>
       </Step>
 
-      <Step no={2} title="만들 것">
-        <div className="flex flex-col gap-7 sm:col-span-2">
-          <Chips
-            legend="개발 분야"
-            options={developmentAreaOptions}
-            type="radio"
-            registration={register("area")}
-            error={errors.area?.message}
-          />
-          <Chips
-            legend="만들 화면"
-            hint="여러 개 고를 수 있습니다"
-            options={platformOptions}
-            type="checkbox"
-            registration={register("platforms")}
-            error={errors.platforms?.message}
-          />
-          <Chips
-            legend="지금 준비된 것"
-            options={readinessOptions}
-            type="radio"
-            registration={register("readiness")}
-            error={errors.readiness?.message}
+      <Step title="만들 것">
+        <Controller
+          control={control}
+          name="area"
+          render={({ field: f }) => (
+            <EstimateSelect
+              label="개발 분야"
+              options={developmentAreaOptions}
+              {...f}
+              error={errors.area?.message}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="readiness"
+          render={({ field: f }) => (
+            <EstimateSelect
+              label="지금 준비된 것"
+              options={readinessOptions}
+              {...f}
+              error={errors.readiness?.message}
+            />
+          )}
+        />
+        <div className="sm:col-span-2">
+          <Controller
+            control={control}
+            name="platforms"
+            render={({ field: f }) => (
+              <EstimateSelect
+                label="만들 화면"
+                options={platformOptions}
+                multiple
+                placeholder="여러 개 고를 수 있어요"
+                {...f}
+                error={errors.platforms?.message}
+              />
+            )}
           />
         </div>
       </Step>
 
-      <Step no={3} title="예산 · 일정">
-        <div className="sm:col-span-2">
-          <Chips
-            legend="예산 범위"
-            options={budgetOptions}
-            type="radio"
-            registration={register("budget")}
-            error={errors.budget?.message}
-          />
-        </div>
+      <Step title="예산 · 일정">
+        <Controller
+          control={control}
+          name="budget"
+          render={({ field: f }) => (
+            <EstimateSelect
+              label="예산 범위"
+              options={budgetOptions}
+              {...f}
+              error={errors.budget?.message}
+            />
+          )}
+        />
         <FormField
           id="schedule"
           label="희망 오픈 시기"
@@ -240,7 +206,7 @@ export function EstimateForm() {
         </FormField>
       </Step>
 
-      <Step no={4} title="요구사항">
+      <Step title="요구사항">
         <div className="sm:col-span-2">
           <FormField
             id="requirements"

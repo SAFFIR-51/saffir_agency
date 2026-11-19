@@ -67,13 +67,13 @@ build:nginx:
 deploy:prod:
   stage: deploy
   tags:
-    - saffir-prod          # 배포 서버의 self-hosted Runner
+    - saffir-prod # 배포 서버의 self-hosted Runner
   needs:
     - build:web
     - build:server
     - build:nginx
   timeout: 15m
-  resource_group: production   # 동시 배포 방지
+  resource_group: production # 동시 배포 방지
   environment:
     name: production
     url: https://saffir.co.kr
