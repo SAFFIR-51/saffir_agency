@@ -18,7 +18,7 @@ export const site = {
     // 크몽 전문가 프로필
     "https://kmong.com/@%EC%82%AC%ED%94%BC%EC%96%B4%ED%85%8C%ED%81%AC%EB%86%80%EB%A1%9C%EC%A7%80",
   ] as readonly string[],
-  /** 회사 소개서 PDF. TODO: 실제 파일을 public/brochure/에 넣고 이름 확정 */
+  /** 회사 소개서 PDF (2026.11). 공개 다운로드 파일. */
   brochure: "/brochure/saffir-company-profile.pdf",
   tagline: "만들고 끝내지 않습니다. 계속 돌아가게 책임집니다.",
   description: "병원·커머스·업무 시스템을 빠르게 만들고, 납품 뒤 운영까지 사피어가 맡습니다.",
