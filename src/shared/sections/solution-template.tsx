@@ -116,7 +116,9 @@ export function SolutionTemplate({
 
   return (
     <div className={`${detailPageWidth} bg-white pb-28 text-black lg:pb-40`}>
-      <JsonLd data={serviceGraph({ path: c.path, name: c.name, description: c.message })} />
+      <JsonLd
+        data={serviceGraph({ path: c.path, name: c.name, description: c.message, faq: c.faq })}
+      />
 
       {/* 상단: 이동 경로 · 이름 · 소개 · 버튼 | 요약 상자 */}
       <header className={`pt-8 pb-14 lg:pt-12 lg:pb-20 ${subpagePad}`}>

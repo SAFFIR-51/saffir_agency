@@ -1,6 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
 import { routes, site } from "@/shared/config";
+import { noIndex } from "@/shared/seo";
+
+/** 로그인·가입·비밀번호·초대 화면은 검색에 나오지 않게 */
+export const metadata: Metadata = { robots: noIndex };
 
 /** 로그인·가입: 왼쪽 위 로고 + 가운데 좁은 폼 (실제 서비스 로그인 화면 구성) */
 export default function AuthLayout({ children }: { children: React.ReactNode }) {

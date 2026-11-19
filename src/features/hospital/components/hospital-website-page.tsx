@@ -67,6 +67,7 @@ export function HospitalWebsitePage() {
           path: content.path,
           name: content.name,
           description: content.message,
+          faq: content.faq,
         })}
       />
       <WebsiteHero />

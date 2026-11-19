@@ -6,6 +6,18 @@ export const site = {
   name: "사피어",
   legalName: "주식회사 사피어테크놀로지",
   domain: "https://saffir.co.kr",
+  /** 로고 (구조화데이터·OG). public 기준 경로 */
+  logo: "/brand/saffir-logo.png",
+  /**
+   * 회사 공식 채널 (블로그·인스타그램·링크드인 등 전체 주소).
+   * 구조화데이터 sameAs로 나가 AI·검색이 같은 회사로 묶는다. 실제 운영 중인 채널만 넣는다.
+   */
+  sameAs: [
+    // 사람인 기업정보
+    "https://www.saramin.co.kr/zf_user/company-info/view/csn/RllkcUMyZUp1RE53cVJXU1h0WjZPZz09/company_nm/(%EC%A3%BC)%EC%82%AC%ED%94%BC%EC%96%B4%ED%85%8C%ED%81%AC%EB%86%80%EB%A1%9C%EC%A7%80",
+    // 크몽 전문가 프로필
+    "https://kmong.com/@%EC%82%AC%ED%94%BC%EC%96%B4%ED%85%8C%ED%81%AC%EB%86%80%EB%A1%9C%EC%A7%80",
+  ] as readonly string[],
   /** 회사 소개서 PDF. TODO: 실제 파일을 public/brochure/에 넣고 이름 확정 */
   brochure: "/brochure/saffir-company-profile.pdf",
   tagline: "만들고 끝내지 않습니다. 계속 돌아가게 책임집니다.",

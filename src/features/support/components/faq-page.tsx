@@ -1,11 +1,14 @@
 import { routes } from "@/shared/config";
 import { faqByCategory } from "@/content/faq";
+import { faqGraph, JsonLd } from "@/shared/seo";
 import { ButtonLink, DataTable, PageHeader, Section } from "@/shared/ui";
 import { faqCategories } from "../model/content";
 
 export function FaqPage() {
+  const all = faqCategories.flatMap((category) => faqByCategory(category.key));
   return (
     <>
+      <JsonLd data={faqGraph({ path: routes.faq, name: "자주 묻는 질문", items: all })} />
       <PageHeader title="자주 묻는 질문" />
       {faqCategories.map((category, index) => (
         <Section

@@ -4,12 +4,16 @@ import { routes } from "@/shared/config";
 import { detailPageWidth } from "@/shared/sections";
 import { ButtonLink, DataTable, PageHeader, Section, WireBox } from "@/shared/ui";
 import { findPortfolio } from "../api/queries";
+import { JsonLd } from "@/shared/seo";
+import { getPortfolioJsonLd } from "../api/metadata";
 
 export function PortfolioDetailPage({ slug }: { slug: string }) {
   const item = findPortfolio(slug);
   if (!item) notFound();
+  const jsonLd = getPortfolioJsonLd(slug);
   return (
     <div className={detailPageWidth}>
+      {jsonLd ? <JsonLd data={jsonLd} /> : null}
       <PageHeader
         eyebrow={`포트폴리오 · ${item.groupName}`}
         title={item.title}

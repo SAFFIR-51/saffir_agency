@@ -35,6 +35,7 @@ export function GeoLandingPage() {
           path: content.path,
           name: content.name,
           description: content.message,
+          faq: content.faq,
         })}
       />
       <header className={`pt-12 lg:pt-20 ${subpagePad}`}>

@@ -22,6 +22,7 @@ import {
   SubpageSection,
   subpagePad,
 } from "@/shared/sections";
+import { JsonLd, serviceGraph } from "@/shared/seo";
 import { PlanTable } from "@/shared/ui";
 import { crmPage as c } from "../model/content";
 
@@ -253,11 +254,35 @@ function Faq() {
   );
 }
 
+/** 검색·AI용 구조화데이터: 서비스 + 화면의 요금(월 이용료) + FAQ */
+function CrmJsonLd() {
+  const offers = solutionPlans
+    .filter((plan) => plan.id.startsWith("crm-") && plan.monthly != null)
+    .map((plan) => ({
+      name: plan.name,
+      price: plan.monthly ?? 0,
+      description: `월 이용료, 부가세 별도${plan.setup != null ? `. 도입 세팅비 ${formatKRW(plan.setup)}` : ""}`,
+    }));
+  return (
+    <JsonLd
+      data={serviceGraph({
+        path: routes.hospital.crm,
+        name: c.hero.srTitle,
+        description:
+          "방문 이력으로 환자를 나누고 검진·재처치 시기에 알림톡·문자 안내를 예약해 보내는 병원 CRM. 병원마다 전용 서버·DB로 운영합니다.",
+        faq: faqForService("crm"),
+        offers,
+      })}
+    />
+  );
+}
+
 export function CrmPage() {
   return (
     <article
       className={`${detailPageWidth} ${detailSectionSpacing} bg-white text-black [&_[id]]:scroll-mt-24`}
     >
+      <CrmJsonLd />
       <Hero />
       <div className={`mt-12 lg:mt-16 ${subpagePad}`}>
         <CaseMarquee

@@ -50,7 +50,12 @@ export function ProcessPage() {
       className={`${detailPageWidth} ${detailSectionSpacing} bg-white text-black [&_[id]]:scroll-mt-24`}
     >
       <JsonLd
-        data={serviceGraph({ path: routes.development.process, name: c.name, description: c.lead })}
+        data={serviceGraph({
+          path: routes.development.process,
+          name: c.name,
+          description: c.lead,
+          faq: [...faqForService("development"), ...c.faq],
+        })}
       />
       <header className={`pt-12 lg:pt-20 ${subpagePad}`}>
         <h1 className="-ml-[0.04em] text-[clamp(2.75rem,8.2vw,7.5rem)] leading-[0.98] font-extrabold tracking-[-0.05em] text-balance">

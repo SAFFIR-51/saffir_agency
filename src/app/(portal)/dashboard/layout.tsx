@@ -2,7 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 import { PortalSessionNav } from "@/features/auth";
+import type { Metadata } from "next";
 import { routes, site } from "@/shared/config";
+import { noIndex } from "@/shared/seo";
+
+/** 고객 포털은 검색에 나오지 않게 */
+export const metadata: Metadata = { robots: noIndex };
 
 /**
  * 고객 포털: 왼쪽 메뉴 + 본문 (흰 배경 고정). 로그인 확인은 src/proxy.ts(1차)와
